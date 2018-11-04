@@ -3,49 +3,49 @@
         <a class="nav-link dropdown-toggle text-muted text-muted" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa" :class="icon"></i>
             <div class="notify">
-                <span class="heartbit"></span>
-                <span class="point"></span>
+                <span
+                    v-if="count !== null"
+                    class="count">{{ count }}</span>
+                <span
+                    v-if="alert"
+                    class="heartbit"></span>
+                <span
+                    v-if="alert"
+                    class="point"></span>
             </div>
         </a>
         <div class="dropdown-menu dropdown-menu-right mailbox animated zoomIn">
             <ul>
                 <li>
-                    <div class="drop-title">{{ title }}</div>
+                    <div class="drop-title">{{ title }} <span v-if="count !== null">({{ count }})</span></div>
                 </li>
                 <li>
                     <div class="message-center">
                         <!-- Message -->
-                        <a href="#">
-                            <div class="btn btn-danger btn-circle m-r-10"><i class="fa fa-link"></i></div>
-                            <div class="mail-contnet">
-                                <h5>This is title</h5> <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span>
+                        <a
+                            v-for="(item, index) in items"
+                            :key="index"
+                            :href="item.url">
+                            <div
+                                class="btn btn-circle m-r-10"
+                                :class="item.prepend.class">
+                                <i
+                                    class="fa"
+                                    :class="item.prepend.icon"></i>
                             </div>
-                        </a>
-                        <!-- Message -->
-                        <a href="#">
-                            <div class="btn btn-success btn-circle m-r-10"><i class="ti-calendar"></i></div>
                             <div class="mail-contnet">
-                                <h5>This is another title</h5> <span class="mail-desc">Just a reminder that you have event</span> <span class="time">9:10 AM</span>
-                            </div>
-                        </a>
-                        <!-- Message -->
-                        <a href="#">
-                            <div class="btn btn-info btn-circle m-r-10"><i class="ti-settings"></i></div>
-                            <div class="mail-contnet">
-                                <h5>This is title</h5> <span class="mail-desc">You can customize this template as you want</span> <span class="time">9:08 AM</span>
-                            </div>
-                        </a>
-                        <!-- Message -->
-                        <a href="#">
-                            <div class="btn btn-primary btn-circle m-r-10"><i class="ti-user"></i></div>
-                            <div class="mail-contnet">
-                                <h5>This is another title</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
+                                <h5>{{ item.title }}</h5>
+                                <span class="mail-desc">{{ item.content }}</span> <span class="time">{{ item.time | moment("LLL") }}</span>
                             </div>
                         </a>
                     </div>
                 </li>
                 <li>
-                    <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                    <a
+                        class="nav-link text-center"
+                        :href="url">
+                        <strong>{{ urlText }}</strong> <i class="fa fa-angle-right"></i>
+                    </a>
                 </li>
             </ul>
         </div>
@@ -62,13 +62,48 @@
                 type: String,
                 required: true
             },
+            alert: {
+                type: Boolean,
+                required: true
+            },
             icon: {
+                type: String,
+                required: true
+            },
+            items: {
+                type: Array,
+                required: true
+            },
+            count: {
+                type: Number,
+                required: false,
+                default: null
+            },
+            url: {
+                type: String,
+                required: true
+            },
+            urlText: {
                 type: String,
                 required: true
             }
         },
         computed: {
             ...mapState([ 'locale' ])
+        },
+        mounted () {
+            Vue.moment().locale(this.locale)
         }
     }
 </script>
+
+<style scoped>
+    .notify .count {
+        font-size: 80%;
+        position: absolute;
+        color: #ff4249;
+        font-weight: bold;
+        margin-top: -5px;
+        margin-left: 5px;
+    }
+</style>

@@ -21,9 +21,6 @@
         <link href="{{ asset('admin/css/eladmin.css') }}" rel="stylesheet">
     </head>
     <body class="fix-header fix-sidebar mini-sidebar">
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
         <div id="app">
             <main id="main-wrapper">
                 <!-- header header  -->
@@ -175,11 +172,18 @@
         </div>
         <script>
             const locale = "{{ App::getLocale() }}"
+            const csrfToken = "{{ csrf_token() }}"
             const routesGlobal = {
                 logout: "{{ route('logout') }}",
                 dashboard: "{{ route('admin.dashboard') }}",
+                profile: {
+                    index: "{{ route('admin.profile') }}",
+                    getData: "{{ route('admin.profile.getData') }}"
+                },
                 messages: {
-                    getStatus: "{{ route('admin.messages.getStatus') }}"
+                    index: "{{ route('admin.messages') }}",
+                    getState: "{{ route('admin.messages.getState') }}",
+                    getLastPendingMessages: "{{ route('admin.messages.getLastPending') }}"
                 }
             }
         </script>

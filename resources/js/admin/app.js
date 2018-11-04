@@ -22,6 +22,12 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-instant/dist/vue-instant.css'
 
+const moment = require('moment')
+
+if ( locale !== 'en' ) {
+    require(`moment/locale/${locale}`)
+}
+
 // Uses
 Vue.use(BootstrapVue)
 Vue.use(Notifications)
@@ -29,7 +35,7 @@ Vue.use(VeeValidate, { fieldsBagName: 'veeFields' })
 Vue.use(i18n, translations)
 Vue.use(VueScrollTo)
 Vue.use(VueInstant)
-Vue.use(VueMoment)
+Vue.use(VueMoment, { moment })
 
 // Store
 import store from './store'

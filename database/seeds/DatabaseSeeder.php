@@ -9,10 +9,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersTableSeeder::class,
             CommentsTableSeeder::class,
-            MessagesTableSeeder::class
-            /*PagesTableSeeder::class,
+            MessagesTableSeeder::class,
+            PagesTableSeeder::class,
             MenusTableSeeder::class,
-            AppsTableSeeder::class,*/
+            AppsTableSeeder::class,
         ]);
     }
 

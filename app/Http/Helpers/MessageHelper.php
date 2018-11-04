@@ -27,15 +27,21 @@ class MessageHelper
         return Array (
             Array (
                 'key' => 'important',
-                'color' => '#00a65a'
+                'color' => '#00a65a',
+                'icon' => 'fa-start',
+                'class' => 'btn-warning'
             ),
             Array (
                 'key' => 'error',
-                'color' => '#f39c12'
+                'color' => '#f39c12',
+                'icon' => 'fa-exclamation',
+                'class' => 'btn-danger'
             ),
             Array (
                 'key' => 'contact',
-                'color' => '#dd4b39'
+                'color' => '#dd4b39',
+                'icon' => 'fa-envelope',
+                'class' => 'btn-primary'
             )
         );
     }

@@ -16,6 +16,8 @@ class AppLocale extends Model
 
     protected static function boot ()
     {
+        parent::boot();
+
         static::deleted (function ($app_locale) {
             if (!App::runningInConsole()) {
                 $app = $app_locale->page();

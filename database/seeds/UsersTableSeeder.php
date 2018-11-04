@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Carbon;
 
 use Spatie\Permission\Models\Role;
 
@@ -28,8 +27,7 @@ class UsersTableSeeder extends Seeder
 
         factory(User::class, 1)->create([
             'email' => config('mail.from')['address'],
-            'password' => Hash::make('secret1!'),
-            'email_verified_at' => Carbon::now()
+            'password' => Hash::make('secret1!')
         ])->first()->assignRole('admin');
     }
 }

@@ -9,10 +9,12 @@ use App\Models\Core\AppImage;
 
 class AppsTableSeeder extends Seeder
 {
+    use \Illuminate\Foundation\Testing\WithFaker;
     /**
      * Run the database seeds.
      *
      * @return void
+     * @throws Exception
      */
     public function run()
     {
@@ -20,13 +22,13 @@ class AppsTableSeeder extends Seeder
 
         $apps = factory(App::class, 5)->create()->each(function ($app) {
             factory(AppLocale::class)->create([
-                'lang' => 'en',
-                'app_id' => $app->id
+                'app_id' => $app->id,
+                'lang' => 'en'
             ]);
 
-            factory(AppLocale::class)->create([
-                'lang' => 'es',
-                'app_id' => $app->id
+            factory(AppLocale::class, 5)->create([
+                'app_id' => $app->id,
+                'lang' => 'es'
             ]);
 
             factory(AppImage::class, 3)->create([
@@ -42,6 +44,6 @@ class AppsTableSeeder extends Seeder
             }
         }
         
-        //$user->apps()->sync($apps, [ 'active' => true ]);
+        $user->apps()->sync($apps, [ 'active' => true ]);
     }
 }

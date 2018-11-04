@@ -1,61 +1,33 @@
+import moment from 'moment'
+
 const message = {
     namespaced: true,
     state: {
-        messages: [],
-        status: {},
-        updatedTime: null
+        state: [],
+        timeLastRequest: null,
+        lastPendings: []
     },
     getters: {
-        count: state => {
-            return state.messages.length
-        },
-
-        isEmpty: getters => {
-            return !(getters.count > 0)
+        hasPendings: (state) => {
+            return state.state.status.pending > 0
         }
     },
     mutations: {
-        SET: (state, messages) => {
-            state.messages = messages
+        REFRESH_STATE: (state, status) => {
+            state.state = status
         },
-
-        PUSH: (state, message) => {
-            state.messages.push(message)
+        SET_TIME_LAST_REQUEST: (state) => {
+            state.timeLastRequest = moment()
         },
-
-        REFRESH_STATUS: (state, status) => {
-            state.status = status
+        REFRESH_LAST_PENDINGS: (state, messages) => {
+            state.lastPendings = messages
         }
     },
     actions: {
-        set ({ commit }, messages) {
-            commit('SET', messages)
-        },
-
-        push ({ commit }, message) {
-
-            commit('PUSH', message)
-        },
-
-        refreshStatus ({ commit }, payload) {
-            let status = {}
-
-            Object.keys(payload).forEach((key) => {
-                status[key] = payload[key].options
-
-                status[key].forEach((item, index) => {
-                    status[key][index].count = 0
-
-                    payload[key].result.forEach((item2) => {
-                        if ( item2.status === item.key ) {
-                            status[key][index].count = item2.count
-                        }
-                    })
-                })
-
-            })
-
-            commit('REFRESH_STATUS', status)
+        refresh ({ commit }, params) {
+            commit('REFRESH_STATE', params.state)
+            commit('REFRESH_LAST_PENDINGS', params.messages)
+            commit('SET_TIME_LAST_REQUEST')
         }
     }
 }
