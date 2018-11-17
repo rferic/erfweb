@@ -38,6 +38,8 @@ Route::group(
         // Admin Profile
         Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
         Route::post('/profile/get-data', 'Admin\ProfileController@getData')->name('admin.profile.getData');
+        Route::post('/profile/email-is-free', 'Admin\ProfileController@emailIsFree')->name('admin.profile.emailIsFree');
+        Route::post('/profile/update', 'Admin\ProfileController@update')->name('admin.profile.update');
         // Admin Messages
         Route::get('/messages', 'Admin\MessageController@index')->name('admin.messages');
         Route::get('/messages/{message}', 'Admin\MessageController@detail')->name('admin.message');

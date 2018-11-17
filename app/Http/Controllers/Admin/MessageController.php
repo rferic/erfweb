@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 use App\Models\Core\Message;
@@ -21,9 +21,9 @@ class MessageController extends Controller
         ]);
     }
 
-    public function getLastPending ()
+    public function getLastPending ( Request $request )
     {
-        $count = Input::get('count');
+        $count = $request->input('count');
         return Response::json(Message::where('status', 'pending')->orderBy('created_at', 'desc')->take($count)->get());
     }
 

@@ -22,6 +22,9 @@ class DashboardController extends Controller
      */
     public function index ()
     {
-        return view('admin/dashboard');
+        $title = __('Dashboard');
+        $component = 'index-dashboard';
+
+        return view('admin/default', compact('title', 'component'));
     }
 }

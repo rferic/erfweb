@@ -43,6 +43,8 @@ import store from './store'
 import NavIndex from './components/Nav/Index'
 import NavRight from './components/Nav/Right'
 import NavMessageNotify from './components/Nav/MessageNotify'
+import IndexDashboard from './components/Dashboard/Index'
+import IndexProfile from './components/Profile/Index'
 
 const app = new Vue({
     el: '#app',
@@ -50,7 +52,8 @@ const app = new Vue({
     components: {
         NavIndex,
         NavRight,
-        NavMessageNotify
-    },
-
+        NavMessageNotify,
+        IndexDashboard,
+        IndexProfile
+    }
 });

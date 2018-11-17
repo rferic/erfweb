@@ -30,9 +30,9 @@
                                     <i
                                         v-show="errors.has('email')"
                                         class="fa fa-warning text-danger"></i>
-                                    <span
+                                    <div
                                         v-show="errors.has('email')"
-                                        class="text-danger">{{ errors.first('email') }}</span>
+                                        class="invalid-feedback">{{ errors.first('email') }}</div>
                                 </b-form-group>
                                 <b-form-group :label="$t('Password', { locale: locale })">
                                     <b-form-input
@@ -49,9 +49,9 @@
                                     <i
                                         v-show="errors.has('password')"
                                         class="fa fa-warning text-danger"></i>
-                                    <span
+                                    <div
                                         v-show="errors.has('password')"
-                                        class="text-danger">{{ errors.first('password') }}</span>
+                                        class="invalid-feedback">{{ errors.first('password') }}</div>
                                 </b-form-group>
                                 <b-form-group :label="$t('Password confirm', { locale: locale })">
                                     <b-form-input
@@ -67,9 +67,9 @@
                                     <i
                                         v-show="errors.has('password_confirmation')"
                                         class="fa fa-warning text-danger"></i>
-                                    <span
+                                    <div
                                         v-show="errors.has('password_confirmation')"
-                                        class="text-danger">{{ errors.first('password_confirmation') }}</span>
+                                        class="invalid-feedback">{{ errors.first('password_confirmation') }}</div>
                                 </b-form-group>
                                 <b-button
                                     type="submit"

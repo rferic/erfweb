@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 use Spatie\Permission\Models\Role;
+use App\Http\Helpers\RoleHelper;
 
 use App\Models\Core\User;
 
@@ -18,8 +19,9 @@ class UsersTableSeeder extends Seeder
     {
         app()['cache']->forget('spatie.permission.cache');
 
-        Role::create(['name' => 'public']);
-        Role::create(['name' => 'admin']);
+        foreach ( RoleHelper::getRoles() AS $role ) {
+            Role::create(['name' => $role]);
+        }
 
         factory(User::class, 5)->create()->each(function ($user) {
             $user->assignRole('public');
