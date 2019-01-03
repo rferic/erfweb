@@ -2,10 +2,12 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">{{ $title }}</div>
-
         <div class="card-body">
-            <{{ $component }} data="{{ isset($data) ? json_encode($data) : null }}" />
+            <h1 class="box-title">{{ $title }}</h1>
+            <{{ $component }}
+                class="mt-4"
+                data="{{ isset($data) ? json_encode($data) : null }}"
+            />
         </div>
     </div>
 @endsection

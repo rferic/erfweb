@@ -9,15 +9,18 @@ class MessageHelper
         return Array (
             Array (
                 'key' => 'pending',
-                'color' => '#00a65a'
+                'color' => '#f39c12',
+                'class' => 'warning'
             ),
             Array (
                 'key' => 'readed',
-                'color' => '#f39c12'
+                'color' => '#007bff',
+                'class' => 'primary'
             ),
             Array (
                 'key' => 'answered',
-                'color' => '#dd4b39'
+                'color' => '#00a65a',
+                'class' => 'success'
             )
         );
     }
@@ -28,21 +31,36 @@ class MessageHelper
             Array (
                 'key' => 'important',
                 'color' => '#00a65a',
-                'icon' => 'fa-start',
-                'class' => 'btn-warning'
+                'icon' => 'fa-flash',
+                'class' => 'warning'
             ),
             Array (
                 'key' => 'error',
                 'color' => '#f39c12',
                 'icon' => 'fa-exclamation',
-                'class' => 'btn-danger'
+                'class' => 'danger'
             ),
             Array (
                 'key' => 'contact',
                 'color' => '#dd4b39',
                 'icon' => 'fa-envelope',
-                'class' => 'btn-primary'
+                'class' => 'primary'
             )
         );
+    }
+
+    static function getIndexViewOptions ( $onlyTrashed = false )
+    {
+        return [
+            'component' => 'index-message',
+            'data' => [
+                'statusList' => MessageHelper::getStatusList(),
+                'tagsList' => MessageHelper::getTagsList(),
+                'onlyTrashed' => $onlyTrashed
+            ],
+            'routes' => [
+                'getMessages' => route('admin.messages.get')
+            ]
+        ];
     }
 }

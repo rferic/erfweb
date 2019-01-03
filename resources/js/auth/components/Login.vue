@@ -16,6 +16,7 @@
                                 <b-form-group :label="$t('Email', { locale: locale })">
                                     <b-form-input
                                         v-model="email"
+                                        id="email"
                                         type="email"
                                         name="email"
                                         class="form-control"
@@ -34,6 +35,7 @@
                                 <b-form-group :label="$t('Password', { locale: locale })">
                                     <b-form-input
                                         v-model="password"
+                                        id="password"
                                         type="password"
                                         name="password"
                                         class="form-control"
@@ -51,6 +53,7 @@
                                 </b-form-group>
                                 <div class="checkbox">
                                     <b-form-checkbox
+                                        id="remember"
                                         v-model="remember"
                                         value="1"
                                         unchecked-value="2"
@@ -60,7 +63,6 @@
                                     <label class="pull-right">
                                         <a :href="routesGlobal.forgottenPassword">{{ $t('Forgotten Password?', { locale: this.locale }) }}</a>
                                     </label>
-
                                 </div>
                                 <b-button
                                     type="submit"
@@ -74,6 +76,15 @@
                                     </p>
                                 </div>
                             </b-form>
+                            <div v-if="hasSessionErrors">
+                                <b-alert
+                                    v-for="(sessionError, index) in sessionErrors"
+                                    :key="index"
+                                    show
+                                    variant="danger">
+                                    {{ $t(sessionError, { locale: this.locale }) }}
+                                </b-alert>
+                            </div>
                         </div>
                     </b-card>
                 </b-col>
@@ -93,6 +104,10 @@
             rememberValue: {
                 required: true,
                 type: String
+            },
+            sessionErrorsJson: {
+                required: true,
+                type: String
             }
         },
         data () {
@@ -103,7 +118,13 @@
             }
         },
         computed: {
-            ...mapState([ 'csrfToken', 'locale', 'routesGlobal' ])
+            ...mapState([ 'csrfToken', 'locale', 'routesGlobal' ]),
+            sessionErrors () {
+                return JSON.parse(this.sessionErrorsJson)
+            },
+            hasSessionErrors () {
+                return this.sessionErrors.length > 0
+            }
         },
         methods: {
             validateBeforeSubmit () {

@@ -33,6 +33,8 @@ Route::group(
     ],
     function ()
     {
+        // Admin routes to menu
+        Route::post('/admin-menu', 'Admin\AdminMenuController@get')->name('admin.adminMenu');
         // Admin Dashboard
         Route::get('/', 'Admin\DashboardController@index')->name('admin.dashboard');
         // Admin Profile
@@ -42,8 +44,13 @@ Route::group(
         Route::post('/profile/update', 'Admin\ProfileController@update')->name('admin.profile.update');
         // Admin Messages
         Route::get('/messages', 'Admin\MessageController@index')->name('admin.messages');
+        Route::get('/messages/trash', 'Admin\MessageController@indexTrash')->name('admin.messages.trash');
         Route::get('/messages/{message}', 'Admin\MessageController@detail')->name('admin.message');
         Route::post('/messages/get-state', 'Admin\MessageController@getState')->name('admin.messages.getState');
         Route::post('/messages/get-last-pending', 'Admin\MessageController@getLastPending')->name('admin.messages.getLastPending');
+        Route::post('/messages', 'Admin\MessageController@get')->name('admin.messages.get');
+        Route::post('/messages/{message}/restore', 'Admin\MessageController@restore')->name('admin.messages.restore');
+        Route::delete('/messages/{message}/remove', 'Admin\MessageController@remove')->name('admin.messages.remove');
+        Route::delete('/messages/{message}/destroy', 'Admin\MessageController@destroy')->name('admin.messages.destroy');
     }
 );

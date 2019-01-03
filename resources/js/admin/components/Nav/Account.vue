@@ -57,7 +57,7 @@
                 setAuth : 'auth/set'
             }),
             async getDataProfileRequest () {
-                const response = await axios.post(routesGlobal.profile.getData, {})
+                const response = await axios.post(this.routesGlobal.profile.getData, {})
                 return response.data
             },
             logout () {

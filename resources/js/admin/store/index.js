@@ -3,15 +3,18 @@ import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import auth from './auth'
 import message from './message'
+import adminMenu from './adminMenu'
+import paginator from './paginator'
 
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
-
 const store =  new Vuex.Store({
     modules: {
         auth,
-        message
+        adminMenu,
+        message,
+        paginator
     },
     state: {
         locale: locale,
@@ -29,7 +32,9 @@ const store =  new Vuex.Store({
                 'auth',
                 'message.state',
                 'message.lastPendings',
-                'message.timeLastRequest'
+                'message.timeLastRequest',
+                'adminMenu',
+                'paginator'
             ]
         })
     ],
