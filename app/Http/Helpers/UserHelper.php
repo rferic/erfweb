@@ -36,7 +36,7 @@ class UserHelper
     static function refreshRoles ( User $user, $roles)
     {
         foreach ( $roles AS $role ) {
-            if ( $user->hasRole($role['key']) !== $role['value'] ) {
+            if ( $user->hasRole($role['key']) !== boolval($role['value']) ) {
                 if ( $role['value'] ) {
                     $user->assignRole($role['key']);
                 } else {

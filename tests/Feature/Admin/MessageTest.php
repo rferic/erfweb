@@ -171,6 +171,97 @@ class MessageTest extends TestCase
         $this->assertEquals($response->total, $responseToAssert->total);
     }
 
+    public function testPostGetAuthorMessage ()
+    {
+        $this->withExceptionHandling();
+
+        $message = factory(Message::class)->create();
+        $author = User::find($message->author->id)->toArray();
+
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.messages.getAuthor', $message->id))
+            ->assertSuccessful()
+            ->assertStatus(200)
+            ->assertJsonFragment($author);
+    }
+
+    public function testPostRestoreMessage ()
+    {
+        $this->withExceptionHandling();
+
+        $message = factory(Message::class)->create();
+        // Call restore to message not in trash
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.messages.restore', $message->id))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => false]);
+
+        // Call restore to message in trash
+        $message->delete();
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.messages.restore', $message->id))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => true]);
+
+        $this->assertFalse(Message::withTrashed()->find($message->id)->trashed());
+    }
+
+    public function testDeleteRemoveMessage ()
+    {
+        $this->withExceptionHandling();
+
+        // Call restore to message in trash
+        $message = factory(Message::class)->create();
+        $message->delete();
+        $this
+            ->actingAs($this->user)
+            ->delete(route('admin.messages.remove', $message->id))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => false]);
+
+        // Call restore to message not in trash
+        $message = Message::get()->first();
+        $message->restore();
+        $this
+            ->actingAs($this->user)
+            ->delete(route('admin.messages.remove', $message->id))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => true]);
+
+        $this->assertTrue(Message::withTrashed()->find($message->id)->trashed());
+    }
+
+    public function testDeleteDestroyMessage ()
+    {
+        $this->withExceptionHandling();
+
+        $message = factory(Message::class)->create();
+        // Call restore to message not in trash
+        $this
+            ->actingAs($this->user)
+            ->delete(route('admin.messages.destroy', $message->id))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => false]);
+
+        // Call restore to message in trash
+        $message->delete();
+        $this
+            ->actingAs($this->user)
+            ->delete(route('admin.messages.destroy', $message->id))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => true]);
+
+        $this->assertNull(Message::withTrashed()->find($message->id));
+    }
+
+    /**
+     * Intental test method
+     * @param bool $onlyTrashed
+     * @return array
+     */
     private function getParamsToPostGetMessage ( $onlyTrashed = false )
     {
         $params = [ 'perPage' => $this->faker->numberBetween(1, 100), 'filters' => [ 'onlyTrashed' => $onlyTrashed ] ];

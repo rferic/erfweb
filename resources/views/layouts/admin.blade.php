@@ -25,12 +25,12 @@
             <main id="main-wrapper">
                 <!-- header header  -->
                 <div class="header">
-                    <nav-index />
+                    <nav-index ref="nav" />
                 </div>
                 <!-- End header header -->
                 <!-- Left Sidebar  -->
                 <div class="left-sidebar">
-                    <sidebar-index />
+                    <sidebar-index ref="sidebar" />
                 </div>
                 <!-- End Left Sidebar  -->
                 <!-- Page wrapper  -->
@@ -38,7 +38,6 @@
                     <div class="container-fluid">
                         <div class="row justify-content-center">
                             <div class="col-md-11">
-
                                 @yield('content')
                             </div>
                         </div>

@@ -3,13 +3,16 @@ import moment from 'moment'
 const message = {
     namespaced: true,
     state: {
-        state: [],
+        state: null,
         timeLastRequest: null,
         lastPendings: []
     },
     getters: {
         hasPendings: (state) => {
-            return state.state.status.pending > 0
+            return state.state !== null ? state.state.status.pending > 0 : false
+        },
+        countPendings: (state) => {
+            return state.state !== null ? state.state.status.pending : 0
         }
     },
     mutations: {

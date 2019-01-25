@@ -13,6 +13,11 @@
                     @input="onToggleCheck(checkbox)"
                 >
                     {{ $t(checkbox.key, { locale }) }}
+                    <i
+                        v-if="typeof checkbox.icon !== typeof undefined"
+                        class="fa ml-2"
+                        :class="checkbox.icon"
+                    />
                 </b-form-checkbox>
             </div>
         </b-nav-form>

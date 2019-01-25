@@ -182,10 +182,10 @@ class ProfileTest extends TestCase
         $this->assertTrue($this->admin->email === $email);
         $this->assertTrue($this->admin->name === $name);
 
-        $user = User::find($this->user->id)->first();
+        $user = User::find($this->admin->id);
 
         foreach ( $this->roles AS $role ) {
-            if ( $role['value'] ) {
+            if ( boolval($role['value']) ) {
                 $this->assertTrue($user->hasRole($role['key']));
             } else {
                 $this->assertFalse($user->hasRole($role['key']));

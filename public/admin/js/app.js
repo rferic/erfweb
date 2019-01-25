@@ -2601,6 +2601,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2630,6 +2635,123 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/admin/components/Message/Detail.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/admin/components/Message/Detail.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _mixins_messages__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../mixins/messages */ "./resources/js/admin/mixins/messages.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'DetailMessage',
+  props: {
+    messageOrigin: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [_mixins_messages__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  data: function data() {
+    return {
+      author: null
+    };
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])(['locale', 'routes'])),
+  methods: {
+    getAuthor: function () {
+      var _getAuthor = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return this.getAuthorRequest(this.messageOrigin);
+
+              case 2:
+                this.author = _context.sent;
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function getAuthor() {
+        return _getAuthor.apply(this, arguments);
+      }
+
+      return getAuthor;
+    }()
+  },
+  mounted: function mounted() {
+    this.getAuthor();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/admin/components/Message/Filter.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/admin/components/Message/Filter.vue?vue&type=script&lang=js& ***!
@@ -2648,6 +2770,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -2762,6 +2886,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_clone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../mixins/clone */ "./resources/js/admin/mixins/clone.js");
 /* harmony import */ var _Filter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Filter */ "./resources/js/admin/components/Message/Filter.vue");
 /* harmony import */ var _List__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./List */ "./resources/js/admin/components/Message/List.vue");
+/* harmony import */ var _Detail__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Detail */ "./resources/js/admin/components/Message/Detail.vue");
 //
 //
 //
@@ -2785,6 +2910,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2799,29 +2934,41 @@ __webpack_require__.r(__webpack_exports__);
   },
   components: {
     FilterMessage: _Filter__WEBPACK_IMPORTED_MODULE_2__["default"],
-    ListMessage: _List__WEBPACK_IMPORTED_MODULE_3__["default"]
+    ListMessage: _List__WEBPACK_IMPORTED_MODULE_3__["default"],
+    DetailMessage: _Detail__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   mixins: [_mixins_clone__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
-      messagesIdsSelected: [],
-      filters: this.clone(_structures_filterMessage__WEBPACK_IMPORTED_MODULE_0__["default"])
+      filters: this.clone(_structures_filterMessage__WEBPACK_IMPORTED_MODULE_0__["default"]),
+      currentMessage: null,
+      isLoaded: false
     };
   },
-  methods: {
-    onToggleCheck: function onToggleCheck(message) {
-      if (message.checked && !this.messagesIdsSelected.includes(message.id)) {
-        this.messagesIdsSelected.push(message.id);
-      } else if (!message.checked && this.messagesIdsSelected.includes(message.id)) {
-        this.messagesIdsSelected.splice(this.messagesIdsSelected.indexOf(message.id), 1);
-      }
+  computed: {
+    viewList: function viewList() {
+      return this.currentMessage === null && this.isLoaded;
     },
+    viewForm: function viewForm() {
+      return this.currentMessage !== null && this.isLoaded;
+    }
+  },
+  methods: {
     onChangeFilters: function onChangeFilters(filters) {
       this.filters = filters;
+    },
+    goToMessage: function goToMessage(message) {
+      this.currentMessage = message;
+    },
+    goToList: function goToList() {
+      this.currentMessage = null;
     }
   },
   created: function created() {
     this.filters.onlyTrashed = JSON.parse(this.data).onlyTrashed;
+  },
+  mounted: function mounted() {
+    this.isLoaded = true;
   }
 });
 
@@ -2883,9 +3030,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _mixins_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../mixins/paginator */ "./resources/js/admin/mixins/paginator.js");
-/* harmony import */ var _mixins_messages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../mixins/messages */ "./resources/js/admin/mixins/messages.js");
+/* harmony import */ var _mixins_clone__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../mixins/clone */ "./resources/js/admin/mixins/clone.js");
+/* harmony import */ var _mixins_paginator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../mixins/paginator */ "./resources/js/admin/mixins/paginator.js");
+/* harmony import */ var _mixins_messages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../../mixins/messages */ "./resources/js/admin/mixins/messages.js");
 
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -3035,6 +3185,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3051,7 +3230,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       default: {}
     }
   },
-  mixins: [_mixins_paginator__WEBPACK_IMPORTED_MODULE_2__["default"], _mixins_messages__WEBPACK_IMPORTED_MODULE_3__["default"]],
+  mixins: [_mixins_clone__WEBPACK_IMPORTED_MODULE_2__["default"], _mixins_paginator__WEBPACK_IMPORTED_MODULE_3__["default"], _mixins_messages__WEBPACK_IMPORTED_MODULE_4__["default"]],
   data: function data() {
     return {
       stackMessages: true,
@@ -3080,17 +3259,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         label: ''
       }],
       selectPerPage: null,
-      messageToDestroy: null
+      messageToDestroy: null,
+      messagesWithCheckedAttr: [],
+      checkAll: false
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])(['locale', 'routes']), {
-    hasMessagesSelected: function hasMessagesSelected() {
-      return this.$parent.messagesIdsSelected.length > 0;
+    isTrashView: function isTrashView() {
+      return JSON.parse(this.data).onlyTrashed;
     },
-    removeAllSelectedText: function removeAllSelectedText() {
-      return JSON.parse(this.data).onlyTrashed ? this.$t('Confirm delete all selected messages', {
+    hasMessagesSelected: function hasMessagesSelected() {
+      return this.messagesWithCheckedAttr.some(function (message) {
+        return message.checked;
+      });
+    },
+    removeSelectedText: function removeSelectedText() {
+      return this.isTrashView ? this.$t('Destroy selected messages', {
         locale: this.locale
-      }) : this.$t('Delete all selected messages', {
+      }) : this.$t('Delete selected messages', {
         locale: this.locale
       });
     }
@@ -3106,28 +3292,135 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     // Events
-    onToggleCheck: function onToggleCheck(message) {
-      this.$emit('onToggleCheck', message);
+    onToggleCheckAll: function onToggleCheckAll() {
+      this.setMessagesCheckAttr(true);
     },
     onChangePerPage: function onChangePerPage() {
       this.setPerPage(this.selectPerPage);
       this.refresh();
     },
-    onRemove: function () {
-      var _onRemove = _asyncToGenerator(
+    onRemoveSelected: function () {
+      var _onRemoveSelected = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(message) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, message;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!(message.deleted_at === null)) {
-                  _context.next = 7;
+                if (!this.isTrashView) {
+                  _context.next = 4;
                   break;
                 }
 
-                _context.next = 3;
-                return this.removeMessageRequest(message);
+                this.$refs.confirmDestroySelected.open();
+                _context.next = 33;
+                break;
+
+              case 4:
+                _iteratorNormalCompletion = true;
+                _didIteratorError = false;
+                _iteratorError = undefined;
+                _context.prev = 7;
+                _iterator = this.messagesWithCheckedAttr[Symbol.iterator]();
+
+              case 9:
+                if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                  _context.next = 17;
+                  break;
+                }
+
+                message = _step.value;
+
+                if (!message.checked) {
+                  _context.next = 14;
+                  break;
+                }
+
+                _context.next = 14;
+                return this.remove(message);
+
+              case 14:
+                _iteratorNormalCompletion = true;
+                _context.next = 9;
+                break;
+
+              case 17:
+                _context.next = 23;
+                break;
+
+              case 19:
+                _context.prev = 19;
+                _context.t0 = _context["catch"](7);
+                _didIteratorError = true;
+                _iteratorError = _context.t0;
+
+              case 23:
+                _context.prev = 23;
+                _context.prev = 24;
+
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                  _iterator.return();
+                }
+
+              case 26:
+                _context.prev = 26;
+
+                if (!_didIteratorError) {
+                  _context.next = 29;
+                  break;
+                }
+
+                throw _iteratorError;
+
+              case 29:
+                return _context.finish(26);
+
+              case 30:
+                return _context.finish(23);
+
+              case 31:
+                Vue.notify({
+                  group: 'notify',
+                  title: this.$t('Delete message'),
+                  text: this.$t('Messages selected has been deleted and moved to trash'),
+                  type: 'success',
+                  config: {
+                    closeOnClick: true
+                  }
+                });
+                this.refreshNavMessages();
+
+              case 33:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[7, 19, 23, 31], [24,, 26, 30]]);
+      }));
+
+      function onRemoveSelected() {
+        return _onRemoveSelected.apply(this, arguments);
+      }
+
+      return onRemoveSelected;
+    }(),
+    onRemove: function () {
+      var _onRemove = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(message) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!(message.deleted_at === null)) {
+                  _context2.next = 7;
+                  break;
+                }
+
+                _context2.next = 3;
+                return this.remove(message);
 
               case 3:
                 Vue.notify({
@@ -3139,19 +3432,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     closeOnClick: true
                   }
                 });
-                this.removeFromList(message);
-                _context.next = 8;
+                this.refreshNavMessages();
+                _context2.next = 9;
                 break;
 
               case 7:
+                this.messageToDestroy = message;
                 this.$refs.confirmDestroy.open();
 
-              case 8:
+              case 9:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function onRemove(_x) {
@@ -3160,24 +3454,115 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return onRemove;
     }(),
-    onRestore: function () {
-      var _onRestore = _asyncToGenerator(
+    onRestoreSelected: function () {
+      var _onRestoreSelected = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(message) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, message;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                if (!(message.deleted_at !== null)) {
-                  _context2.next = 5;
+                _iteratorNormalCompletion2 = true;
+                _didIteratorError2 = false;
+                _iteratorError2 = undefined;
+                _context3.prev = 3;
+                _iterator2 = this.messagesWithCheckedAttr[Symbol.iterator]();
+
+              case 5:
+                if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
+                  _context3.next = 13;
                   break;
                 }
 
-                _context2.next = 3;
-                return this.restoreMessageRequest(message);
+                message = _step2.value;
 
-              case 3:
-                this.removeFromList(message);
+                if (!message.checked) {
+                  _context3.next = 10;
+                  break;
+                }
+
+                _context3.next = 10;
+                return this.restore(message);
+
+              case 10:
+                _iteratorNormalCompletion2 = true;
+                _context3.next = 5;
+                break;
+
+              case 13:
+                _context3.next = 19;
+                break;
+
+              case 15:
+                _context3.prev = 15;
+                _context3.t0 = _context3["catch"](3);
+                _didIteratorError2 = true;
+                _iteratorError2 = _context3.t0;
+
+              case 19:
+                _context3.prev = 19;
+                _context3.prev = 20;
+
+                if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                  _iterator2.return();
+                }
+
+              case 22:
+                _context3.prev = 22;
+
+                if (!_didIteratorError2) {
+                  _context3.next = 25;
+                  break;
+                }
+
+                throw _iteratorError2;
+
+              case 25:
+                return _context3.finish(22);
+
+              case 26:
+                return _context3.finish(19);
+
+              case 27:
+                Vue.notify({
+                  group: 'notify',
+                  title: this.$t('Restore selected messages'),
+                  text: this.$t('Selected messages has been restored and moved to list'),
+                  type: 'success',
+                  config: {
+                    closeOnClick: true
+                  }
+                });
+                this.refreshNavMessages();
+
+              case 29:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this, [[3, 15, 19, 27], [20,, 22, 26]]);
+      }));
+
+      function onRestoreSelected() {
+        return _onRestoreSelected.apply(this, arguments);
+      }
+
+      return onRestoreSelected;
+    }(),
+    onRestore: function () {
+      var _onRestore = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(message) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.restore(message);
+
+              case 2:
                 Vue.notify({
                   group: 'notify',
                   title: this.$t('Restore message'),
@@ -3187,13 +3572,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     closeOnClick: true
                   }
                 });
+                this.refreshNavMessages();
 
-              case 5:
+              case 4:
               case "end":
-                return _context2.stop();
+                return _context4.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee4, this);
       }));
 
       function onRestore(_x2) {
@@ -3202,25 +3588,125 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return onRestore;
     }(),
-    onDestroy: function () {
-      var _onDestroy = _asyncToGenerator(
+    onDestroySelected: function () {
+      var _onDestroySelected = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, message;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
-                if (!(this.messageToDestroy !== null)) {
-                  _context3.next = 6;
+                _iteratorNormalCompletion3 = true;
+                _didIteratorError3 = false;
+                _iteratorError3 = undefined;
+                _context5.prev = 3;
+                _iterator3 = this.messagesWithCheckedAttr[Symbol.iterator]();
+
+              case 5:
+                if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+                  _context5.next = 14;
                   break;
                 }
 
-                _context3.next = 3;
-                return this.destroyMessageRequest(this.messageToDestroy);
+                message = _step3.value;
+
+                if (!message.checked) {
+                  _context5.next = 11;
+                  break;
+                }
+
+                _context5.next = 10;
+                return this.destroy(message);
+
+              case 10:
+                this.$refs.confirmDestroySelected.close();
+
+              case 11:
+                _iteratorNormalCompletion3 = true;
+                _context5.next = 5;
+                break;
+
+              case 14:
+                _context5.next = 20;
+                break;
+
+              case 16:
+                _context5.prev = 16;
+                _context5.t0 = _context5["catch"](3);
+                _didIteratorError3 = true;
+                _iteratorError3 = _context5.t0;
+
+              case 20:
+                _context5.prev = 20;
+                _context5.prev = 21;
+
+                if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                  _iterator3.return();
+                }
+
+              case 23:
+                _context5.prev = 23;
+
+                if (!_didIteratorError3) {
+                  _context5.next = 26;
+                  break;
+                }
+
+                throw _iteratorError3;
+
+              case 26:
+                return _context5.finish(23);
+
+              case 27:
+                return _context5.finish(20);
+
+              case 28:
+                Vue.notify({
+                  group: 'notify',
+                  title: this.$t('Destroy selected messages'),
+                  text: this.$t('Selected essages has been destroyed'),
+                  type: 'success',
+                  config: {
+                    closeOnClick: true
+                  }
+                });
+                this.refreshNavMessages();
+
+              case 30:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this, [[3, 16, 20, 28], [21,, 23, 27]]);
+      }));
+
+      function onDestroySelected() {
+        return _onDestroySelected.apply(this, arguments);
+      }
+
+      return onDestroySelected;
+    }(),
+    onDestroy: function () {
+      var _onDestroy = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                if (!(this.messageToDestroy !== null)) {
+                  _context6.next = 7;
+                  break;
+                }
+
+                _context6.next = 3;
+                return this.destroy(this.messageToDestroy);
 
               case 3:
-                this.removeFromList(this.messageToDestroy);
                 this.messageToDestroy = null;
+                this.$refs.confirmDestroy.close();
                 Vue.notify({
                   group: 'notify',
                   title: this.$t('Destroy message'),
@@ -3230,13 +3716,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     closeOnClick: true
                   }
                 });
+                this.refreshNavMessages();
 
-              case 6:
+              case 7:
               case "end":
-                return _context3.stop();
+                return _context6.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee6, this);
       }));
 
       function onDestroy() {
@@ -3249,10 +3736,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadNextPage: function () {
       var _loadNextPage = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
                 this.loadPage({
                   page: this.currentPage,
@@ -3262,10 +3749,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 1:
               case "end":
-                return _context4.stop();
+                return _context7.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee7, this);
       }));
 
       function loadNextPage() {
@@ -3277,14 +3764,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadPage: function () {
       var _loadPage = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(_ref) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(_ref) {
         var page, perPage, url, data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 page = _ref.page, perPage = _ref.perPage, url = _ref.url;
-                _context5.next = 3;
+                _context8.next = 3;
                 return this.getMessages({
                   stack: this.stackMessages,
                   page: page,
@@ -3293,18 +3780,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 });
 
               case 3:
-                data = _context5.sent;
-                this.setMessagesCheckAttr();
+                data = _context8.sent;
+                this.setMessagesCheckAttr(false);
                 this.currentPage = data.current_page;
                 this.totalPages = data.to;
                 this.setPerPage(perPage);
 
               case 8:
               case "end":
-                return _context5.stop();
+                return _context8.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee8, this);
       }));
 
       function loadPage(_x3) {
@@ -3313,14 +3800,125 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return loadPage;
     }(),
-    refresh: function refresh() {
-      this.$wait.start('loader');
-      this.messages = [];
-      this.loadPage({
-        page: this.page,
-        perPage: this.perPage
-      });
-      this.$wait.end('loader');
+    refresh: function () {
+      var _refresh = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                this.$wait.start('loader');
+                this.messages = [];
+                _context9.next = 4;
+                return this.loadPage({
+                  page: this.page,
+                  perPage: this.perPage
+                });
+
+              case 4:
+                this.$wait.end('loader');
+
+              case 5:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, this);
+      }));
+
+      function refresh() {
+        return _refresh.apply(this, arguments);
+      }
+
+      return refresh;
+    }(),
+    remove: function () {
+      var _remove = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10(message) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                _context10.next = 2;
+                return this.removeMessageRequest(message);
+
+              case 2:
+                this.removeFromList(message);
+
+              case 3:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10, this);
+      }));
+
+      function remove(_x4) {
+        return _remove.apply(this, arguments);
+      }
+
+      return remove;
+    }(),
+    restore: function () {
+      var _restore = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11(message) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                _context11.next = 2;
+                return this.restoreMessageRequest(message);
+
+              case 2:
+                this.removeFromList(message);
+
+              case 3:
+              case "end":
+                return _context11.stop();
+            }
+          }
+        }, _callee11, this);
+      }));
+
+      function restore(_x5) {
+        return _restore.apply(this, arguments);
+      }
+
+      return restore;
+    }(),
+    destroy: function () {
+      var _destroy = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12(message) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                _context12.next = 2;
+                return this.destroyMessageRequest(message);
+
+              case 2:
+                this.removeFromList(message);
+
+              case 3:
+              case "end":
+                return _context12.stop();
+            }
+          }
+        }, _callee12, this);
+      }));
+
+      function destroy(_x6) {
+        return _destroy.apply(this, arguments);
+      }
+
+      return destroy;
+    }(),
+    refreshNavMessages: function refreshNavMessages() {
+      this.$root.$refs.nav.$refs.navRight.refreshData();
     },
     // Getters
     getDataStatusSelected: function getDataStatusSelected(statusKey) {
@@ -3350,10 +3948,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return tagSelected;
     },
     // Setters
-    setMessagesCheckAttr: function setMessagesCheckAttr() {
-      this.messages.forEach(function (message) {
-        message.checked = false;
-      });
+    setMessagesCheckAttr: function setMessagesCheckAttr(force) {
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = this.messages[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var message = _step4.value;
+
+          if (force || _typeof(message.checked) === ( true ? "undefined" : undefined)) {
+            message.checked = this.checkAll;
+          }
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+            _iterator4.return();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
+          }
+        }
+      }
+
+      this.messagesWithCheckedAttr = this.clone(this.messages);
     }
   },
   mounted: function mounted() {
@@ -3558,7 +4181,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   components: {
     NavRight: _Right__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['routesGlobal']))
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['routesGlobal'])),
+  mounted: function mounted() {
+    this.$emit('eventToRoot');
+  }
 });
 
 /***/ }),
@@ -3731,7 +4357,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return state.message.state.tagsStructure;
     },
     countPending: function countPending(state) {
-      return state.message.state.status.pending;
+      return state.message.countPendings;
     },
     lastPendings: function lastPendings(state) {
       return state.message.lastPendings;
@@ -85386,8 +86012,11 @@ var render = function() {
                 _vm._v(
                   "\n                " +
                     _vm._s(_vm.$t(checkbox.key, { locale: _vm.locale })) +
-                    "\n            "
-                )
+                    "\n                "
+                ),
+                typeof checkbox.icon !== typeof undefined
+                  ? _c("i", { staticClass: "fa ml-2", class: checkbox.icon })
+                  : _vm._e()
               ]
             )
           ],
@@ -85397,6 +86026,98 @@ var render = function() {
     }),
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/admin/components/Message/Detail.vue?vue&type=template&id=4f71abe4&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/admin/components/Message/Detail.vue?vue&type=template&id=4f71abe4& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("transition", { attrs: { name: "bounceRight" } }, [
+    _c(
+      "div",
+      [
+        _c(
+          "b-row",
+          [
+            _c(
+              "b-col",
+              { attrs: { cols: "12" } },
+              [
+                _c(
+                  "b-button",
+                  {
+                    attrs: { variant: "primary", size: "sm" },
+                    on: {
+                      click: function($event) {
+                        _vm.$emit("onGoToList")
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "fa fa-chevron-left" }),
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(
+                          _vm.$t("Return to list", { locale: _vm.locale })
+                        ) +
+                        "\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("hr")
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("b-col", { attrs: { cols: "12" } }, [
+              _vm._v("\n                asd\n            ")
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          [
+            _c(
+              "b-col",
+              { staticClass: "pull-right", attrs: { cols: "4", xs: "12" } },
+              [
+                _c("b-card", [
+                  _vm._v("\n                    asd\n                ")
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("b-col", { attrs: { cols: "5", xs: "12" } }, [
+              _vm._v("\n                asd\n            ")
+            ])
+          ],
+          1
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -85420,40 +86141,42 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "b-nav",
-        { attrs: { vertical: "" } },
-        [
-          _c("div", { staticClass: "dropdown-divider" }),
-          _vm._v(" "),
-          _c("input-text-filter-message", {
-            on: { onChangeFilter: _vm.onChangeTextFilter }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "dropdown-divider" }),
-          _vm._v(" "),
-          _c("checkboxes-filter-message", {
-            attrs: { options: _vm.statusList },
-            on: { onChangeFilter: _vm.onChangeStatusFilter }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "dropdown-divider" }),
-          _vm._v(" "),
-          _c("checkboxes-filter-message", {
-            attrs: { options: _vm.tagsList },
-            on: { onChangeFilter: _vm.onChangeTagsFilter }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "dropdown-divider" })
-        ],
-        1
-      )
-    ],
-    1
-  )
+  return _c("transition", { attrs: { name: "bounceRight" } }, [
+    _c(
+      "div",
+      [
+        _c(
+          "b-nav",
+          { attrs: { vertical: "" } },
+          [
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("input-text-filter-message", {
+              on: { onChangeFilter: _vm.onChangeTextFilter }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("checkboxes-filter-message", {
+              attrs: { options: _vm.statusList },
+              on: { onChangeFilter: _vm.onChangeStatusFilter }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("checkboxes-filter-message", {
+              attrs: { options: _vm.tagsList },
+              on: { onChangeFilter: _vm.onChangeTagsFilter }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" })
+          ],
+          1
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -85478,32 +86201,54 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "b-row",
+    "div",
     [
-      _c(
-        "b-col",
-        { attrs: { cols: "3", xs: "12" } },
-        [
-          _c("filter-message", {
-            attrs: { data: _vm.data },
-            on: { onChangeFilters: _vm.onChangeFilters }
-          })
-        ],
-        1
-      ),
+      _vm.viewList
+        ? _c(
+            "b-row",
+            [
+              _c(
+                "b-col",
+                { attrs: { cols: "3", xs: "12" } },
+                [
+                  _c("filter-message", {
+                    attrs: { data: _vm.data },
+                    on: { onChangeFilters: _vm.onChangeFilters }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-col",
+                { attrs: { cols: "9", xs: "12" } },
+                [
+                  _c("list-message", {
+                    ref: "listMessage",
+                    attrs: { data: _vm.data, filters: _vm.filters },
+                    on: { onGoToMessage: _vm.goToMessage }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
       _vm._v(" "),
-      _c(
-        "b-col",
-        { attrs: { cols: "9", xs: "12" } },
-        [
-          _c("list-message", {
-            ref: "listMessage",
-            attrs: { data: _vm.data, filters: _vm.filters },
-            on: { onToggleCheck: _vm.onToggleCheck }
-          })
-        ],
-        1
-      )
+      _vm.viewForm
+        ? _c(
+            "b-row",
+            [
+              _c("detail-message", {
+                staticClass: "col-12",
+                attrs: { "message-origin": _vm.currentMessage },
+                on: { onGoToList: _vm.goToList }
+              })
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )
@@ -85583,313 +86328,429 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-wait",
-    { attrs: { for: "loader" } },
+    "transition",
+    { attrs: { name: "bounceRight" } },
     [
-      _c("template", { slot: "waiting" }, [
-        _c("div", [
-          _vm._v(
-            "\n            " +
-              _vm._s(_vm.$t("Loading...", _vm.locale)) +
-              "\n        "
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "dropdown-divider" }),
-      _vm._v(" "),
-      _c("b-alert", { attrs: { show: !_vm.hasMessages, variant: "warning" } }, [
-        _vm._v(
-          "\n        " +
-            _vm._s(_vm.$t("Messages not found", { locale: this.locale })) +
-            "\n    "
-        )
-      ]),
-      _vm._v(" "),
       _c(
-        "sweet-modal",
-        { ref: "confirmDestroy" },
+        "v-wait",
+        { attrs: { for: "loader" } },
         [
-          _c("h2", [
-            _vm._v(
-              _vm._s(_vm.$t("Confirm destroy message", { locale: _vm.locale }))
-            )
+          _c("notifications", {
+            attrs: { group: "notify", position: "bottom right" }
+          }),
+          _vm._v(" "),
+          _c("template", { slot: "waiting" }, [
+            _c("div", [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.$t("Loading...", _vm.locale)) +
+                  "\n            "
+              )
+            ])
           ]),
-          _vm._v(
-            "\n        " +
-              _vm._s(
-                _vm.$t(
-                  "Are you sure to destroy the message? You will not be able to restore it.",
-                  { locale: _vm.locale }
-                )
-              ) +
-              "\n        "
-          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "dropdown-divider" }),
+          _vm._v(" "),
           _c(
-            "b-button",
-            {
-              staticClass: "mt-4",
-              attrs: { size: "sm", variant: "danger" },
-              on: { click: _vm.onDestroy }
-            },
+            "b-alert",
+            { attrs: { show: !_vm.hasMessages, variant: "warning" } },
             [
               _vm._v(
                 "\n            " +
                   _vm._s(
-                    _vm.$t("Confirm destroy message", { locale: _vm.locale })
+                    _vm.$t("Messages not found", { locale: this.locale })
                   ) +
                   "\n        "
               )
             ]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _vm.hasMessages
-        ? _c(
-            "div",
+          ),
+          _vm._v(" "),
+          _c(
+            "sweet-modal",
+            { ref: "confirmDestroy" },
             [
-              _c("div", { staticClass: "mb-2" }, [
-                _c(
-                  "div",
-                  { staticClass: "text-right pull-left" },
-                  [
-                    _c(
-                      "b-button",
-                      {
-                        attrs: {
-                          size: "sm",
-                          variant: "danger",
-                          disabled: !_vm.hasMessagesSelected
-                        },
-                        on: {
-                          click: function($event) {
-                            _vm.$emit("removeAllSelected")
-                          }
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "fa fa-trash" }),
-                        _vm._v(
-                          " " +
-                            _vm._s(_vm.removeAllSelectedText) +
-                            "\n                "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "text-right pull-right" },
-                  [
-                    _c("b-form-select", {
-                      attrs: { size: "sm", options: _vm.optionsPerPage },
-                      on: { input: _vm.onChangePerPage },
-                      model: {
-                        value: _vm.selectPerPage,
-                        callback: function($$v) {
-                          _vm.selectPerPage = $$v
-                        },
-                        expression: "selectPerPage"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "clearfix" })
+              _c("h2", [
+                _vm._v(
+                  _vm._s(
+                    _vm.$t("Confirm destroy message", { locale: _vm.locale })
+                  )
+                )
               ]),
               _vm._v(" "),
-              _c("b-table", {
-                attrs: {
-                  id: "messages",
-                  responsive: "",
-                  small: "",
-                  hover: "",
-                  striped: "",
-                  fields: _vm.columns,
-                  items: _vm.messages
+              _c("p", [
+                _vm._v(
+                  _vm._s(
+                    _vm.$t(
+                      "Are you sure to destroy the message? You will not be able to restore it.",
+                      { locale: _vm.locale }
+                    )
+                  )
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  staticClass: "mt-4",
+                  attrs: { size: "sm", variant: "danger" },
+                  on: { click: _vm.onDestroy }
                 },
-                scopedSlots: _vm._u([
-                  {
-                    key: "check",
-                    fn: function(data) {
-                      return [
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(
+                        _vm.$t("Confirm destroy message", {
+                          locale: _vm.locale
+                        })
+                      ) +
+                      "\n            "
+                  )
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "sweet-modal",
+            { ref: "confirmDestroySelected" },
+            [
+              _c("h2", [
+                _vm._v(
+                  _vm._s(
+                    _vm.$t("Confirm destroy selected messages", {
+                      locale: _vm.locale
+                    })
+                  )
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  _vm._s(
+                    _vm.$t(
+                      "Are you sure to destroy the selected messages? You will not be able to restore it.",
+                      { locale: _vm.locale }
+                    )
+                  )
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  staticClass: "mt-4",
+                  attrs: { size: "sm", variant: "danger" },
+                  on: { click: _vm.onDestroySelected }
+                },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(
+                        _vm.$t("Confirm destroy selected messages", {
+                          locale: _vm.locale
+                        })
+                      ) +
+                      "\n            "
+                  )
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm.hasMessages
+            ? _c(
+                "div",
+                [
+                  _c("div", { staticClass: "mb-2" }, [
+                    _c(
+                      "div",
+                      { staticClass: "text-right pull-left" },
+                      [
                         _c("b-form-checkbox", {
-                          on: {
-                            input: function($event) {
-                              _vm.onToggleCheck(data.item)
-                            }
-                          },
+                          on: { input: _vm.onToggleCheckAll },
                           model: {
-                            value: data.item.checked,
+                            value: _vm.checkAll,
                             callback: function($$v) {
-                              _vm.$set(data.item, "checked", $$v)
+                              _vm.checkAll = $$v
                             },
-                            expression: "data.item.checked"
+                            expression: "checkAll"
                           }
-                        })
-                      ]
-                    }
-                  },
-                  {
-                    key: "status",
-                    fn: function(data) {
-                      return [
-                        _c("i", {
-                          staticClass: "fa fa-eye",
-                          class:
-                            "text-" +
-                            _vm.getDataStatusSelected(data.item.status).class
-                        })
-                      ]
-                    }
-                  },
-                  {
-                    key: "author",
-                    fn: function(data) {
-                      return [
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(data.item.author.name) +
-                            "\n            "
-                        )
-                      ]
-                    }
-                  },
-                  {
-                    key: "tag",
-                    fn: function(data) {
-                      return [
+                        }),
+                        _vm._v(" "),
                         _c(
-                          "b-badge",
+                          "b-button",
                           {
                             attrs: {
-                              variant: _vm.getDataTagSelected(data.item.tag)
-                                .class
-                            }
+                              size: "sm",
+                              variant: "danger",
+                              disabled: !_vm.hasMessagesSelected
+                            },
+                            on: { click: _vm.onRemoveSelected }
                           },
                           [
+                            _c("i", { staticClass: "fa fa-trash" }),
+                            _vm._v(
+                              " " +
+                                _vm._s(_vm.removeSelectedText) +
+                                "\n                    "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-button",
+                          {
+                            attrs: {
+                              size: "sm",
+                              variant: "success",
+                              disabled: !_vm.hasMessagesSelected
+                            },
+                            on: { click: _vm.onRestoreSelected }
+                          },
+                          [
+                            _c("i", { staticClass: "fa fa-undo" }),
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  _vm.$t("Restore selected messages", {
+                                    locale: _vm.locale
+                                  })
+                                ) +
+                                "\n                    "
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "text-right pull-right" },
+                      [
+                        _c("b-form-select", {
+                          attrs: { size: "sm", options: _vm.optionsPerPage },
+                          on: { input: _vm.onChangePerPage },
+                          model: {
+                            value: _vm.selectPerPage,
+                            callback: function($$v) {
+                              _vm.selectPerPage = $$v
+                            },
+                            expression: "selectPerPage"
+                          }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "clearfix" })
+                  ]),
+                  _vm._v(" "),
+                  _c("b-table", {
+                    ref: "table",
+                    attrs: {
+                      id: "messages",
+                      responsive: "",
+                      small: "",
+                      hover: "",
+                      striped: "",
+                      fields: _vm.columns,
+                      items: _vm.messagesWithCheckedAttr
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "check",
+                        fn: function(data) {
+                          return [
+                            _c("b-form-checkbox", {
+                              model: {
+                                value: data.item.checked,
+                                callback: function($$v) {
+                                  _vm.$set(data.item, "checked", $$v)
+                                },
+                                expression: "data.item.checked"
+                              }
+                            })
+                          ]
+                        }
+                      },
+                      {
+                        key: "status",
+                        fn: function(data) {
+                          return [
                             _c("i", {
-                              staticClass: "fa",
-                              class: _vm.getDataTagSelected(data.item.tag).icon
-                            }),
+                              staticClass: "fa fa-eye",
+                              class:
+                                "text-" +
+                                _vm.getDataStatusSelected(data.item.status)
+                                  .class
+                            })
+                          ]
+                        }
+                      },
+                      {
+                        key: "author",
+                        fn: function(data) {
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(data.item.author.name) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "tag",
+                        fn: function(data) {
+                          return [
+                            _c(
+                              "b-badge",
+                              {
+                                attrs: {
+                                  variant: _vm.getDataTagSelected(data.item.tag)
+                                    .class
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fa",
+                                  class: _vm.getDataTagSelected(data.item.tag)
+                                    .icon
+                                }),
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(
+                                      _vm.$t(data.item.tag, {
+                                        locale: _vm.locale
+                                      })
+                                    ) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "created_at",
+                        fn: function(data) {
+                          return [
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  _vm.$t(data.item.tag, { locale: _vm.locale })
+                                  _vm._f("momentTime")(data.item.created_at)
                                 ) +
                                 "\n                "
                             )
                           ]
-                        )
-                      ]
-                    }
-                  },
-                  {
-                    key: "created_at",
-                    fn: function(data) {
-                      return [
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(_vm._f("momentTime")(data.item.created_at)) +
-                            "\n            "
-                        )
-                      ]
-                    }
-                  },
-                  {
-                    key: "actions",
-                    fn: function(data) {
-                      return [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "mr-2",
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.$emit("onShow", data.item)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fa fa-eye text-secondary" })]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.onRemove(data.item)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fa fa-trash text-danger" })]
-                        ),
-                        _vm._v(" "),
-                        data.item.deleted_at !== null
-                          ? _c(
+                        }
+                      },
+                      {
+                        key: "actions",
+                        fn: function(data) {
+                          return [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "mr-2",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.$emit("onGoToMessage", data.item)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fa fa-eye text-secondary"
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
                               "a",
                               {
                                 attrs: { href: "#" },
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    _vm.onRestore(data.item)
+                                    _vm.onRemove(data.item)
                                   }
                                 }
                               },
                               [
                                 _c("i", {
-                                  staticClass: "fa fa-undo text-success"
+                                  staticClass: "fa fa-trash text-danger"
                                 })
                               ]
-                            )
-                          : _vm._e()
-                      ]
-                    }
-                  }
-                ])
-              })
-            ],
-            1
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "text-right" }, [
-        _c("em", [
-          _vm._v(
-            _vm._s(_vm.messages.length) + " / " + _vm._s(_vm.totalMessages)
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _vm.hasNextPage
-        ? _c(
-            "b-button",
-            {
-              attrs: { block: "", variant: "primary" },
-              on: { click: _vm.loadNextPage }
-            },
-            [
-              _vm._v(
-                "\n        " +
-                  _vm._s(_vm.$t("View more", { locale: this.locale })) +
-                  "\n    "
+                            ),
+                            _vm._v(" "),
+                            data.item.deleted_at !== null
+                              ? _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.onRestore(data.item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fa fa-undo text-success"
+                                    })
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
               )
-            ]
-          )
-        : _vm._e()
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.hasMessages
+            ? _c("div", { staticClass: "text-right" }, [
+                _c("em", [
+                  _vm._v(
+                    _vm._s(_vm.messages.length) +
+                      " / " +
+                      _vm._s(_vm.totalMessages)
+                  )
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.hasNextPage
+            ? _c(
+                "b-button",
+                {
+                  attrs: { block: "", variant: "primary" },
+                  on: { click: _vm.loadNextPage }
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.$t("View more", { locale: this.locale })) +
+                      "\n        "
+                  )
+                ]
+              )
+            : _vm._e()
+        ],
+        2
+      )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -86045,7 +86906,7 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("nav-right")
+          _c("nav-right", { ref: "navRight" })
         ],
         1
       )
@@ -110444,6 +111305,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/admin/components/Message/Detail.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/admin/components/Message/Detail.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Detail_vue_vue_type_template_id_4f71abe4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Detail.vue?vue&type=template&id=4f71abe4& */ "./resources/js/admin/components/Message/Detail.vue?vue&type=template&id=4f71abe4&");
+/* harmony import */ var _Detail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Detail.vue?vue&type=script&lang=js& */ "./resources/js/admin/components/Message/Detail.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Detail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Detail_vue_vue_type_template_id_4f71abe4___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Detail_vue_vue_type_template_id_4f71abe4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/admin/components/Message/Detail.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/admin/components/Message/Detail.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/admin/components/Message/Detail.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Detail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Detail.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/admin/components/Message/Detail.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Detail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/admin/components/Message/Detail.vue?vue&type=template&id=4f71abe4&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/admin/components/Message/Detail.vue?vue&type=template&id=4f71abe4& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Detail_vue_vue_type_template_id_4f71abe4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Detail.vue?vue&type=template&id=4f71abe4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/admin/components/Message/Detail.vue?vue&type=template&id=4f71abe4&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Detail_vue_vue_type_template_id_4f71abe4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Detail_vue_vue_type_template_id_4f71abe4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/admin/components/Message/Filter.vue":
 /*!**********************************************************!*\
   !*** ./resources/js/admin/components/Message/Filter.vue ***!
@@ -111352,7 +112282,7 @@ var messagesMixin = {
       var _this = this;
 
       this.messages.some(function (messageList, index) {
-        var scapeCondition = message.id === messageList;
+        var scapeCondition = message.id === messageList.id;
 
         if (scapeCondition) {
           _this.messages.splice(index, 1);
@@ -111362,6 +112292,7 @@ var messagesMixin = {
 
         return scapeCondition;
       });
+      this.messagesWithCheckedAttr = this.clone(this.messages);
     },
     // Getters
     getMessages: function () {
@@ -111458,8 +112389,8 @@ var messagesMixin = {
 
       return getMessagesRequest;
     }(),
-    removeMessageRequest: function () {
-      var _removeMessageRequest = _asyncToGenerator(
+    getAuthorRequest: function () {
+      var _getAuthorRequest = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(message) {
         var _ref4, data;
@@ -111469,7 +112400,7 @@ var messagesMixin = {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.delete("".concat(this.routes.getMessages, "/").concat(message.id, "/remove"), {});
+                return axios.post("".concat(routes.getMessages, "/").concat(message.id, "/get-author"), {});
 
               case 2:
                 _ref4 = _context3.sent;
@@ -111484,14 +112415,14 @@ var messagesMixin = {
         }, _callee3, this);
       }));
 
-      function removeMessageRequest(_x3) {
-        return _removeMessageRequest.apply(this, arguments);
+      function getAuthorRequest(_x3) {
+        return _getAuthorRequest.apply(this, arguments);
       }
 
-      return removeMessageRequest;
+      return getAuthorRequest;
     }(),
-    restoreMessageRequest: function () {
-      var _restoreMessageRequest = _asyncToGenerator(
+    removeMessageRequest: function () {
+      var _removeMessageRequest = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(message) {
         var _ref5, data;
@@ -111501,7 +112432,7 @@ var messagesMixin = {
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios.post("".concat(this.routes.getMessages, "/").concat(message.id, "/restore"), {});
+                return axios.delete("".concat(this.routes.getMessages, "/").concat(message.id, "/remove"), {});
 
               case 2:
                 _ref5 = _context4.sent;
@@ -111516,14 +112447,14 @@ var messagesMixin = {
         }, _callee4, this);
       }));
 
-      function restoreMessageRequest(_x4) {
-        return _restoreMessageRequest.apply(this, arguments);
+      function removeMessageRequest(_x4) {
+        return _removeMessageRequest.apply(this, arguments);
       }
 
-      return restoreMessageRequest;
+      return removeMessageRequest;
     }(),
-    destroyMessageRequest: function () {
-      var _destroyMessageRequest = _asyncToGenerator(
+    restoreMessageRequest: function () {
+      var _restoreMessageRequest = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(message) {
         var _ref6, data;
@@ -111533,7 +112464,7 @@ var messagesMixin = {
             switch (_context5.prev = _context5.next) {
               case 0:
                 _context5.next = 2;
-                return axios.delete("".concat(this.routes.getMessages, "/").concat(message.id, "/destroy"), {});
+                return axios.post("".concat(this.routes.getMessages, "/").concat(message.id, "/restore"), {});
 
               case 2:
                 _ref6 = _context5.sent;
@@ -111548,7 +112479,39 @@ var messagesMixin = {
         }, _callee5, this);
       }));
 
-      function destroyMessageRequest(_x5) {
+      function restoreMessageRequest(_x5) {
+        return _restoreMessageRequest.apply(this, arguments);
+      }
+
+      return restoreMessageRequest;
+    }(),
+    destroyMessageRequest: function () {
+      var _destroyMessageRequest = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(message) {
+        var _ref7, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return axios.delete("".concat(this.routes.getMessages, "/").concat(message.id, "/destroy"), {});
+
+              case 2:
+                _ref7 = _context6.sent;
+                data = _ref7.data;
+                return _context6.abrupt("return", data);
+
+              case 5:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      function destroyMessageRequest(_x6) {
         return _destroyMessageRequest.apply(this, arguments);
       }
 
@@ -111608,7 +112571,7 @@ __webpack_require__.r(__webpack_exports__);
 var adminMenu = {
   namespaced: true,
   state: {
-    menu: Array
+    menu: []
   },
   getters: {
     menuIsLoaded: function menuIsLoaded(state) {
@@ -111733,13 +112696,16 @@ __webpack_require__.r(__webpack_exports__);
 var message = {
   namespaced: true,
   state: {
-    state: [],
+    state: null,
     timeLastRequest: null,
     lastPendings: []
   },
   getters: {
     hasPendings: function hasPendings(state) {
-      return state.state.status.pending > 0;
+      return state.state !== null ? state.state.status.pending > 0 : false;
+    },
+    countPendings: function countPendings(state) {
+      return state.state !== null ? state.state.status.pending : 0;
     }
   },
   mutations: {

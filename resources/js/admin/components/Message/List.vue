@@ -1,145 +1,174 @@
 <template>
-    <v-wait for="loader">
-        <template slot="waiting">
-            <div>
-                {{ $t('Loading...', locale) }}
-            </div>
-        </template>
-        <div class="dropdown-divider"></div>
-        <b-alert
-            :show="!hasMessages"
-            variant="warning"
-        >
-            {{ $t('Messages not found', { locale: this.locale }) }}
-        </b-alert>
-        <sweet-modal ref="confirmDestroy">
-            <h2>{{ $t('Confirm destroy message', { locale }) }}</h2>
-            {{ $t('Are you sure to destroy the message? You will not be able to restore it.', { locale }) }}
-            <b-button
-                size="sm"
-                class="mt-4"
-                variant="danger"
-                @click="onDestroy"
-            >
-                {{ $t('Confirm destroy message', { locale }) }}
-            </b-button>
-        </sweet-modal>
-        <div v-if="hasMessages">
-            <div class="mb-2">
-                <div class="text-right pull-left">
-                    <b-button
-                        size="sm"
-                        variant="danger"
-                        @click="$emit('removeAllSelected')"
-                        :disabled="!hasMessagesSelected"
-                    >
-                        <i class="fa fa-trash" /> {{ removeAllSelectedText }}
-                    </b-button>
+    <transition name="bounceRight">
+        <v-wait for="loader">
+            <notifications group="notify" position="bottom right" />
+            <template slot="waiting">
+                <div>
+                    {{ $t('Loading...', locale) }}
                 </div>
-                <div class="text-right pull-right">
-                    <b-form-select
-                        size="sm"
-                        v-model="selectPerPage"
-                        :options="optionsPerPage"
-                        @input="onChangePerPage"
-                    />
-                </div>
-                <div class="clearfix" />
-            </div>
-            <b-table
-                id="messages"
-                responsive
-                small
-                hover
-                striped
-                :fields="columns"
-                :items="messages"
+            </template>
+            <div class="dropdown-divider" />
+            <b-alert
+                :show="!hasMessages"
+                variant="warning"
             >
-                <template
-                    slot="check"
-                    slot-scope="data"
+                {{ $t('Messages not found', { locale: this.locale }) }}
+            </b-alert>
+            <sweet-modal ref="confirmDestroy">
+                <h2>{{ $t('Confirm destroy message', { locale }) }}</h2>
+                <p>{{ $t('Are you sure to destroy the message? You will not be able to restore it.', { locale }) }}</p>
+                <b-button
+                    size="sm"
+                    class="mt-4"
+                    variant="danger"
+                    @click="onDestroy"
                 >
-                    <b-form-checkbox
-                        v-model="data.item.checked"
-                        @input="onToggleCheck(data.item)"
-                    />
-                </template>
-                <template
-                    slot="status"
-                    slot-scope="data"
+                    {{ $t('Confirm destroy message', { locale }) }}
+                </b-button>
+            </sweet-modal>
+            <sweet-modal ref="confirmDestroySelected">
+                <h2>{{ $t('Confirm destroy selected messages', { locale }) }}</h2>
+                <p>{{ $t('Are you sure to destroy the selected messages? You will not be able to restore it.', { locale }) }}</p>
+                <b-button
+                    size="sm"
+                    class="mt-4"
+                    variant="danger"
+                    @click="onDestroySelected"
                 >
-                    <i
-                        class="fa fa-eye"
-                        :class="`text-${getDataStatusSelected(data.item.status).class}`"
-                    />
-                </template>
-                <template
-                    slot="author"
-                    slot-scope="data"
-                >
-                    {{ data.item.author.name }}
-                </template>
-                <template
-                    slot="tag"
-                    slot-scope="data"
-                >
-                    <b-badge :variant="getDataTagSelected(data.item.tag).class">
-                        <i
-                            class="fa"
-                            :class="getDataTagSelected(data.item.tag).icon"
+                    {{ $t('Confirm destroy selected messages', { locale }) }}
+                </b-button>
+            </sweet-modal>
+            <div v-if="hasMessages">
+                <div class="mb-2">
+                    <div class="text-right pull-left">
+                        <b-form-checkbox
+                            v-model="checkAll"
+                            @input="onToggleCheckAll"
                         />
-                        {{ $t(data.item.tag, { locale }) }}
-                    </b-badge>
-                </template>
-                <template
-                    slot="created_at"
-                    slot-scope="data"
+                        <b-button
+                            size="sm"
+                            variant="danger"
+                            @click="onRemoveSelected"
+                            :disabled="!hasMessagesSelected"
+                        >
+                            <i class="fa fa-trash" /> {{ removeSelectedText }}
+                        </b-button>
+                        <b-button
+                            size="sm"
+                            variant="success"
+                            @click="onRestoreSelected"
+                            :disabled="!hasMessagesSelected"
+                        >
+                            <i class="fa fa-undo" /> {{ $t('Restore selected messages', { locale }) }}
+                        </b-button>
+                    </div>
+                    <div class="text-right pull-right">
+                        <b-form-select
+                            size="sm"
+                            v-model="selectPerPage"
+                            :options="optionsPerPage"
+                            @input="onChangePerPage"
+                        />
+                    </div>
+                    <div class="clearfix" />
+                </div>
+                <b-table
+                    id="messages"
+                    ref="table"
+                    responsive
+                    small
+                    hover
+                    striped
+                    :fields="columns"
+                    :items="messagesWithCheckedAttr"
                 >
-                    {{ data.item.created_at | momentTime }}
-                </template>
-                <template
-                    slot="actions"
-                    slot-scope="data"
-                >
-                    <a
-                        href="#"
-                        class="mr-2"
-                        @click.prevent="$emit('onShow', data.item)"
+                    <template
+                        slot="check"
+                        slot-scope="data"
                     >
-                        <i class="fa fa-eye text-secondary" />
-                    </a>
-                    <a
-                        href="#"
-                        @click.prevent="onRemove(data.item)"
+                        <b-form-checkbox v-model="data.item.checked" />
+                    </template>
+                    <template
+                        slot="status"
+                        slot-scope="data"
                     >
-                        <i class="fa fa-trash text-danger" />
-                    </a>
-                    <a
-                        v-if="data.item.deleted_at !== null"
-                        href="#"
-                        @click.prevent="onRestore(data.item)"
+                        <i
+                            class="fa fa-eye"
+                            :class="`text-${getDataStatusSelected(data.item.status).class}`"
+                        />
+                    </template>
+                    <template
+                        slot="author"
+                        slot-scope="data"
                     >
-                        <i class="fa fa-undo text-success" />
-                    </a>
-                </template>
-            </b-table>
-        </div>
-        <div class="text-right">
-            <em>{{ messages.length }} / {{ totalMessages }}</em>
-        </div>
-        <b-button
-            v-if="hasNextPage"
-            block
-            variant="primary"
-            @click="loadNextPage"
-        >
-            {{ $t('View more', { locale: this.locale }) }}
-        </b-button>
-    </v-wait>
+                        {{ data.item.author.name }}
+                    </template>
+                    <template
+                        slot="tag"
+                        slot-scope="data"
+                    >
+                        <b-badge :variant="getDataTagSelected(data.item.tag).class">
+                            <i
+                                class="fa"
+                                :class="getDataTagSelected(data.item.tag).icon"
+                            />
+                            {{ $t(data.item.tag, { locale }) }}
+                        </b-badge>
+                    </template>
+                    <template
+                        slot="created_at"
+                        slot-scope="data"
+                    >
+                        {{ data.item.created_at | momentTime }}
+                    </template>
+                    <template
+                        slot="actions"
+                        slot-scope="data"
+                    >
+                        <a
+                            href="#"
+                            class="mr-2"
+                            @click.prevent="$emit('onGoToMessage', data.item)"
+                        >
+                            <i class="fa fa-eye text-secondary" />
+                        </a>
+                        <a
+                            href="#"
+                            @click.prevent="onRemove(data.item)"
+                        >
+                            <i class="fa fa-trash text-danger" />
+                        </a>
+                        <a
+                            v-if="data.item.deleted_at !== null"
+                            href="#"
+                            @click.prevent="onRestore(data.item)"
+                        >
+                            <i class="fa fa-undo text-success" />
+                        </a>
+                    </template>
+                </b-table>
+            </div>
+            <div
+                v-if="hasMessages"
+                class="text-right"
+            >
+                <em>{{ messages.length }} / {{ totalMessages }}</em>
+            </div>
+            <b-button
+                v-if="hasNextPage"
+                block
+                variant="primary"
+                @click="loadNextPage"
+            >
+                {{ $t('View more', { locale: this.locale }) }}
+            </b-button>
+        </v-wait>
+    </transition>
 </template>
 
 <script>
     import { mapState } from 'vuex'
+    import cloneMixin from './../../mixins/clone'
     import paginatorMixin from './../../mixins/paginator'
     import messagesMixin from './../../mixins/messages'
 
@@ -156,7 +185,7 @@
                 default: {}
             }
         },
-        mixins: [ paginatorMixin, messagesMixin ],
+        mixins: [ cloneMixin, paginatorMixin, messagesMixin ],
         data () {
             return {
                 stackMessages: true,
@@ -193,18 +222,23 @@
                     }
                 ],
                 selectPerPage: null,
-                messageToDestroy: null
+                messageToDestroy: null,
+                messagesWithCheckedAttr: [],
+                checkAll: false
             }
         },
         computed: {
             ...mapState([ 'locale', 'routes' ]),
-            hasMessagesSelected () {
-                return this.$parent.messagesIdsSelected.length > 0
-            },
-            removeAllSelectedText () {
+            isTrashView () {
                 return JSON.parse(this.data).onlyTrashed
-                    ? this.$t('Confirm delete all selected messages', { locale: this.locale })
-                    : this.$t('Delete all selected messages', { locale: this.locale })
+            },
+            hasMessagesSelected () {
+                return this.messagesWithCheckedAttr.some(message => message.checked)
+            },
+            removeSelectedText () {
+                return this.isTrashView
+                    ? this.$t('Destroy selected messages', { locale: this.locale })
+                    : this.$t('Delete selected messages', { locale: this.locale })
             }
         },
         watch: {
@@ -218,16 +252,38 @@
         },
         methods: {
             // Events
-            onToggleCheck ( message ) {
-                this.$emit('onToggleCheck', message)
+            onToggleCheckAll () {
+                this.setMessagesCheckAttr(true)
             },
             onChangePerPage () {
                 this.setPerPage(this.selectPerPage)
                 this.refresh()
             },
+            async onRemoveSelected () {
+                if ( this.isTrashView ) {
+                    this.$refs.confirmDestroySelected.open()
+                } else {
+                    for ( let message of this.messagesWithCheckedAttr ) {
+                        if ( message.checked ) {
+                            await this.remove(message)
+                        }
+                    }
+
+                    Vue.notify({
+                        group: 'notify',
+                        title: this.$t('Delete message'),
+                        text: this.$t('Messages selected has been deleted and moved to trash'),
+                        type: 'success',
+                        config: {
+                            closeOnClick: true
+                        }
+                    })
+                    this.refreshNavMessages()
+                }
+            },
             async onRemove ( message ) {
                 if ( message.deleted_at === null ) {
-                    await this.removeMessageRequest(message)
+                    await this.remove(message)
                     Vue.notify({
                         group: 'notify',
                         title: this.$t('Delete message'),
@@ -237,31 +293,67 @@
                             closeOnClick: true
                         }
                     })
-                    this.removeFromList(message)
+                    this.refreshNavMessages()
                 } else {
+                    this.messageToDestroy = message
                     this.$refs.confirmDestroy.open()
                 }
             },
-            async onRestore ( message ) {
-                if ( message.deleted_at !== null ) {
-                    await this.restoreMessageRequest(message)
-                    this.removeFromList(message)
-                    Vue.notify({
-                        group: 'notify',
-                        title: this.$t('Restore message'),
-                        text: this.$t('Message has been restored and moved to list'),
-                        type: 'success',
-                        config: {
-                            closeOnClick: true
-                        }
-                    })
+            async onRestoreSelected () {
+                for ( let message of this.messagesWithCheckedAttr ) {
+                    if ( message.checked ) {
+                        await this.restore(message)
+                    }
                 }
+
+                Vue.notify({
+                    group: 'notify',
+                    title: this.$t('Restore selected messages'),
+                    text: this.$t('Selected messages has been restored and moved to list'),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+                this.refreshNavMessages()
+            },
+            async onRestore ( message ) {
+                await this.restore(message)
+                Vue.notify({
+                    group: 'notify',
+                    title: this.$t('Restore message'),
+                    text: this.$t('Message has been restored and moved to list'),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+                this.refreshNavMessages()
+            },
+            async onDestroySelected () {
+                for ( let message of this.messagesWithCheckedAttr ) {
+                    if ( message.checked ) {
+                        await this.destroy(message)
+                        this.$refs.confirmDestroySelected.close()
+                    }
+                }
+
+                Vue.notify({
+                    group: 'notify',
+                    title: this.$t('Destroy selected messages'),
+                    text: this.$t('Selected essages has been destroyed'),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+                this.refreshNavMessages()
             },
             async onDestroy () {
                 if ( this.messageToDestroy !== null ) {
-                    await this.destroyMessageRequest(this.messageToDestroy)
-                    this.removeFromList(this.messageToDestroy)
+                    await this.destroy(this.messageToDestroy)
                     this.messageToDestroy = null
+                    this.$refs.confirmDestroy.close()
                     Vue.notify({
                         group: 'notify',
                         title: this.$t('Destroy message'),
@@ -271,6 +363,7 @@
                             closeOnClick: true
                         }
                     })
+                    this.refreshNavMessages()
                 }
             },
             // Actions
@@ -283,19 +376,34 @@
             },
             async loadPage ({ page, perPage, url }) {
                 const data = await this.getMessages({ stack: this.stackMessages, page, perPage, url })
-                this.setMessagesCheckAttr()
+                this.setMessagesCheckAttr(false)
                 this.currentPage = data.current_page
                 this.totalPages = data.to
                 this.setPerPage(perPage)
             },
-            refresh () {
+            async refresh () {
                 this.$wait.start('loader')
                 this.messages = []
-                this.loadPage({
+                await this.loadPage({
                     page: this.page,
                     perPage: this.perPage
                 })
                 this.$wait.end('loader')
+            },
+            async remove ( message ) {
+                await this.removeMessageRequest(message)
+                this.removeFromList(message)
+            },
+            async restore ( message ) {
+                await this.restoreMessageRequest(message)
+                this.removeFromList(message)
+            },
+            async destroy ( message ) {
+                await this.destroyMessageRequest(message)
+                this.removeFromList(message)
+            },
+            refreshNavMessages () {
+                this.$root.$refs.nav.$refs.navRight.refreshData()
             },
             // Getters
             getDataStatusSelected ( statusKey ) {
@@ -329,10 +437,14 @@
                 return tagSelected
             },
             // Setters
-            setMessagesCheckAttr () {
-                this.messages.forEach((message) => {
-                    message.checked = false
-                })
+            setMessagesCheckAttr ( force ) {
+                for ( let message of this.messages ) {
+                    if ( force || typeof message.checked === typeof undefined ) {
+                        message.checked = this.checkAll
+                    }
+                }
+
+                this.messagesWithCheckedAttr = this.clone(this.messages)
             }
         },
         mounted () {

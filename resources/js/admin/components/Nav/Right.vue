@@ -33,7 +33,7 @@
             ...mapState([ 'routesGlobal', 'locale' ]),
             ...mapState({
                 tagsStructure: state => state.message.state.tagsStructure,
-                countPending: state => state.message.state.status.pending,
+                countPending: state => state.message.countPendings,
                 lastPendings: state => state.message.lastPendings,
                 timeLastRequestMessage: state => state.message.timeLastRequest
             }),

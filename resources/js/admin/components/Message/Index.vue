@@ -1,24 +1,33 @@
 <template>
-    <b-row>
-        <b-col
-            cols="3"
-            xs="12">
-            <filter-message
-                :data="data"
-                @onChangeFilters="onChangeFilters"
+    <div>
+        <b-row v-if="viewList">
+            <b-col
+                cols="3"
+                xs="12">
+                <filter-message
+                    :data="data"
+                    @onChangeFilters="onChangeFilters"
+                />
+            </b-col>
+            <b-col
+                cols="9"
+                xs="12">
+                <list-message
+                    ref="listMessage"
+                    :data="data"
+                    :filters="filters"
+                    @onGoToMessage="goToMessage"
+                />
+            </b-col>
+        </b-row>
+        <b-row v-if="viewForm">
+            <detail-message
+                class="col-12"
+                :message-origin="currentMessage"
+                @onGoToList="goToList"
             />
-        </b-col>
-        <b-col
-            cols="9"
-            xs="12">
-            <list-message
-                ref="listMessage"
-                :data="data"
-                @onToggleCheck="onToggleCheck"
-                :filters="filters"
-            />
-        </b-col>
-    </b-row>
+        </b-row>
+    </div>
 </template>
 
 <script>
@@ -26,6 +35,7 @@
     import cloneMixin from './../../mixins/clone'
     import FilterMessage from './Filter'
     import ListMessage from './List'
+    import DetailMessage from './Detail'
 
     export default {
         name: 'IndexMessage',
@@ -35,28 +45,39 @@
               required: true
           }
         },
-        components: { FilterMessage, ListMessage },
+        components: { FilterMessage, ListMessage, DetailMessage },
         mixins: [ cloneMixin ],
         data () {
             return {
-                messagesIdsSelected: [],
-                filters: this.clone(filterMessageStructure)
+                filters: this.clone(filterMessageStructure),
+                currentMessage: null,
+                isLoaded: false
+            }
+        },
+        computed: {
+            viewList () {
+                return this.currentMessage === null && this.isLoaded
+            },
+            viewForm () {
+                return this.currentMessage !== null && this.isLoaded
             }
         },
         methods: {
-            onToggleCheck ( message ) {
-                if ( message.checked && !this.messagesIdsSelected.includes(message.id) ) {
-                    this.messagesIdsSelected.push(message.id)
-                } else if ( !message.checked && this.messagesIdsSelected.includes(message.id) ) {
-                    this.messagesIdsSelected.splice(this.messagesIdsSelected.indexOf(message.id), 1)
-                }
-            },
             onChangeFilters ( filters ) {
                 this.filters = filters
+            },
+            goToMessage ( message ) {
+                this.currentMessage = message
+            },
+            goToList () {
+                this.currentMessage = null
             }
         },
         created () {
             this.filters.onlyTrashed = JSON.parse(this.data).onlyTrashed
+        },
+        mounted () {
+            this.isLoaded = true
         }
     }
 </script>

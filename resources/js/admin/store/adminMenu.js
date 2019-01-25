@@ -1,7 +1,7 @@
 const adminMenu = {
     namespaced: true,
     state: {
-        menu: Array
+        menu: []
     },
     getters: {
         menuIsLoaded: state => {

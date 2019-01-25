@@ -1,23 +1,25 @@
 <template>
-    <div>
-        <b-nav vertical>
-            <div class="dropdown-divider"></div>
-            <input-text-filter-message
-                @onChangeFilter="onChangeTextFilter"
-            />
-            <div class="dropdown-divider"></div>
-            <checkboxes-filter-message
-                :options="statusList"
-                @onChangeFilter="onChangeStatusFilter"
-            />
-            <div class="dropdown-divider"></div>
-            <checkboxes-filter-message
-                :options="tagsList"
-                @onChangeFilter="onChangeTagsFilter"
-            />
-            <div class="dropdown-divider"></div>
-        </b-nav>
-    </div>
+    <transition name="bounceRight">
+        <div>
+            <b-nav vertical>
+                <div class="dropdown-divider"></div>
+                <input-text-filter-message
+                    @onChangeFilter="onChangeTextFilter"
+                />
+                <div class="dropdown-divider"></div>
+                <checkboxes-filter-message
+                    :options="statusList"
+                    @onChangeFilter="onChangeStatusFilter"
+                />
+                <div class="dropdown-divider"></div>
+                <checkboxes-filter-message
+                    :options="tagsList"
+                    @onChangeFilter="onChangeTagsFilter"
+                />
+                <div class="dropdown-divider"></div>
+            </b-nav>
+        </div>
+    </transition>
 </template>
 
 <script>

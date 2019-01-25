@@ -18,7 +18,7 @@ const messagesMixin = {
         // Actions
         removeFromList ( message ) {
             this.messages.some((messageList, index) => {
-                const scapeCondition = message.id === messageList
+                const scapeCondition = message.id === messageList.id
 
                 if ( scapeCondition ) {
                     this.messages.splice(index, 1)
@@ -27,6 +27,8 @@ const messagesMixin = {
 
                 return scapeCondition
             })
+
+            this.messagesWithCheckedAttr = this.clone(this.messages)
         },
         // Getters
         async getMessages ({ stack, page, perPage, url }) {
@@ -58,6 +60,10 @@ const messagesMixin = {
                 perPage,
                 filters: this.filters
             })
+            return data
+        },
+        async getAuthorRequest ( message ) {
+            const { data } = await axios.post(`${routes.getMessages}/${message.id}/get-author`, {})
             return data
         },
         async removeMessageRequest ( message ) {

@@ -19,7 +19,7 @@
                     </a>
                 </li>
             </ul>
-            <nav-right />
+            <nav-right ref="navRight" />
         </div>
     </b-navbar>
 </template>
@@ -35,6 +35,9 @@
         },
         computed: {
             ...mapState([ 'routesGlobal' ])
+        },
+        mounted () {
+            this.$emit('eventToRoot')
         }
     }
 </script>

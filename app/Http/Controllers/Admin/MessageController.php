@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Core\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
@@ -57,30 +58,39 @@ class MessageController extends Controller
         return Response::json(Message::where('status', 'pending')->orderBy('created_at', 'desc')->take($count)->get());
     }
 
-    public function remove ( Message $message ) {
-        try {
+    public function getAuthor ( Message $message ) {
+        return Response::json(User::where('id', $message->author->id)->with('messages')->first());
+    }
+
+    public function remove ( $id ) {
+        $message = Message::withTrashed()->find($id);
+        if ( !$message->trashed() ) {
             $message->delete();
-            return Response::json(true);
-        } catch (\Exception $e) {
-            return Response::json(false);
+            return Response::json(['result' => true]);
+        } else {
+            return Response::json(['result' => false]);
         }
     }
 
-    public function restore ( Message $message ) {
-        try {
+    public function restore ( $id ) {
+        $message = Message::withTrashed()->find($id);
+
+        if ( $message->trashed() ) {
             $message->restore();
-            return Response::json(true);
-        } catch (\Exception $e) {
-            return Response::json(false);
+            return Response::json(['result' => true]);
+        } else {
+            return Response::json(['result' => false]);
         }
     }
 
-    public function destroy ( Message $message ) {
-        try {
+    public function destroy ( $id ) {
+        $message = Message::withTrashed()->find($id);
+
+        if ( $message->trashed() ) {
             $message->forceDelete();
-            return Response::json(true);
-        } catch (\Exception $e) {
-            return Response::json(false);
+            return Response::json(['result' => true]);
+        } else {
+            return Response::json(['result' => false]);
         }
     }
 
