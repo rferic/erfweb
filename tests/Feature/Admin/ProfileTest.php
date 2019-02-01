@@ -259,7 +259,7 @@ class ProfileTest extends TestCase
 
         $email = $this->faker->safeEmail;
         $name = $this->faker->name;
-        $avatar = Storage::disk(ImageTemporalController::$disk )->putFile(
+        $avatar = Storage::disk(ImageTemporalController::$disk)->putFile(
             ImageTemporalController::$temporalPath,
             UploadedFile::fake()->image('random.jpg'),
             ImageTemporalController::$disk
@@ -294,5 +294,7 @@ class ProfileTest extends TestCase
                 $this->assertFalse($user->hasRole($role['key']));
             }
         }
+        // Remove test image
+        Storage::disk(ImageTemporalController::$disk)->delete('images/users/' . $user->id . '/avatar' . str_replace(ImageTemporalController::$temporalPath, '', $avatar));
     }
 }
