@@ -20,11 +20,13 @@ import Notifications from 'vue-notification'
 import VueWait from 'vue-wait'
 import vueDebounce from 'vue-debounce'
 import SweetModal from 'sweet-modal-vue/src/plugin.js'
+import ToggleButton from 'vue-js-toggle-button'
 // CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-instant/dist/vue-instant.css'
 const moment = require('moment')
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 if ( locale !== 'en' ) {
     require(`moment/locale/${locale}`)
@@ -41,6 +43,7 @@ Vue.use(VueMoment, { moment })
 Vue.use(VueWait)
 Vue.use(vueDebounce)
 Vue.use(SweetModal)
+Vue.use(ToggleButton)
 
 // Store
 import store from './store'

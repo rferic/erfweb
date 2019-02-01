@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
@@ -98,6 +99,8 @@ class RegisterTest extends TestCase
         $this->withExceptionHandling();
         Event::fake();
 
+        $avatars = UserHelper::getAvatars();
+
         $userData = [
             'name' => $this->faker->name,
             'email' => $this->faker->safeEmail,
@@ -110,6 +113,7 @@ class RegisterTest extends TestCase
                 'name' => $userData['name'],
                 'email' => $userData['email'],
                 'password' => $userData['password'],
+                'avatar' => COUNT($avatars) > 0 ? $avatars[$this->faker->numberBetween(0, COUNT($avatars) - 1)] : null,
                 'password_confirmation' => $userData['password'],
                 'terms' => $userData['terms']
             ])

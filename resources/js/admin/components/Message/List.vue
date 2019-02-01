@@ -269,7 +269,7 @@
                         }
                     }
 
-                    Vue.notify({
+                    this.$notify({
                         group: 'notify',
                         title: this.$t('Delete message'),
                         text: this.$t('Messages selected has been deleted and moved to trash'),
@@ -284,7 +284,7 @@
             async onRemove ( message ) {
                 if ( message.deleted_at === null ) {
                     await this.remove(message)
-                    Vue.notify({
+                    this.$notify({
                         group: 'notify',
                         title: this.$t('Delete message'),
                         text: this.$t('Message has been deleted and moved to trash'),
@@ -306,7 +306,7 @@
                     }
                 }
 
-                Vue.notify({
+                this.$notify({
                     group: 'notify',
                     title: this.$t('Restore selected messages'),
                     text: this.$t('Selected messages has been restored and moved to list'),
@@ -319,7 +319,7 @@
             },
             async onRestore ( message ) {
                 await this.restore(message)
-                Vue.notify({
+                this.$notify({
                     group: 'notify',
                     title: this.$t('Restore message'),
                     text: this.$t('Message has been restored and moved to list'),
@@ -338,7 +338,7 @@
                     }
                 }
 
-                Vue.notify({
+                this.$notify({
                     group: 'notify',
                     title: this.$t('Destroy selected messages'),
                     text: this.$t('Selected essages has been destroyed'),
@@ -354,7 +354,7 @@
                     await this.destroy(this.messageToDestroy)
                     this.messageToDestroy = null
                     this.$refs.confirmDestroy.close()
-                    Vue.notify({
+                    this.$notify({
                         group: 'notify',
                         title: this.$t('Destroy message'),
                         text: this.$t('Message has been destroyed'),

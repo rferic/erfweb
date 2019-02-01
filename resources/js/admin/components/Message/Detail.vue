@@ -24,6 +24,9 @@
                     class="pull-right"
                 >
                     <b-card>
+                        <div class="avatar">
+                            <img :src="author.avatar" />
+                        </div>
                         asd
                     </b-card>
                 </b-col>

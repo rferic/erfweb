@@ -1,6 +1,7 @@
 <template>
     <b-nav-form>
         <b-form-input
+            class="filter-input"
             v-model="text"
             type="text"
             size="sm"
@@ -30,3 +31,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .filter-input {
+        width: 100%;
+    }
+</style>

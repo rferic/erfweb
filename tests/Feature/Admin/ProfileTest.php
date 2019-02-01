@@ -8,12 +8,16 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Http\Controllers\Admin\ImageTemporalController;
 use App\Http\Helpers\RoleHelper;
+use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -58,12 +62,18 @@ class ProfileTest extends TestCase
     public function testPostDataIfLogged ()
     {
         $this->withExceptionHandling();
+        $profile = User::find($this->admin->id, [ 'id', 'email', 'name', 'avatar' ]);
 
         $this
             ->actingAs($this->admin)
             ->post(route('admin.profile.getData'))
             ->assertSuccessful()
-            ->assertExactJson(User::find($this->admin->id, [ 'id', 'email', 'name' ])->toArray());
+            ->assertExactJson([
+                'id' => $profile->id,
+                'email' => $profile->email,
+                'name' => $profile->name,
+                'avatar' => asset($profile->avatar)
+            ]);
     }
 
     public function testViewIndex ()
@@ -145,7 +155,7 @@ class ProfileTest extends TestCase
             ->assertStatus(400);
     }
 
-    public function testPostUpdateEmailIsNotFree ()
+    public function testPostUpdateProfileIsNotFree ()
     {
         $this->withExceptionHandling();
 
@@ -163,26 +173,36 @@ class ProfileTest extends TestCase
             ->assertStatus(400);
     }
 
-    public function testPostUpdateEmailWithoutPassword ()
+    public function testPostUpdateProfileWithoutPassword ()
     {
         $this->withExceptionHandling();
 
+        $avatars = UserHelper::getAvatars();
         $email = $this->faker->safeEmail;
         $name = $this->faker->name;
+        $avatar = COUNT($avatars) > 0 ? $avatars[$this->faker->numberBetween(0, COUNT($avatars) - 1)] : null;
 
-        $this
+        $response = $this
             ->actingAs($this->admin)
             ->post(route('admin.profile.update', [
                 'email' => $email,
                 'name' => $name,
+                'avatar' => $avatar,
                 'roles' => $this->roles
             ]))
-            ->assertStatus(200)
-            ->assertExactJson([ 'result' => true ]);
+            ->assertStatus(200);
+
+        $user = User::findOrFail($this->admin->id, [ 'id', 'email', 'name', 'avatar' ]);
+
+        $response->assertJson([
+            'result' => true,
+            'data' => [
+                'user' => $user->toArray()
+            ]
+        ], true);
+
         $this->assertTrue($this->admin->email === $email);
         $this->assertTrue($this->admin->name === $name);
-
-        $user = User::find($this->admin->id);
 
         foreach ( $this->roles AS $role ) {
             if ( boolval($role['value']) ) {
@@ -193,28 +213,82 @@ class ProfileTest extends TestCase
         }
     }
 
-    public function testPostUpdateEmailWithPassword ()
+    public function testPostUpdateProfileWithPassword ()
     {
         $this->withExceptionHandling();
 
         $password = Hash::make($this->faker->password);
+        $avatars = UserHelper::getAvatars();
+        $email = $this->faker->safeEmail;
+        $name = $this->faker->name;
+        $avatar = COUNT($avatars) > 0 ? $avatars[$this->faker->numberBetween(0, COUNT($avatars) - 1)] : null;
 
-        $this
+        $response = $this
             ->actingAs($this->admin)
             ->post(route('admin.profile.update', [
-                'email' => $this->faker->safeEmail,
-                'name' => $this->faker->name,
+                'email' => $email,
+                'name' => $name,
+                'avatar' =>$avatar,
                 'password' => $password,
                 'password_confirmation' => $password,
                 'roles' => $this->roles
             ]))
-            ->assertStatus(200)
-            ->assertExactJson([ 'result' => true ]);
+            ->assertStatus(200);
 
-        $user = User::find($this->user->id)->first();
+        $user = User::findOrFail($this->admin->id, [ 'id', 'email', 'name', 'avatar' ]);
+
+        $response->assertExactJson([
+            'result' => true,
+            'data' => [
+                'user' => $user->toArray()
+            ]
+        ]);
 
         foreach ( $this->roles AS $role ) {
             if ( $role['value'] ) {
+                $this->assertTrue($user->hasRole($role['key']));
+            } else {
+                $this->assertFalse($user->hasRole($role['key']));
+            }
+        }
+    }
+
+    public function testPostUpdateProfileWithAvatarImage ()
+    {
+        $this->withExceptionHandling();
+
+        $email = $this->faker->safeEmail;
+        $name = $this->faker->name;
+        $avatar = Storage::disk(ImageTemporalController::$disk )->putFile(
+            ImageTemporalController::$temporalPath,
+            UploadedFile::fake()->image('random.jpg'),
+            ImageTemporalController::$disk
+        );
+
+        $response = $this
+            ->actingAs($this->admin)
+            ->post(route('admin.profile.update', [
+                'email' => $email,
+                'name' => $name,
+                'avatar' => $avatar,
+                'roles' => $this->roles
+            ]))
+            ->assertStatus(200);
+
+        $user = User::findOrFail($this->admin->id, [ 'id', 'email', 'name', 'avatar' ]);
+
+        $response->assertJson([
+            'result' => true,
+            'data' => [
+                'user' => $user->toArray()
+            ]
+        ], true);
+
+        $this->assertTrue($this->admin->email === $email);
+        $this->assertTrue($this->admin->name === $name);
+
+        foreach ( $this->roles AS $role ) {
+            if ( boolval($role['value']) ) {
                 $this->assertTrue($user->hasRole($role['key']));
             } else {
                 $this->assertFalse($user->hasRole($role['key']));

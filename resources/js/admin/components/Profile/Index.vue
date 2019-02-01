@@ -1,6 +1,9 @@
 <template>
     <b-form>
-        <notifications group="notify" position="bottom right" />
+        <notifications
+            group="notify"
+            position="bottom right"
+        />
         <b-row>
             <b-col
                 lg="8"
@@ -105,6 +108,72 @@
                             </div>
                         </b-form-group>
                     </b-col>
+                    <b-col
+                        cols="12"
+                        class="mb-4"
+                    >
+                        <toggle-button v-model="toggleImage" />
+                        <label>{{ $t('Custom image', { locale}) }}</label>
+                        <b-alert
+                            :show="errorImageShow && user.avatar === null"
+                            variant="danger"
+                        >
+                            <i class="fa fa-warning text-danger" />
+                            {{ $t('Image is required', { locale}) }}
+                        </b-alert>
+                    </b-col>
+                    <b-col
+                        v-if="!toggleImage"
+                        cols="12"
+                    >
+                        <div class="row">
+                            <div class="col-md-3 col-xs-6" v-for="(avatar, key) in userDataOrigin.avatars" :key="key">
+                                <div
+                                    class="avatar avatar-100 selectable mb-4"
+                                    :class="{ 'selected': avatar === user.avatar }"
+                                >
+                                    <img
+                                        :src="`/${avatar}`"
+                                        @click="onSelectAvatar(avatar)"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row v-if="toggleImage">
+                    <b-col
+                        v-if="toggleImage"
+                        cols="6"
+                        xs="12"
+                    >
+                        <div
+                            v-if="user.avatar !== null && avatarIsImage"
+                            class="avatar avatar-100"
+                        >
+                            <img :src="user.avatar" />
+                        </div>
+                        <div
+                            v-else
+                             class="avatar avatar-100"
+                        >
+                        </div>
+                    </b-col>
+                    <b-col
+                        cols="6"
+                        xs="12"
+                    >
+                        <vue-dropzone
+                            ref="avatarDropzone"
+                            id="dropzone"
+                            :options="dropzoneOptions"
+                            v-on:vdropzone-file-added="onFileAddedDropzone"
+                            v-on:vdropzone-sending="onSendingDropzone"
+                            v-on:vdropzone-success="onSuccessDropzone"
+                            v-on:vdropzone-error="onErrorDropzone"
+                            v-on:vdropzone-removed-file="onRemovedDropzone"
+                        />
+                    </b-col>
                 </b-row>
             </b-col>
             <b-col
@@ -120,12 +189,11 @@
                         <label
                             :for="role.key"
                             class="form-check-label ">
-                            <input
-                                type="checkbox"
-                                :name="role.key"
+                            <toggle-button
                                 v-model="role.value"
                                 :disabled="role.key === 'admin' && role.value === true"
-                                class="form-check-input">{{ role.key }}
+                            />
+                            {{ role.key }}
                         </label>
                     </div>
                 </div>
@@ -147,10 +215,12 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-    import cloneMixin from '../../../includes/mixins/cloneMixin'
+    import { mapState, mapActions } from 'vuex'
+    import cloneMixin from '../../../includes/mixins/clone'
+    import profileMixin from '../../mixins/profile'
     import { Validator } from 'vee-validate'
     import passwordIsStrongRule from '../../../includes/validators/passwordIsStrongRule'
+    import vue2Dropzone from 'vue2-dropzone'
 
     export default {
         name: 'IndexProfile',
@@ -160,23 +230,85 @@
                 required: true
             }
         },
-        mixins: [ cloneMixin ],
+        mixins: [ cloneMixin, profileMixin ],
+        components: {
+            vueDropzone: vue2Dropzone
+        },
         data () {
             return {
                 user: null,
                 roles: [],
                 emailIsFree: true,
                 password: '',
-                passwordConfirm: ''
+                passwordConfirm: '',
+                avatarIsImage: true,
+                toggleImage: true,
+                dropzoneOptions: {
+                    method: 'post',
+                    paramName: 'image',
+                    acceptedFiles: 'image/*',
+                    url: null,
+                    thumbnailWidth: 150,
+                    maxFilesize: 4,
+                    maxFiles: 1,
+                    addRemoveLinks: true,
+                    dictDefaultMessage: '<i class="fa fa-cloud-upload"></i> ' + this.$t('Upload me', { locale: this.locale }),
+                    dictRemoveFile: this.$t('Remove image', { locale: this.locale })
+                },
+                temporalImageDropzone: null,
+                imageIsTemporal: false,
+                errorImageShow: false
             }
         },
         computed: {
-            ...mapState([ 'locale', 'routes' ]),
+            ...mapState([ 'locale', 'routes', 'csrfToken' ]),
             userDataOrigin () {
                 return JSON.parse(this.data)
             }
         },
         methods: {
+            ...mapActions({
+                setAuth : 'auth/set'
+            }),
+            async onSelectAvatar (avatar) {
+                await this.removeTemporalImage()
+                this.user.avatar = avatar
+                this.avatarIsImage = this.getAvatarIsImage()
+            },
+            async onFileAddedDropzone ( file ) {
+                if ( this.temporalImageDropzone !== null ) {
+                    this.$refs.avatarDropzone.removeFile(this.temporalImageDropzone)
+                }
+            },
+            onSendingDropzone ( file, xhr, formData ) {
+                formData.append('_token', this.csrfToken);
+            },
+            onSuccessDropzone ( file, response ) {
+                if ( response.result ) {
+                    this.user.avatar = response.data.image
+                    this.temporalImageDropzone = file
+                    this.avatarIsImage = this.getAvatarIsImage()
+                    this.imageIsTemporal = true
+                }
+            },
+            onErrorDropzone ( file, error, xhr ) {
+                this.$refs.avatarDropzone.removeFile(file)
+
+                this.$notify({
+                    group: 'notify',
+                    title: this.$t('Upload image'),
+                    text: this.$t(error),
+                    type: 'error',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+            },
+            async onRemovedDropzone ( file ) {
+                await this.removeTemporalImage()
+                this.user.avatar = null
+                this.temporalImageDropzone = null
+            },
             async validateEmail () {
                 const { result } = await this.checkIfEmailIsFreeRequest()
 
@@ -210,11 +342,11 @@
                 // Call dynamic validate email
                 await this.validateEmail()
                 this.$validator.validate().then(async result => {
-                    if ( result ) {
+                    if ( result && this.user.avatar !== null ) {
                         const { result } = await this.update()
 
                         if ( result ) {
-                            Vue.notify({
+                            this.$notify({
                                 group: 'notify',
                                 title: this.$t('Profile'),
                                 text: this.$t('Profile has been save'),
@@ -228,7 +360,7 @@
                                 this.password = ''
                                 this.passwordConfirm = ''
 
-                                Vue.notify({
+                                this.$notify({
                                     group: 'notify',
                                     title: this.$t('Profile'),
                                     text: this.$t('Profile has changed password'),
@@ -238,8 +370,10 @@
                                     }
                                 })
                             }
+
+                            this.setAuth(await this.getDataProfileRequest())
                         } else {
-                            Vue.notify({
+                            this.$notify({
                                 group: 'notify',
                                 title: this.$t('Profile'),
                                 text: this.$t('An error has been detected. Check the form.'),
@@ -249,6 +383,8 @@
                                 }
                             })
                         }
+                    } else if ( result && this.user.avatar === null ) {
+                        this.errorImageShow = true
                     }
                 })
             },
@@ -256,6 +392,7 @@
                 let paramsRequest = {
                     email: this.user.email,
                     name: this.user.name,
+                    avatar: this.user.avatar,
                     roles: this.roles
                 }
 
@@ -264,14 +401,37 @@
                     paramsRequest.password_confirmation = this.passwordConfirm
                 }
 
-                const response = await axios.post(this.routes.profileUpdate, paramsRequest)
-                return response.data
+                try {
+                    const response = await axios.post(this.routes.profileUpdate, paramsRequest)
+                    return response.data
+                } catch (err) {
+                    return { result: false }
+                }
+            },
+            async removeTemporalImage () {
+                if ( this.user.avatar !== null && this.getAvatarIsImage() && this.imageIsTemporal ) {
+                    const { result, data } = await axios.delete(this.routes.removeImage, {
+                        data: {
+                            image: this.user.avatar
+                        }
+                    })
+
+                    if ( result ) {
+                        this.user = data.user
+                    }
+                }
+            },
+            getAvatarIsImage () {
+                return !(this.user.avatar !== null && this.userDataOrigin.avatars.includes(this.user.avatar))
             }
         },
         created () {
             const data = JSON.parse(this.data)
 
             this.user = data.user
+            this.avatarIsImage = this.getAvatarIsImage()
+            this.toggleImage = this.avatarIsImage
+            this.dropzoneOptions.url = this.routes.uploadImage
 
             data.roles.forEach(role => {
                 this.roles.push({
@@ -285,3 +445,15 @@
         }
     }
 </script>
+
+<style scoped>
+    .avatar.selected:hover {
+        opacity: .8;
+        cursor: pointer;
+    }
+
+    .avatar.selected:hover,
+    .avatar.selectable.selected {
+        box-shadow: 0px 0px 8px #474b67;
+    }
+</style>

@@ -8,8 +8,8 @@
 
 namespace App\Http\Helpers;
 
-
 use App\Models\Core\User;
+use Illuminate\Support\Facades\Storage;
 
 class UserHelper
 {
@@ -44,5 +44,9 @@ class UserHelper
                 }
             }
         }
+    }
+
+    static function getAvatars () {
+        return Storage::disk('public')->files(config('global.pathAvatars'));
     }
 }

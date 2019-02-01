@@ -52,5 +52,8 @@ Route::group(
         Route::post('/messages/{message}/restore', 'Admin\MessageController@restore')->name('admin.messages.restore');
         Route::delete('/messages/{message}/remove', 'Admin\MessageController@remove')->name('admin.messages.remove');
         Route::delete('/messages/{message}/destroy', 'Admin\MessageController@destroy')->name('admin.messages.destroy');
+        // Admin Images temporal
+        Route::post('/upload-image-temporal', 'Admin\ImageTemporalController@upload')->name('admin.imagesTemporal.upload');
+        Route::delete('/remove-image-temporal', 'Admin\ImageTemporalController@remove')->name('admin.imagesTemporal.remove');
     }
 );

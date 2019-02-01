@@ -37,7 +37,7 @@ class PageTest extends TestCase
 
         Role::create(['name' => 'admin']);
 
-        $this->count = $this->faker->numberBetween(0, 10);
+        $this->count = $this->faker->numberBetween(1, 10);
 
         $this->user = factory(User::class)->create()->assignRole('admin');
         $this->author = factory(User::class)->create()->assignRole('admin');

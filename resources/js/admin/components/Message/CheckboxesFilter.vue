@@ -1,27 +1,24 @@
 <template>
-    <div>
+    <b-card>
         <b-nav-form
             v-for="checkbox in checkboxes"
             :key="checkbox.key"
         >
-            <div
-                class="nav-form-item-color"
-                :class="`bg-${checkbox.class}`"
-            >
+            <div class="nav-form-item-color">
                 <b-form-checkbox
                     v-model="checkbox.checked"
                     @input="onToggleCheck(checkbox)"
                 >
-                    {{ $t(checkbox.key, { locale }) }}
+                    <span :class="`text-${checkbox.class}`">{{ $t(checkbox.key, { locale }) }}</span>
                     <i
                         v-if="typeof checkbox.icon !== typeof undefined"
                         class="fa ml-2"
-                        :class="checkbox.icon"
+                        :class="`${checkbox.icon} text-${checkbox.class}`"
                     />
                 </b-form-checkbox>
             </div>
         </b-nav-form>
-    </div>
+    </b-card>
 </template>
 
 <script>

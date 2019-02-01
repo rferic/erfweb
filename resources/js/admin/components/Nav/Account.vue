@@ -1,6 +1,9 @@
 <template>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-muted " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <li
+        class="nav-item dropdown background-avatar"
+        :style="`background-image: url(${auth.avatar})`"
+    >
+        <a class="nav-link dropdown-toggle text-white text-center" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ acronym }}
         </a>
         <div class="dropdown-menu dropdown-menu-right animated zoomIn">
@@ -35,9 +38,11 @@
 
 <script>
     import { mapState, mapActions } from 'vuex'
+    import profileMixin from '../../mixins/profile'
 
     export default {
         name: 'NavAccount',
+        mixins: [ profileMixin ],
         computed: {
             ...mapState([ 'routesGlobal', 'locale', 'csrfToken' ]),
             ...mapState({
@@ -56,10 +61,6 @@
             ...mapActions({
                 setAuth : 'auth/set'
             }),
-            async getDataProfileRequest () {
-                const response = await axios.post(this.routesGlobal.profile.getData, {})
-                return response.data
-            },
             logout () {
                 this.$refs.logoutForm.submit()
             }
@@ -69,3 +70,24 @@
         }
     }
 </script>
+
+<style scoped>
+    .background-avatar {
+        background-size: cover !important;
+        background-position: center !important;
+        background-color: transparent !important;
+        background-repeat: no-repeat !important;
+        border-radius: 100%;
+        width: 50px;
+        height: 50px;
+    }
+
+    .background-avatar:hover {
+        opacity: .8;
+    }
+
+    .background-avatar > a.nav-link {
+        color: white;
+        text-shadow: 0px 0px 8px #1f2f3d;
+    }
+</style>
