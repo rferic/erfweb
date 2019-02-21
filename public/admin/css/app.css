@@ -13212,6 +13212,39 @@ a.text-dark:focus {
   top: 5px;
 }
 
+.message > .message-item,
+.message > .count-total-messages {
+  margin: 5px 20px 0 0;
+}
+
+.message.is-mine > .message-item,
+.message.is-mine > .count-total-messages {
+  margin-left: 20px;
+  margin-right: 0;
+}
+
+.message > .message-item {
+  border-radius: 0 10px 10px 0;
+}
+
+.message.is-mine > .message-item {
+  border-radius: 10px 0 0 10px;
+}
+
+.message .status-label {
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+.message .status-label.status-label-selected {
+  cursor: default;
+}
+
+.message .status-label:hover,
+.message .status-label.status-label-selected {
+  opacity: 1;
+}
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
