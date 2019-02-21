@@ -70,8 +70,7 @@
                 statusList: JSON.parse(this.data).statusList,
                 tagsList: JSON.parse(this.data).tagsList,
                 currentPage: 1,
-                perPage: 10,
-                conversationIsOpen: this.messageOrigin.status === 'readed'
+                perPage: 10
             }
         },
         computed: {
@@ -87,6 +86,9 @@
             },
             hasMoreMessages () {
                 return this.totalMessages > this.messages.length
+            },
+            conversationIsOpen () {
+                return this.messageOrigin.status !== 'pending'
             }
         },
         methods: {

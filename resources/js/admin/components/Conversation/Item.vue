@@ -9,9 +9,6 @@
         >
             <div>
                 <div class="pull-left">
-                    <div class="d-inline-block avatar avatar-40">
-                        <img :src="`/${messageOrigin.author.avatar}`" />
-                    </div>
                     <i
                         class="fa"
                         :class="getDataTagSelected(message.tag).icon"
@@ -27,8 +24,16 @@
                         {{ $t(status.key, { locale }) | capitalizeFilter }}
                     </span>
                 </div>
-                <div class="pull-right">
-                    {{ message.created_at | momentTime }}
+                <div class="d-inline-block avatar avatar-50 pull-right ml-2">
+                    <img :src="`/${messageOrigin.author.avatar}`" />
+                </div>
+                <div class="pull-right text-right">
+                    <div>
+                        <small>{{ message.created_at | momentTime }}</small>
+                    </div>
+                    <div>
+                        <small>{{ author.name }}</small>
+                    </div>
                 </div>
             </div>
             <div class="clearfix"></div>
