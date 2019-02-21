@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -32,6 +33,8 @@ class UserTest extends TestCase
         parent::setUp();
 
         app()['cache']->forget('spatie.permission.cache');
+
+        Notification::fake();
 
         $this->user = factory(User::class)->create();
     }
@@ -61,6 +64,7 @@ class UserTest extends TestCase
 
     public function testHasMessages ()
     {
+        Notification::fake();
         $count = $this->faker->numberBetween(1, 100);
 
         factory(Message::class, $count)->create();

@@ -15,6 +15,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -31,6 +32,8 @@ class MessageTest extends TestCase
         parent::setUp();
 
         app()['cache']->forget('spatie.permission.cache');
+
+        Notification::fake();
 
         foreach ( RoleHelper::getRoles() AS $role ) {
             Role::create(['name' => $role]);
@@ -62,6 +65,8 @@ class MessageTest extends TestCase
 
     public function testHasNotReceiver()
     {
+        Notification::fake();
+
         $messageWithoutReceiver = factory(Message::class)->create([ 'author_id' => $this->author->id, 'receiver_id' => null ]);
         $this->assertEquals($messageWithoutReceiver->receiver_id, null);
     }
@@ -88,6 +93,7 @@ class MessageTest extends TestCase
 
     public function testHasChilds ()
     {
+        Notification::fake();
         $count = $this->faker->numberBetween(1, 100) + 1;
 
         factory(Message::class, $count - 1)->create([ 'message_parent_id' => $this->message->id ]);

@@ -16,6 +16,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -33,6 +34,8 @@ class MessageTest extends TestCase
         parent::setUp();
 
         app()['cache']->forget('spatie.permission.cache');
+
+        Notification::fake();
 
         Role::create(['name' => 'admin']);
 
@@ -100,6 +103,8 @@ class MessageTest extends TestCase
     public function testPostGetLastPending ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         $count = $this->faker->numberBetween(1, 10);
         factory(Message::class, $this->faker->numberBetween(1, 10))->create([
@@ -209,6 +214,8 @@ class MessageTest extends TestCase
     {
         $this->withExceptionHandling();
 
+        Notification::fake();
+
         $message = factory(Message::class)->create();
         $author = User::find($message->author->id)->toArray();
 
@@ -223,6 +230,8 @@ class MessageTest extends TestCase
     public function testPostRestoreMessage ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         $message = factory(Message::class)->create();
         // Call restore to message not in trash
@@ -246,6 +255,8 @@ class MessageTest extends TestCase
     public function testDeleteRemoveMessage ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         // Call restore to message in trash
         $message = factory(Message::class)->create();
@@ -272,6 +283,8 @@ class MessageTest extends TestCase
     {
         $this->withExceptionHandling();
 
+        Notification::fake();
+
         $message = factory(Message::class)->create();
         // Call restore to message not in trash
         $this
@@ -294,6 +307,8 @@ class MessageTest extends TestCase
     public function testUploadMessageWithWrongParams ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         $message = factory(Message::class)->create();
         $params = [];
@@ -319,6 +334,8 @@ class MessageTest extends TestCase
     public function testUpdateMessageSuccessful ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         $statusList = MessageHelper::getStatusList();
         $tagsList = MessageHelper::getTagsList();
