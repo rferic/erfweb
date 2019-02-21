@@ -57,6 +57,7 @@
                             <i class="fa fa-trash" /> {{ removeSelectedText }}
                         </b-button>
                         <b-button
+                            v-if="isTrashView"
                             size="sm"
                             variant="success"
                             @click="onRestoreSelected"
@@ -129,6 +130,7 @@
                         slot-scope="data"
                     >
                         <a
+                            v-if="data.item.deleted_at === null"
                             href="#"
                             class="mr-2"
                             @click.prevent="$emit('onGoToMessage', data.item)"
@@ -272,6 +274,8 @@
                         }
                     }
 
+                    await this.refreshList()
+
                     this.$notify({
                         group: 'notify',
                         title: this.$t('Delete message'),
@@ -287,6 +291,8 @@
             async onRemove ( message ) {
                 if ( message.deleted_at === null ) {
                     await this.remove(message)
+                    await this.refreshList()
+
                     this.$notify({
                         group: 'notify',
                         title: this.$t('Delete message'),
@@ -309,6 +315,8 @@
                     }
                 }
 
+                await this.refreshList()
+
                 this.$notify({
                     group: 'notify',
                     title: this.$t('Restore selected messages'),
@@ -322,6 +330,8 @@
             },
             async onRestore ( message ) {
                 await this.restore(message)
+                await this.refreshList()
+
                 this.$notify({
                     group: 'notify',
                     title: this.$t('Restore message'),
@@ -341,6 +351,8 @@
                     }
                 }
 
+                await this.refreshList()
+
                 this.$notify({
                     group: 'notify',
                     title: this.$t('Destroy selected messages'),
@@ -355,6 +367,8 @@
             async onDestroy () {
                 if ( this.messageToDestroy !== null ) {
                     await this.destroy(this.messageToDestroy)
+                    await this.refreshList()
+
                     this.messageToDestroy = null
                     this.$refs.confirmDestroy.close()
                     this.$notify({
@@ -370,6 +384,16 @@
                 }
             },
             // Actions
+            async refreshList () {
+                this.messages = []
+
+                for ( let page = 1; page <= this.currentPage; page++ ) {
+                    await this.loadPage({
+                        page: page,
+                        perPage: this.perPage
+                    })
+                }
+            },
             async loadNextPage () {
                 this.loadPage({
                     page: this.currentPage,

@@ -129,6 +129,7 @@ class MessageController extends Controller
     public function remove ( $id )
     {
         $message = Message::withTrashed()->find($id);
+
         if ( !$message->trashed() ) {
             $message->delete();
             return Response::json(['result' => true]);
@@ -153,7 +154,7 @@ class MessageController extends Controller
     {
         $message = Message::withTrashed()->find($id);
 
-        if ( $message->trashed() ) {
+        if ( !is_null($message) && $message->trashed() ) {
             $message->forceDelete();
             return Response::json(['result' => true]);
         } else {
