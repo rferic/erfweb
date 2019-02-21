@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Core\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 use App\Models\Core\Message;
 use App\Http\Helpers\MessageHelper;
+use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
@@ -38,17 +40,20 @@ class MessageController extends Controller
     {
         $perPage = $request->input('perPage');
         $filters = $request->input('filters');
+        $orderBy = $request->input('orderBy');
 
-        return Response::json($this->getMessages($filters, $perPage));
+        return Response::json($this->getMessages($filters, $perPage, $orderBy));
     }
 
-    public function getState ()
+    public function getState ( Request $request )
     {
+        $filters = $request->input('filters');
+
         return Response::json([
             'statusStructure' => MessageHelper::getStatusList(),
             'tagsStructure' => MessageHelper::getTagsList(),
-            'status' => $this->getStateStatus(),
-            'tags' => $this->getStateTags()
+            'status' => $this->getStateStatus($filters),
+            'tags' => $this->getStateTags($filters)
         ]);
     }
 
@@ -58,11 +63,71 @@ class MessageController extends Controller
         return Response::json(Message::where('status', 'pending')->orderBy('created_at', 'desc')->take($count)->get());
     }
 
-    public function getAuthor ( Message $message ) {
+    public function getAuthor ( Message $message )
+    {
         return Response::json(User::where('id', $message->author->id)->with('messages')->first());
     }
 
-    public function remove ( $id ) {
+    public function create ( Request $request )
+    {
+        $validator = Validator::make($request->all(), [
+            'subject' => 'required',
+            'text' => 'required',
+            'status' => 'required',
+            'tag' => 'required'
+        ]);
+
+        if (
+            !$validator->fails() &&
+            MessageHelper::existsKeyInStatusList($request->input('status')) &&
+            MessageHelper::existsKeyInTagsList($request->input('tag'))
+        ) {
+            $message = Message::create([
+                'subject' => $request->input('subject'),
+                'text' => $request->input('text'),
+                'status' => $request->input('status'),
+                'tag' => $request->input('tag'),
+                'message_parent_id' => $request->input('message_parent_id'),
+                'author_id' => Auth::id(),
+                'receiver_id' => $request->input('receiver_id')
+            ]);
+
+            return Response::json([
+                'result' => true,
+                'message' => $message
+            ]);
+        } else {
+            abort(400);
+        }
+    }
+
+    public function update ( Message $message, Request $request )
+    {
+        $validator = Validator::make($request->all(), [
+            'subject' => 'required',
+            'text' => 'required',
+            'status' => 'required',
+            'tag' => 'required'
+        ]);
+
+        if (
+            !$validator->fails() &&
+            MessageHelper::existsKeyInStatusList($request->input('status')) &&
+            MessageHelper::existsKeyInTagsList($request->input('tag'))
+        ) {
+            $message->subject = $request->input('subject');
+            $message->text = $request->input('text');
+            $message->status = $request->input('status');
+            $message->tag = $request->input('tag');
+            $message->save();
+            return Response::json(['result' => true]);
+        } else {
+            abort(400);
+        }
+    }
+
+    public function remove ( $id )
+    {
         $message = Message::withTrashed()->find($id);
         if ( !$message->trashed() ) {
             $message->delete();
@@ -72,7 +137,8 @@ class MessageController extends Controller
         }
     }
 
-    public function restore ( $id ) {
+    public function restore ( $id )
+    {
         $message = Message::withTrashed()->find($id);
 
         if ( $message->trashed() ) {
@@ -83,7 +149,8 @@ class MessageController extends Controller
         }
     }
 
-    public function destroy ( $id ) {
+    public function destroy ( $id )
+    {
         $message = Message::withTrashed()->find($id);
 
         if ( $message->trashed() ) {
@@ -94,49 +161,7 @@ class MessageController extends Controller
         }
     }
 
-    private function getStateStatus ()
-    {
-        $result = new \stdClass();
-        $status = Message::groupBy('status')->select('status', DB::raw('count(status) AS count'))->get();
-
-        foreach ( MessageHelper::getStatusList() AS $itemStatus ) {
-            $key = $itemStatus['key'];
-            $count = 0;
-
-            foreach ( $status AS $state ) {
-                if ( $itemStatus['key'] === $state->status ) {
-                    $count = $state->count;
-                }
-            }
-
-            $result->$key = $count;
-        }
-
-        return $result;
-    }
-
-    private function getStateTags ()
-    {
-        $result = new \stdClass();
-        $tags = Message::groupBy('tag')->select('tag', DB::raw('count(tag) AS count'))->get();
-
-        foreach ( MessageHelper::getTagsList() AS $itemTags ) {
-            $key = $itemTags['key'];
-            $count = 0;
-
-            foreach ( $tags AS $tag ) {
-                if ( $key === $tag->tag ) {
-                    $count = $tag->count;
-                }
-            }
-
-            $result->$key = $count;
-        }
-
-        return $result;
-    }
-
-    protected function getMessages ( $filters, $perPage )
+    protected function getMessages ( $filters, $perPage, $orderBy )
     {
         $query = Message::query();
 
@@ -180,6 +205,109 @@ class MessageController extends Controller
             });
         }
 
-        return $query->with('author')->orderByDesc('created_at')->paginate($perPage);
+        if  ( isset($filters['authors']) || isset($filters['receivers']) || isset($filters['message_parent']) ) {
+            $query->where(function ($query) use ($filters) {
+                if ( isset($filters['authors']) ) {
+                    foreach ($filters['authors'] as $item) {
+                        $query->orWhere('author_id', '=', $item);
+                    }
+                }
+
+                if ( isset($filters['receivers']) ) {
+                    foreach ($filters['receivers'] as $item) {
+                        if ( $item === 'admin' ) {
+                            $query->orWhereNull('receiver_id');
+                        } else {
+                            $query->orWhere('receiver_id', '=', $item);
+                        }
+                    }
+                }
+
+                if  ( isset($filters['message_parent']) ) {
+                    if ( !$filters['message_parent'] ) {
+                        $query->orWhereNull('message_parent_id');
+                    } else {
+                        $query->orWhere('message_parent_id', $filters['message_parent']);
+                    }
+                }
+            });
+        }
+
+        $query = $query->with(['author', 'receiver', 'childs', 'parent']);
+
+        if ( $orderBy['way'] === 'ASC' ) {
+            $query = $query->with(['author', 'receiver', 'childs', 'parent'])->orderBy($orderBy['attribute']);
+        } else {
+            $query = $query->with(['author', 'receiver', 'childs', 'parent'])->orderByDesc($orderBy['attribute']);
+        }
+
+        return $query->paginate($perPage);
+    }
+
+    private function getStateStatus ( $filters = [] )
+    {
+        $query = Message::query();
+        $result = new \stdClass();
+
+        if ( isset($filters['authors']) ) {
+            $authors = $filters['authors'];
+            $query->where(function ($query) use ($authors) {
+                foreach ($authors as $item) {
+                    $query->orWhere('author_id', '=', $item);
+                }
+
+                return $query;
+            });
+        }
+
+        $status = $query->groupBy('status')->select('status', DB::raw('count(status) AS count'))->get();
+
+        foreach ( MessageHelper::getStatusList() AS $itemStatus ) {
+            $key = $itemStatus['key'];
+            $count = 0;
+
+            foreach ( $status AS $state ) {
+                if ( $itemStatus['key'] === $state->status ) {
+                    $count = $state->count;
+                }
+            }
+
+            $result->$key = strval($count);
+        }
+
+        return $result;
+    }
+
+    private function getStateTags ( $filters = [] )
+    {
+        $query = Message::query();
+        $result = new \stdClass();
+
+        if ( isset($filters['authors']) ) {
+            $authors = $filters['authors'];
+            $query->where(function ($query) use ($authors) {
+                foreach ($authors as $item) {
+                    $query->orWhere('author_id', '=', $item);
+                }
+
+                return $query;
+            });
+        }
+        $tags = $query->groupBy('tag')->select('tag', DB::raw('count(tag) AS count'))->get();
+
+        foreach ( MessageHelper::getTagsList() AS $itemTags ) {
+            $key = $itemTags['key'];
+            $count = 0;
+
+            foreach ( $tags AS $tag ) {
+                if ( $key === $tag->tag ) {
+                    $count = $tag->count;
+                }
+            }
+
+            $result->$key = strval($count);
+        }
+
+        return $result;
     }
 }

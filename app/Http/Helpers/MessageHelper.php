@@ -59,8 +59,35 @@ class MessageHelper
                 'onlyTrashed' => $onlyTrashed
             ],
             'routes' => [
-                'getMessages' => route('admin.messages.get')
+                'getMessages' => route('admin.messages.get'),
+                'createMessage' => route('admin.messages.create')
             ]
         ];
+    }
+
+    static function existsKeyInStatusList ( $key )
+    {
+        $exists = false;
+
+        foreach ( MessageHelper::getStatusList() AS $item ) {
+            if ( $item['key'] === $key ) {
+                $exists = true;
+            }
+        }
+
+        return $exists;
+    }
+
+    static function existsKeyInTagsList ( $key )
+    {
+        $exists = false;
+
+        foreach ( MessageHelper::getTagsList() AS $item ) {
+            if ( $item['key'] === $key ) {
+                $exists = true;
+            }
+        }
+
+        return $exists;
     }
 }

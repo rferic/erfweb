@@ -46,9 +46,9 @@ class PageLocaleTest extends TestCase
             'lang' => $this->faker->languageCode
         ]);
 
-        factory(Content::class, $this->faker->numberBetween(0, 10))->create([ 'page_locale_id' => $this->pageLocale->id ]);
+        factory(Content::class, $this->faker->numberBetween(1, 10))->create([ 'page_locale_id' => $this->pageLocale->id ]);
         factory(Menu::class)->create([ 'user_id' => $this->author->id]);
-        factory(MenuItem::class, $this->faker->numberBetween(0, 10))->create([
+        factory(MenuItem::class, $this->faker->numberBetween(1, 10))->create([
             'page_locale_id' => $this->pageLocale->id,
             'lang' => $this->pageLocale->lang
         ]);

@@ -9,7 +9,7 @@
                     v-model="checkbox.checked"
                     @input="onToggleCheck(checkbox)"
                 >
-                    <span :class="`text-${checkbox.class}`">{{ $t(checkbox.key, { locale }) }}</span>
+                    <span :class="`text-${checkbox.class}`">{{ $t(checkbox.key, { locale }) | capitalizeFilter }}</span>
                     <i
                         v-if="typeof checkbox.icon !== typeof undefined"
                         class="fa ml-2"
@@ -24,6 +24,7 @@
 <script>
     import { mapState } from 'vuex'
     import cloneMixin from './../../mixins/clone'
+    import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
 
     export default {
         name: 'CheckboxesFilterMessage',
@@ -34,6 +35,7 @@
             }
         },
         mixins: [ cloneMixin ],
+        filters: { capitalizeFilter },
         data () {
             return {
                 checkboxes: []

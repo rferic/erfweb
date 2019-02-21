@@ -1,7 +1,10 @@
 <template>
     <transition name="bounceRight">
         <v-wait for="loader">
-            <notifications group="notify" position="bottom right" />
+            <notifications
+                group="notify"
+                position="top right"
+            />
             <template slot="waiting">
                 <div>
                     {{ $t('Loading...', locale) }}
@@ -40,7 +43,7 @@
             </sweet-modal>
             <div v-if="hasMessages">
                 <div class="mb-2">
-                    <div class="text-right pull-left">
+                    <div class="pull-left">
                         <b-form-checkbox
                             v-model="checkAll"
                             @input="onToggleCheckAll"
@@ -375,7 +378,16 @@
                 })
             },
             async loadPage ({ page, perPage, url }) {
-                const data = await this.getMessages({ stack: this.stackMessages, page, perPage, url })
+                this.filters.receivers = [ 'admin' ]
+
+                const data = await this.getMessages({
+                    stack: this.stackMessages,
+                    page,
+                    perPage,
+                    url,
+                    filters: this.filters,
+                    orderBy: this.orderBy
+                })
                 this.setMessagesCheckAttr(false)
                 this.currentPage = data.current_page
                 this.totalPages = data.to
@@ -405,37 +417,6 @@
             refreshNavMessages () {
                 this.$root.$refs.nav.$refs.navRight.refreshData()
             },
-            // Getters
-            getDataStatusSelected ( statusKey ) {
-                let statusSelected = ''
-
-                this.statusList.some((status) => {
-                    const conditionScape = statusKey === status.key
-
-                    if ( conditionScape ) {
-                        statusSelected = status
-                    }
-
-                    return conditionScape
-                })
-
-                return statusSelected
-            },
-            getDataTagSelected ( tagKey ) {
-                let tagSelected = ''
-
-                this.tagsList.some((tag) => {
-                    const conditionScape = tagKey === tag.key
-
-                    if ( conditionScape ) {
-                        tagSelected = tag
-                    }
-
-                    return conditionScape
-                })
-
-                return tagSelected
-            },
             // Setters
             setMessagesCheckAttr ( force ) {
                 for ( let message of this.messages ) {
@@ -453,3 +434,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .custom-checkbox {
+        display: inline-block;
+    }
+</style>

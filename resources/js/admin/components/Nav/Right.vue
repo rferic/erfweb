@@ -16,6 +16,7 @@
     import { mapState, mapGetters, mapActions } from 'vuex'
     import NavMessageNotify from './MessageNotify'
     import NavAccount from './Account'
+    import messagesMixin from '../../mixins/messages'
 
     export default {
         name: 'NavRight',
@@ -23,6 +24,7 @@
             NavMessageNotify,
             NavAccount
         },
+        mixins: [ messagesMixin ],
         data () {
             return {
                 secondsTimeoutLastRequestMessage: 60,
@@ -90,7 +92,7 @@
             // Actions
             async refreshData () {
                 const data = {
-                    state: await this.getMessageStateRequest(),
+                    state: await this.getMessageStateRequest({}),
                     messages: await this.getLastPendingMessagesRequest()
                 }
 
@@ -101,10 +103,6 @@
                 }, this.secondsTimeoutLastRequestMessage * 1000)
             },
             // AJAX Request
-            async getMessageStateRequest () {
-                const response = await axios.post(this.routesGlobal.messages.getState)
-                return response.data
-            },
             async getLastPendingMessagesRequest () {
                 const response = await axios.post(this.routesGlobal.messages.getLastPendingMessages, {
                     count: this.countItemsInNotify

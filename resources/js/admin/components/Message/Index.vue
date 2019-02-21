@@ -23,6 +23,7 @@
         <b-row v-if="viewForm">
             <detail-message
                 class="col-12"
+                :data="data"
                 :message-origin="currentMessage"
                 @onGoToList="goToList"
             />

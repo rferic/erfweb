@@ -15,7 +15,9 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('message_parent_id')->nullable();
+            $table->unsignedInteger('author_id');
+            $table->unsignedInteger('receiver_id')->nullable();
             $table->string('status');
             $table->string('tag');
             $table->string('subject')->nullable();
@@ -25,7 +27,9 @@ class CreateMessagesTable extends Migration
             
             $table->index('id');
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('message_parent_id')->references('id')->on('messages');
+            $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('receiver_id')->references('id')->on('users');
         });
     }
 

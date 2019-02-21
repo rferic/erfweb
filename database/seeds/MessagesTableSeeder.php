@@ -13,6 +13,17 @@ class MessagesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Message::class, 100)->create();
+        factory(Message::class, 10)->create();
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
+        factory(Message::class, 10)->create([ 'message_parent_id' => App\Models\Core\Message::all()->random()->id ]);
     }
 }

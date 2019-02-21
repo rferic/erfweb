@@ -2,7 +2,7 @@
     <b-form>
         <notifications
             group="notify"
-            position="bottom right"
+            position="top right"
         />
         <b-row>
             <b-col

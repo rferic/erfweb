@@ -6,7 +6,7 @@ Vue.filter('momentTime', function (time) {
     const momentTime = moment(time)
 
     if ( now.diff(momentTime, 'days') < 1 && now.days() === momentTime.days() ) {
-        return momentTime.format('HH:mm')
+        return momentTime.format('HH:mm DD/MM/YYYY')
     }
 
     return momentTime.format('MM-DD-YYYY')

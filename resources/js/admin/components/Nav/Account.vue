@@ -1,7 +1,8 @@
 <template>
     <li
+        v-if=""
         class="nav-item dropdown background-avatar"
-        :style="`background-image: url(${auth.avatar})`"
+        :style="`background-image: url(${avatar})`"
     >
         <a class="nav-link dropdown-toggle text-white text-center" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ acronym }}
@@ -55,6 +56,9 @@
                 }
 
                 return ''
+            },
+            avatar () {
+                return this.auth !== null ? this.auth.avatar : ''
             }
         },
         methods: {
