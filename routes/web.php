@@ -21,6 +21,10 @@ Route::get('/account', function () {
     return view('front/welcome');
 })->middleware('verified')->name('account');
 
+Route::get('/policy', function () {
+    return view('front/welcome');
+})->name('policy');
+
 // Auth routes
 Auth::routes(['verify' => true]);
 Route::view('/password/confirm', 'auth/passwords/confirm');

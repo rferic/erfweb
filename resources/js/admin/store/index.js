@@ -5,6 +5,7 @@ import auth from './auth'
 import message from './message'
 import adminMenu from './adminMenu'
 import paginator from './paginator'
+import blockui from './blockui'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ const store =  new Vuex.Store({
         auth,
         adminMenu,
         message,
-        paginator
+        paginator,
+        blockui
     },
     state: {
         locale: locale,

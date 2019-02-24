@@ -21,6 +21,7 @@ import VueWait from 'vue-wait'
 import vueDebounce from 'vue-debounce'
 import SweetModal from 'sweet-modal-vue/src/plugin.js'
 import ToggleButton from 'vue-js-toggle-button'
+import BlockUI from 'vue-blockui'
 // CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -44,7 +45,7 @@ Vue.use(VueWait)
 Vue.use(vueDebounce)
 Vue.use(SweetModal)
 Vue.use(ToggleButton)
-
+Vue.use(BlockUI)
 // Store
 import store from './store'
 // Components

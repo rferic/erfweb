@@ -1,5 +1,8 @@
 <template>
     <div>
+        <BlockUI v-if="isVisibleBlockui" :message="messageBlockui">
+            <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+        </BlockUI>
         <b-row v-if="viewList">
             <b-col
                 cols="3"
@@ -37,6 +40,7 @@
     import FilterMessage from './Filter'
     import ListMessage from './List'
     import DetailMessage from './Detail'
+    import { mapState } from 'vuex'
 
     export default {
         name: 'IndexMessage',
@@ -56,6 +60,10 @@
             }
         },
         computed: {
+            ...mapState({
+                isVisibleBlockui: state => state.blockui.isVisible,
+                messageBlockui: state => state.blockui.message
+            }),
             viewList () {
                 return this.currentMessage === null && this.isLoaded
             },

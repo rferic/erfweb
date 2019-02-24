@@ -124,7 +124,8 @@ class ProfileController extends Controller
             'id' => $profile->id,
             'email' => $profile->email,
             'name' => $profile->name,
-            'avatar' => asset($profile->avatar)
+            'avatar' => asset($profile->avatar),
+            'roles' => $profile->getRoleNames()
         ]);
     }
 

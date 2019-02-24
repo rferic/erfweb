@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Core\Message;
+use App\Notifications\MessageDeletedNotification;
 use App\Notifications\MessageReceivedNotification;
 
 class MessageObserver
@@ -39,7 +40,9 @@ class MessageObserver
      */
     public function deleted ( Message $message )
     {
-        //
+        if ( !is_null($message->author) ) {
+            $message->author->notify(new MessageDeletedNotification($message));
+        }
     }
 
     /**

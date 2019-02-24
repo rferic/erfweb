@@ -67,6 +67,7 @@
                         :data="data"
                         :message-origin="messageOrigin"
                         :author="author"
+                        @onGoToList="$emit('onGoToList')"
                     />
                 </b-col>
             </b-row>

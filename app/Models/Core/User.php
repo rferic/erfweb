@@ -81,4 +81,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new Notification);
     }
+
+    public function MessageDeletedNotification ()
+    {
+        $this->notify(new Notification);
+    }
 }

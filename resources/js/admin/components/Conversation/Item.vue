@@ -45,14 +45,26 @@
             <div v-if="message.status !== 'pending' || !statusEditable">
                 {{ message.text }}
                 <hr>
-                <a
-                    v-if="enableResponses && !replyIsOpen"
-                    href="#"
-                    @click.prevent="toggleReply"
-                >
-                    {{ $t('Reply', { locale }) }}
-                </a>
-                <div v-else-if="enableResponses">
+                <div>
+                    <a
+                        v-if="iCanRemove"
+                        href="#"
+                        class="pull-left text-danger"
+                        @click.prevent="remove"
+                    >
+                        {{ $t('Remove', { locale }) }}
+                    </a>
+                    <a
+                        v-if="enableResponses && !replyIsOpen"
+                        href="#"
+                        class="pull-right"
+                        @click.prevent="toggleReply"
+                    >
+                        {{ $t('Reply', { locale }) }}
+                    </a>
+                    <p class="clearfix" />
+                </div>
+                <div v-if="enableResponses && replyIsOpen">
                     <form-conversation
                         :message-parent="messageOrigin"
                         :button-cancel="buttonCancelForm"
@@ -90,7 +102,7 @@
     import cloneMixin from './../../mixins/clone'
     import messagesMixin from './../../mixins/messages'
     import FormConversation from './Form'
-    import { mapState } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         name: 'ItemConversation',
@@ -121,6 +133,11 @@
                 type: Boolean,
                 required: false,
                 default: true
+            },
+            enableRemove: {
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
         components: { FormConversation },
@@ -141,10 +158,16 @@
         computed: {
             ...mapState([ 'locale', 'routes', 'auth' ]),
             authorIsAdmin () {
-                return this.messageOrigin.author.roles.some(role => { role.name === 'admin' })
+                return this.messageOrigin.author.roles.some(role => role.name === 'admin')
+            },
+            iCanRemove () {
+                return this.enableRemove && (this.auth.user.roles.some(role => role === 'admin') || this.auth.user.id === this.message.author.id)
             }
         },
         methods: {
+            ...mapActions({
+                toogleBlockui : 'blockui/toggleIsVisible'
+            }),
             async onChangeStatusMessage ( status ) {
                 this.message.status = status
 
@@ -160,6 +183,12 @@
             },
             toggleReply () {
                 this.replyIsOpen = !this.replyIsOpen
+            },
+            async remove () {
+                this.toogleBlockui(true)
+                await this.removeMessageRequest(this.messageOrigin)
+                this.$emit('onRemoveMessage')
+                this.toogleBlockui(false)
             }
         }
     }

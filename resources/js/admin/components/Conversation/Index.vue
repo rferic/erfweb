@@ -6,14 +6,16 @@
         />
         <b-list-group class="messages">
             <item-conversation
-                :key="messageOrigin.id"
-                :message-origin="messageOrigin"
+                :key="messageParent.id"
+                :message-origin="messageParent"
                 :data="data"
                 :author="author"
                 :status-editable="true"
                 :enable-responses="true"
+                :enable-remove="true"
                 @onUpdateMessage="onUpdateMessage"
                 @onAddMessage="onAddMessage"
+                @onRemoveMessage="onRemoveMessageParent"
             />
             <div
                 v-if="conversationIsOpen"
@@ -26,7 +28,9 @@
                     :data="data"
                     :author="author"
                     :subject-is-visible="false"
+                    :enable-remove="true"
                     @onUpdateMessage="onUpdateMessage"
+                    @onRemoveMessage="onRemoveMessage"
                 />
                 <b-button
                     v-if="hasMoreMessages"
@@ -44,6 +48,7 @@
 
 <script>
     import { mapState } from 'vuex'
+    import cloneMixin from './../../mixins/clone'
     import messagesMixin from './../../mixins/messages'
     import ItemConversation from './Item'
 
@@ -64,13 +69,14 @@
             }
         },
         components: { ItemConversation },
-        mixins: [ messagesMixin ],
+        mixins: [ cloneMixin, messagesMixin ],
         data () {
             return {
                 statusList: JSON.parse(this.data).statusList,
                 tagsList: JSON.parse(this.data).tagsList,
                 currentPage: 1,
-                perPage: 10
+                perPage: 10,
+                messageParent: this.clone(this.messageOrigin)
             }
         },
         computed: {
@@ -80,7 +86,7 @@
                     ? {
                         authors: [ this.author.id ],
                         receivers: [ this.author.id ],
-                        message_parent: this.messageOrigin.id
+                        message_parent: this.messageParent.id
                     }
                     : {}
             },
@@ -88,7 +94,7 @@
                 return this.totalMessages > this.messages.length
             },
             conversationIsOpen () {
-                return this.messageOrigin.status !== 'pending'
+                return this.messageParent.status !== 'pending'
             }
         },
         methods: {
@@ -102,7 +108,7 @@
                 })
             },
             // Events
-            async onAddMessage ({}) {
+            async refreshConversation ({}) {
                 this.messages = []
 
                 for ( let page = 1; page <= this.currentPage; page++ ) {
@@ -114,11 +120,13 @@
                         orderBy: this.orderBy
                     })
                 }
-
+            },
+            async onAddMessage ({}) {
+                await this.refreshConversation({})
                 this.$notify({
                     group: 'notify',
                     title: this.$t('Create message'),
-                    text: this.$t('Message status has been created'),
+                    text: this.$t('Message has been updated'),
                     type: 'success',
                     config: {
                         closeOnClick: true
@@ -126,12 +134,37 @@
                 })
             },
             onUpdateMessage ({ message, status }) {
-                for ( let item of this.messages ) {
-                    if ( item.id === message.id ) {
-                        item.status = status
+                if ( message.id === this.messageParent.id ) {
+                    this.messageParent.status = status
+                } else {
+                    for ( let item of this.messages ) {
+                        if ( item.id === message.id ) {
+                            item.status = status
+                        }
                     }
                 }
 
+                this.notifyMessageUpdated()
+            },
+            async onRemoveMessage () {
+                await this.refreshConversation({})
+                this.notifyMessageDeleted()
+            },
+            onRemoveMessageParent () {
+                this.$emit('onGoToList')
+            },
+            notifyMessageDeleted () {
+                this.$notify({
+                    group: 'notify',
+                    title: this.$t('Update message'),
+                    text: this.$t('Message has been deleted'),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+            },
+            notifyMessageUpdated () {
                 this.$notify({
                     group: 'notify',
                     title: this.$t('Update message'),
