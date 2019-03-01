@@ -1,0 +1,10 @@
+#sidebarnavcustom {
+    > li {
+        > a > span {
+            display: none;
+        }
+        &:hover > a > span {
+            display: inline;
+        }
+    }
+}

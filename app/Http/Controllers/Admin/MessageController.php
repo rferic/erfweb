@@ -237,9 +237,9 @@ class MessageController extends Controller
         $query = $query->with(['author', 'receiver', 'childs', 'parent']);
 
         if ( $orderBy['way'] === 'ASC' ) {
-            $query = $query->with(['author', 'receiver', 'childs', 'parent'])->orderBy($orderBy['attribute']);
+            $query = $query->orderBy($orderBy['attribute']);
         } else {
-            $query = $query->with(['author', 'receiver', 'childs', 'parent'])->orderByDesc($orderBy['attribute']);
+            $query = $query->orderByDesc($orderBy['attribute']);
         }
 
         return $query->paginate($perPage);
