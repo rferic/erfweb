@@ -16,7 +16,7 @@
     import { mapState, mapGetters, mapActions } from 'vuex'
     import NavMessageNotify from './MessageNotify'
     import NavAccount from './Account'
-    import messagesMixin from '../../mixins/messages'
+    import messageMixin from '../../mixins/message'
 
     export default {
         name: 'NavRight',
@@ -24,7 +24,7 @@
             NavMessageNotify,
             NavAccount
         },
-        mixins: [ messagesMixin ],
+        mixins: [ messageMixin ],
         data () {
             return {
                 secondsTimeoutLastRequestMessage: 60,

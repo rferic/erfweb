@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 $factory->define(App\Models\Core\PageLocale::class, function (Faker $faker) {
     $title = $faker->sentence;
@@ -8,7 +9,7 @@ $factory->define(App\Models\Core\PageLocale::class, function (Faker $faker) {
     return [
         'page_id' => App\Models\Core\Page::all()->random()->id,
         'user_id' => App\Models\Core\User::role('admin')->get()->random()->id,
-        'slug' => str_slug($title, '-'),
+        'slug' => Str::slug($title, '-'),
         'title' => $title,
         'description' => $faker->paragraph,
         'layout' => 'default',

@@ -33,6 +33,20 @@ class AdminMenuHelper
                         'url' => route('admin.messages.trash')
                     ]
                 ]
+            ],
+            [
+                'key' => 'Web',
+                'label' => __('Web'),
+                'icon' => 'fa-mixcloud',
+                'url' => null,
+                'childrens' => [
+                    [
+                        'key' => 'pages',
+                        'label' => __('Pages'),
+                        'icon' => null,
+                        'url' => route('admin.pages')
+                    ]
+                ]
             ]
         ];
     }

@@ -23,7 +23,7 @@ class AccessTest extends TestCase
 
     protected $user, $admin, $adminNotVerified;
 
-    protected function setUp ()
+    protected function setUp ():void
     {
         parent::setUp();
 

@@ -3,8 +3,16 @@
         > a > span {
             display: none;
         }
-        &:hover > a > span {
-            display: inline;
+        &:hover {
+            a,
+            a i,
+            ul {
+                background-color: $blue !important;
+                color: white;
+            }
+            > a > span {
+                display: $blue;
+            }
         }
     }
 }

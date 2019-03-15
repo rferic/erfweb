@@ -53,6 +53,7 @@
                 logout: "{{ route('logout') }}",
                 dashboard: "{{ route('admin.dashboard') }}",
                 adminMenu: "{{ route('admin.adminMenu') }}",
+                web: "{{ route('home') }}",
                 profile: {
                     index: "{{ route('admin.profile') }}",
                     getData: "{{ route('admin.profile.getData') }}"

@@ -80,7 +80,7 @@
     import datetimeFilter from '../../../includes/filters/datetimeFilter'
     import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
     import IndexConversation from './../../components/Conversation/Index'
-    import messagesMixin from './../../mixins/messages'
+    import messageMixin from '../../mixins/message'
 
     export default {
         name: 'DetailMessage',
@@ -95,7 +95,7 @@
             }
         },
         components: { IndexConversation },
-        mixins: [ messagesMixin ],
+        mixins: [ messageMixin ],
         filters: { datetimeFilter, capitalizeFilter },
         data () {
             return {

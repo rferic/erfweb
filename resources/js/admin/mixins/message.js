@@ -1,4 +1,6 @@
-const messagesMixin = {
+import { mapState } from 'vuex'
+
+const messageMixin = {
     data () {
         return {
             messages: [],
@@ -11,6 +13,7 @@ const messagesMixin = {
         }
     },
     computed: {
+        ...mapState([ 'routes' ]),
         hasMessages () {
             return this.messages.length > 0
         },
@@ -39,9 +42,9 @@ const messagesMixin = {
             const data = await this.getMessagesRequest({ page, perPage, url, filters, orderBy })
 
             if ( stack ) {
-                data.data.forEach(message => {
+                for ( let message of data.data ) {
                     this.messages.push(message)
-                })
+                }
             } else {
                 this.messages = data.data
             }
@@ -128,4 +131,4 @@ const messagesMixin = {
     }
 }
 
-export default messagesMixin
+export default messageMixin

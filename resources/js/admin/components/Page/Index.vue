@@ -7,7 +7,7 @@
             <b-col
                 cols="2"
                 xs="12">
-                <filter-message
+                <filter-page
                     :data="data"
                     @onChangeFilters="onChangeFilters"
                 />
@@ -15,19 +15,19 @@
             <b-col
                 cols="10"
                 xs="12">
-                <list-message
+                <list-page
                     ref="listMessage"
                     :data="data"
                     :filters="filters"
-                    @onGoToMessage="goToMessage"
+                    @onGoToPage="goToPage"
                 />
             </b-col>
         </b-row>
         <b-row v-if="viewForm">
-            <detail-message
+            <form-page
                 class="col-12"
                 :data="data"
-                :message-origin="currentMessage"
+                :page-origin="currentPage"
                 @onGoToList="goToList"
             />
         </b-row>
@@ -35,27 +35,27 @@
 </template>
 
 <script>
-    import filterMessageStructure from './../../structures/filterMessage'
+    import filterPageStructure from './../../structures/filterPage'
     import cloneMixin from './../../mixins/clone'
-    import FilterMessage from './Filter'
-    import ListMessage from './List'
-    import DetailMessage from './Detail'
+    import FilterPage from './Filter'
+    import ListPage from './List'
+    import FormPage from './Form'
     import { mapState } from 'vuex'
 
     export default {
-        name: 'IndexMessage',
+        name: 'IndexPage',
         props: {
-          data: {
-              type: String,
-              required: true
-          }
+            data: {
+                type: String,
+                required: true
+            }
         },
-        components: { FilterMessage, ListMessage, DetailMessage },
+        components: { FilterPage, ListPage, FormPage },
         mixins: [ cloneMixin ],
         data () {
             return {
-                filters: this.clone(filterMessageStructure),
-                currentMessage: null,
+                filters: this.clone(filterPageStructure),
+                currentPage: null,
                 isLoaded: false
             }
         },
@@ -65,21 +65,22 @@
                 messageBlockui: state => state.blockui.message
             }),
             viewList () {
-                return this.currentMessage === null && this.isLoaded
+                return this.currentPage === null && this.isLoaded
             },
             viewForm () {
-                return this.currentMessage !== null && this.isLoaded
+                return this.currentPage !== null && this.isLoaded
             }
         },
+        mixins: [ cloneMixin ],
         methods: {
             onChangeFilters ( filters ) {
                 this.filters = filters
             },
-            goToMessage ( message ) {
-                this.currentMessage = message
+            goToPage ( page ) {
+                this.currentPage = page
             },
             goToList () {
-                this.currentMessage = null
+                this.currentPage = null
             }
         },
         created () {

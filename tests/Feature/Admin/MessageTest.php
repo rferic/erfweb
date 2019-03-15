@@ -29,7 +29,7 @@ class MessageTest extends TestCase
     protected $user;
     protected $numMessages;
 
-    protected function setUp ()
+    protected function setUp ():void
     {
         parent::setUp();
 
@@ -439,7 +439,7 @@ class MessageTest extends TestCase
     }
 
     /**
-     * Intental test method
+     * Internal test method
      * @param bool $onlyTrashed
      * @return array
      */

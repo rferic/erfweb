@@ -61,5 +61,21 @@ Route::group(
         // Admin Images temporal
         Route::post('/upload-image-temporal', 'Admin\ImageTemporalController@upload')->name('admin.imagesTemporal.upload');
         Route::delete('/remove-image-temporal', 'Admin\ImageTemporalController@remove')->name('admin.imagesTemporal.remove');
+        // Admin Content
+        Route::post('/contents', 'Admin\ContentController@get')->name('admin.contents.get');
+        // Admin Pages
+        Route::get('/pages', 'Admin\PageController@index')->name('admin.pages');
+        Route::post('/pages', 'Admin\PageController@get')->name('admin.pages.get');
+        Route::post('/pages/{page}/restore', 'Admin\PageController@restore')->name('admin.pages.restore');
+        Route::post('/pages/get-all-slugs-page', 'Admin\PageController@getAllSlugsPage')->name('admin.pages.getAllSlugsPage');
+        Route::delete('/pages/{page}/remove', 'Admin\PageController@remove')->name('admin.pages.remove');
+        Route::delete('/pages/{page}/destroy', 'Admin\PageController@destroy')->name('admin.pages.destroy');
+        // Admin Menus
+        Route::post('/menus', 'Admin\MenuController@get')->name('admin.menus.get');
+        // Admin Redirections
+        Route::get('/redirections', 'Admin\RedirectionController@index')->name('admin.redirections');
+        Route::post('/redirections/get', 'Admin\RedirectionController@get')->name('admin.redirections.get');
+        Route::post('/redirections/create', 'Admin\RedirectionController@create')->name('admin.redirections.create');
+        Route::delete('/redirections/{redirection}/destroy', 'Admin\RedirectionController@destroy')->name('admin.redirections.destroy');
     }
 );

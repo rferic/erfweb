@@ -100,7 +100,7 @@
 <script>
     import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
     import cloneMixin from './../../mixins/clone'
-    import messagesMixin from './../../mixins/messages'
+    import messageMixin from '../../mixins/message'
     import FormConversation from './Form'
     import { mapState, mapActions } from 'vuex'
 
@@ -141,7 +141,7 @@
             }
         },
         components: { FormConversation },
-        mixins: [ cloneMixin, messagesMixin ],
+        mixins: [ cloneMixin, messageMixin ],
         filters: { capitalizeFilter },
         data () {
             return {

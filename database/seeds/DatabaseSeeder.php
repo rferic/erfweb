@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             PagesTableSeeder::class,
             MenusTableSeeder::class,
             AppsTableSeeder::class,
+            RedirectionsTableSeeder::class,
         ]);
     }
 

@@ -5,7 +5,7 @@
             v-model="text"
             type="text"
             size="sm"
-            :placeholder="$t('Search text...', { locale })"
+            :placeholder="placeholderComputed"
             v-debounce:500ms="onChange"
         />
     </b-nav-form>
@@ -15,14 +15,24 @@
     import { mapState } from 'vuex'
 
     export default {
-        name: 'InputTextFilterMessage',
+        name: 'InputTextFilter',
+        props: {
+            placeholder: {
+                type: String,
+                required: false,
+                default:  null
+            }
+        },
         data () {
             return {
                 text: ''
             }
         },
         computed: {
-            ...mapState([ 'locale' ])
+            ...mapState([ 'locale' ]),
+            placeholderComputed () {
+                return this.placeholder !== null ? this.placeholder : this.$t('Search text...', { locale: this.locale })
+            }
         },
         methods: {
             onChange () {

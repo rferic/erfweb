@@ -29,7 +29,7 @@ class ProfileTest extends TestCase
 
     public $user, $admin, $roles = [];
 
-    protected function setUp ()
+    protected function setUp ():void
     {
         parent::setUp();
 
@@ -72,7 +72,8 @@ class ProfileTest extends TestCase
                 'id' => $profile->id,
                 'email' => $profile->email,
                 'name' => $profile->name,
-                'avatar' => asset($profile->avatar)
+                'avatar' => asset($profile->avatar),
+                'roles' => $profile->getRoleNames()
             ]);
     }
 

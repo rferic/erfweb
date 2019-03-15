@@ -49,7 +49,7 @@
 <script>
     import { mapState } from 'vuex'
     import cloneMixin from './../../mixins/clone'
-    import messagesMixin from './../../mixins/messages'
+    import messageMixin from '../../mixins/message'
     import ItemConversation from './Item'
 
     export default {
@@ -69,7 +69,7 @@
             }
         },
         components: { ItemConversation },
-        mixins: [ cloneMixin, messagesMixin ],
+        mixins: [ cloneMixin, messageMixin ],
         data () {
             return {
                 statusList: JSON.parse(this.data).statusList,

@@ -1,0 +1,10 @@
+.tabs-pills ul > li {
+    a.nav-link {
+        color: $gray;
+
+        &.active {
+            background-color: $gray;
+            color: $white;
+        }
+    }
+}

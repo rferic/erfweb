@@ -15,26 +15,28 @@ class PagesTableSeeder extends Seeder
      */
     public function run()
     {   
-        factory(Page::class, 8)->create()->each(function ($page) {
-            $random = (bool)random_int(0, 1);
-            
-            if ($random) {
-                $pageLocale = factory(PageLocale::class)->create([
-                    'lang' => 'en',
-                    'page_id' => $page->id
-                ]);
-                
-                factory(Content::class, 3)->create([
-                    'page_locale_id' => $pageLocale->id
-                ]);
+        factory(Page::class, 30)->create()->each(function ($page) {
+            $langs = config('global.langsAvailables');
+            $setAnyLang = false;
+
+            foreach ( $langs AS $lang ) {
+                if ( (bool)random_int(0, 1) ) {
+                    $setAnyLang = true;
+                    $pageLocale = factory(PageLocale::class)->create([
+                        'lang' => $lang['iso'],
+                        'page_id' => $page->id
+                    ]);
+                    factory(Content::class, 3)->create([
+                        'page_locale_id' => $pageLocale->id
+                    ]);
+                }
             }
-            
-            if (!$random || (bool)random_int(0, 1)) {
+
+            if ( !$setAnyLang ) {
                 $pageLocale = factory(PageLocale::class)->create([
-                    'lang' => 'es',
+                    'lang' => $langs[random_int(0, COUNT($langs)-1)]['iso'],
                     'page_id' => $page->id
                 ]);
-                
                 factory(Content::class, 3)->create([
                     'page_locale_id' => $pageLocale->id
                 ]);

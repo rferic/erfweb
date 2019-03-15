@@ -56,6 +56,7 @@ import NavMessageNotify from './components/Nav/MessageNotify'
 import IndexDashboard from './components/Dashboard/Index'
 import IndexProfile from './components/Profile/Index'
 import IndexMessage from './components/Message/Index'
+import IndexPage from './components/Page/Index'
 // filters
 import './filters/global'
 
@@ -70,6 +71,7 @@ const app = new Vue({
         NavMessageNotify,
         IndexDashboard,
         IndexProfile,
-        IndexMessage
+        IndexMessage,
+        IndexPage
     }
 });

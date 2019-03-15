@@ -175,7 +175,7 @@
     import { mapState } from 'vuex'
     import cloneMixin from './../../mixins/clone'
     import paginatorMixin from './../../mixins/paginator'
-    import messagesMixin from './../../mixins/messages'
+    import messageMixin from '../../mixins/message'
 
     export default {
         name: 'ListMessage',
@@ -190,7 +190,7 @@
                 default: {}
             }
         },
-        mixins: [ cloneMixin, paginatorMixin, messagesMixin ],
+        mixins: [ cloneMixin, paginatorMixin, messageMixin ],
         data () {
             return {
                 stackMessages: true,
@@ -233,7 +233,7 @@
             }
         },
         computed: {
-            ...mapState([ 'locale', 'routes' ]),
+            ...mapState([ 'locale' ]),
             isTrashView () {
                 return JSON.parse(this.data).onlyTrashed
             },
@@ -278,8 +278,8 @@
 
                     this.$notify({
                         group: 'notify',
-                        title: this.$t('Delete message'),
-                        text: this.$t('Messages selected has been deleted and moved to trash'),
+                        title: this.$t('Delete message', { locale: this.locale }),
+                        text: this.$t('Messages selected has been deleted and moved to trash', { locale: this.locale }),
                         type: 'success',
                         config: {
                             closeOnClick: true
@@ -295,8 +295,8 @@
 
                     this.$notify({
                         group: 'notify',
-                        title: this.$t('Delete message'),
-                        text: this.$t('Message has been deleted and moved to trash'),
+                        title: this.$t('Delete message', { locale: this.locale }),
+                        text: this.$t('Message has been deleted and moved to trash', { locale: this.locale }),
                         type: 'success',
                         config: {
                             closeOnClick: true
@@ -319,8 +319,8 @@
 
                 this.$notify({
                     group: 'notify',
-                    title: this.$t('Restore selected messages'),
-                    text: this.$t('Selected messages has been restored and moved to list'),
+                    title: this.$t('Restore selected messages', { locale: this.locale }),
+                    text: this.$t('Selected messages has been restored and moved to list', { locale: this.locale }),
                     type: 'success',
                     config: {
                         closeOnClick: true
@@ -334,8 +334,8 @@
 
                 this.$notify({
                     group: 'notify',
-                    title: this.$t('Restore message'),
-                    text: this.$t('Message has been restored and moved to list'),
+                    title: this.$t('Restore message', { locale: this.locale }),
+                    text: this.$t('Message has been restored and moved to list', { locale: this.locale }),
                     type: 'success',
                     config: {
                         closeOnClick: true
@@ -355,8 +355,8 @@
 
                 this.$notify({
                     group: 'notify',
-                    title: this.$t('Destroy selected messages'),
-                    text: this.$t('Selected essages has been destroyed'),
+                    title: this.$t('Destroy selected messages', { locale: this.locale }),
+                    text: this.$t('Selected messages has been destroyed', { locale: this.locale }),
                     type: 'success',
                     config: {
                         closeOnClick: true
@@ -373,8 +373,8 @@
                     this.$refs.confirmDestroy.close()
                     this.$notify({
                         group: 'notify',
-                        title: this.$t('Destroy message'),
-                        text: this.$t('Message has been destroyed'),
+                        title: this.$t('Destroy message', { locale: this.locale }),
+                        text: this.$t('Message has been destroyed', { locale: this.locale }),
                         type: 'success',
                         config: {
                             closeOnClick: true
@@ -414,7 +414,7 @@
                 })
                 this.setMessagesCheckAttr(false)
                 this.currentPage = data.current_page
-                this.totalPages = data.to
+                this.totalPages = data.total
                 this.setPerPage(perPage)
             },
             async refresh () {

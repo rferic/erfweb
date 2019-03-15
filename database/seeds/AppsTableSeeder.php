@@ -21,15 +21,14 @@ class AppsTableSeeder extends Seeder
         $users = User::role('public')->get();
 
         $apps = factory(App::class, 5)->create()->each(function ($app) {
-            factory(AppLocale::class)->create([
-                'app_id' => $app->id,
-                'lang' => 'en'
-            ]);
+            $langs = config('global.langsAvailables');
 
-            factory(AppLocale::class, 5)->create([
-                'app_id' => $app->id,
-                'lang' => 'es'
-            ]);
+            foreach ( $langs AS $lang ) {
+                factory(AppLocale::class)->create([
+                    'app_id' => $app->id,
+                    'lang' => $lang['iso']
+                ]);
+            }
 
             factory(AppImage::class, 3)->create([
                 'app_id' => $app->id

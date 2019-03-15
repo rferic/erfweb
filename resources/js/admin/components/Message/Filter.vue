@@ -1,18 +1,20 @@
 <template>
     <transition name="bounceRight">
-        <div>
+        <div class="filters">
             <b-nav vertical>
-                <div class="dropdown-divider"></div>
-                <input-text-filter-message
-                    @onChangeFilter="onChangeTextFilter"
-                />
-                <div class="dropdown-divider"></div>
-                <checkboxes-filter-message
+                <div class="dropdown-divider" />
+                <input-text-filter @onChangeFilter="onChangeTextFilter" />
+                <div class="dropdown-divider" />
+                <checkboxes-filter
+                    :title="$t('Status', { locale })"
                     :options="statusList"
+                    :translate-label="true"
                     @onChangeFilter="onChangeStatusFilter"
                 />
-                <checkboxes-filter-message
+                <checkboxes-filter
+                    :title="$t('Tags', { locale })"
                     :options="tagsList"
+                    :translate-label="true"
                     @onChangeFilter="onChangeTagsFilter"
                 />
             </b-nav>
@@ -24,8 +26,8 @@
     import { mapState } from 'vuex'
     import filterMessageStructure from './../../structures/filterMessage'
     import cloneMixin from './../../mixins/clone'
-    import InputTextFilterMessage from './InputTextFilter'
-    import CheckboxesFilterMessage from './CheckboxesFilter'
+    import InputTextFilter from './../Filters/InputText'
+    import CheckboxesFilter from './../Filters/Checkboxes'
 
     export default {
         name: 'FilterMessage',
@@ -35,7 +37,7 @@
                 required: true
             }
         },
-        components: { InputTextFilterMessage, CheckboxesFilterMessage },
+        components: { InputTextFilter, CheckboxesFilter },
         mixins: [ cloneMixin ],
         data () {
             return {

@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct ()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index ()
     {
         $vieOptions = MessageHelper::getIndexViewOptions(false);
@@ -174,7 +184,7 @@ class MessageController extends Controller
             $status = $filters['status'];
             $query->where(function ($query) use ($status) {
                 foreach ($status as $item) {
-                    $query->orWhere('status', '=', $item);
+                    $query->orWhere('status', $item);
                 }
 
                 return $query;
@@ -185,7 +195,7 @@ class MessageController extends Controller
             $tags = $filters['tags'];
             $query->where(function ($query) use ($tags) {
                 foreach ($tags as $item) {
-                    $query->orWhere('tag', '=', $item);
+                    $query->orWhere('tag', $item);
                 }
 
                 return $query;
@@ -198,7 +208,7 @@ class MessageController extends Controller
                 return $query
                     ->where('subject', 'LIKE', '%' . $text. '%')
                     ->orWhere('text', 'LIKE', '%' . $text. '%')
-                    ->orWhereHas('author', function ($query) use ($text){
+                    ->orWhereHas('author', function ($query) use ($text) {
                         return $query
                             ->where('name', 'LIKE', '%' . $text. '%')
                             ->orWhere('email', 'LIKE', '%' . $text. '%');
@@ -210,7 +220,7 @@ class MessageController extends Controller
             $query->where(function ($query) use ($filters) {
                 if ( isset($filters['authors']) ) {
                     foreach ($filters['authors'] as $item) {
-                        $query->orWhere('author_id', '=', $item);
+                        $query->orWhere('author_id', $item);
                     }
                 }
 
@@ -219,7 +229,7 @@ class MessageController extends Controller
                         if ( $item === 'admin' ) {
                             $query->orWhereNull('receiver_id');
                         } else {
-                            $query->orWhere('receiver_id', '=', $item);
+                            $query->orWhere('receiver_id', $item);
                         }
                     }
                 }
@@ -254,7 +264,7 @@ class MessageController extends Controller
             $authors = $filters['authors'];
             $query->where(function ($query) use ($authors) {
                 foreach ($authors as $item) {
-                    $query->orWhere('author_id', '=', $item);
+                    $query->orWhere('author_id', $item);
                 }
 
                 return $query;
@@ -288,7 +298,7 @@ class MessageController extends Controller
             $authors = $filters['authors'];
             $query->where(function ($query) use ($authors) {
                 foreach ($authors as $item) {
-                    $query->orWhere('author_id', '=', $item);
+                    $query->orWhere('author_id', $item);
                 }
 
                 return $query;

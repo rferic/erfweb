@@ -1,5 +1,12 @@
 <template>
-    <b-card>
+    <b-card class="filters">
+        <h5
+            v-if="hasTitle"
+            class="text-center"
+        >
+            {{ title }}
+        </h5>
+        <hr>
         <b-nav-form
             v-for="checkbox in checkboxes"
             :key="checkbox.key"
@@ -9,12 +16,12 @@
                     v-model="checkbox.checked"
                     @input="onToggleCheck(checkbox)"
                 >
-                    <span :class="`text-${checkbox.class}`">{{ $t(checkbox.key, { locale }) | capitalizeFilter }}</span>
                     <i
                         v-if="typeof checkbox.icon !== typeof undefined"
-                        class="fa ml-2"
+                        class="fa mr-2"
                         :class="`${checkbox.icon} text-${checkbox.class}`"
                     />
+                    <span :class="`text-${checkbox.class}`">{{ $t(getLabelCheckbox(checkbox), { locale }) | capitalizeFilter }}</span>
                 </b-form-checkbox>
             </div>
         </b-nav-form>
@@ -32,6 +39,16 @@
             options: {
                 type: Array,
                 required: true
+            },
+            title: {
+                type: String,
+                required: false,
+                default: ''
+            },
+            translateLabel: {
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
         mixins: [ cloneMixin ],
@@ -42,11 +59,19 @@
             }
         },
         computed: {
-            ...mapState([ 'locale' ])
+            ...mapState([ 'locale' ]),
+            hasTitle () {
+                return this.title !== ''
+            }
         },
         methods: {
             onToggleCheck ( checkbox ) {
                 this.$emit('onChangeFilter', checkbox)
+            },
+            getLabelCheckbox ( checkbox ) {
+                const label = typeof checkbox.label !== typeof undefined ? checkbox.label : checkbox.key
+
+                return this.translateLabel ? this.$t(label, { locale: this.locale }) : label
             }
         },
         created () {
@@ -60,5 +85,9 @@
         width: 100%;
         padding: 5px 10px;
         margin: 2px 0;
+    }
+
+    h5 {
+        font-size: 1rem;
     }
 </style>
