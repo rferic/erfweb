@@ -110,6 +110,7 @@
 <script>
     import { mapState } from 'vuex'
     import pageMixin from './../../mixins/page'
+    import slugMixin from './../../mixins/slug'
     import redirectionMixin from './../../mixins/redirection'
 
     export default {
@@ -125,7 +126,7 @@
                 default: false
             }
         },
-        mixins: [ pageMixin, redirectionMixin ],
+        mixins: [ pageMixin, slugMixin, redirectionMixin ],
         data () {
             return {
                 slugsCreated: [],
@@ -237,7 +238,7 @@
             }
         },
         async created () {
-            this.slugsCreated = await this.getAllSlugsPageRequest()
+            this.slugsCreated = await this.getAllSlugsRequest()
         }
     }
 </script>

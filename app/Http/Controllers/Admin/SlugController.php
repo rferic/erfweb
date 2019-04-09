@@ -64,4 +64,12 @@ class SlugController extends Controller
             abort(400);
         }
     }
+
+    public function getAllSlugs ()
+    {
+        $slugsPages = PageLocale::query()->pluck('slug')->all();
+        $slugsApps = AppLocale::query()->pluck('slug')->all();
+
+        return Response::json(array_merge($slugsPages, $slugsApps));
+    }
 }

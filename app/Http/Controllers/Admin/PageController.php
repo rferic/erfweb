@@ -43,11 +43,6 @@ class PageController extends Controller
         return Response::json($this->getPages($filters, $perPage, $orderBy));
     }
 
-    public function getAllSlugsPage ()
-    {
-        return Response::json(PageLocale::query()->pluck('slug')->all());
-    }
-
     public function store ( Request $request )
     {
         $pageLocales = $request->input('locales');
@@ -223,13 +218,13 @@ class PageController extends Controller
             ],
             'routes' => [
                 'getPages' => route('admin.pages.get'),
-                'getAllSlugsPage' => route('admin.pages.getAllSlugsPage'),
                 'storePages' => route('admin.pages.store'),
                 'getContents' => route('admin.contents.get'),
                 'getMenus' => route('admin.menus.get'),
                 'indexRedirections' => route('admin.redirections'),
                 'getRedirections' => route('admin.redirections.get'),
                 'createRedirection' => route('admin.redirections.create'),
+                'getAllSlugs' => route('admin.slugs.getAllSlugs'),
                 'getSlugIsFree' => route('admin.slugs.getIsFree')
             ]
         ];
@@ -296,12 +291,12 @@ class PageController extends Controller
     private function destroyContents ( $pageLocale, $currentContents ) {
         $contents = $pageLocale->contents;
 
-        if ( COUNT($contents) > 0 ) {
+        if ( $contents->count() > 0 ) {
             foreach ( $contents AS $content ) {
                 $find = false;
 
                 foreach ( $currentContents AS $currentContent ) {
-                    if ( $currentContent['id'] === $content->id ) {
+                    if ( intval($currentContent['id']) === $content->id ) {
                         $find = true;
                     }
                 }

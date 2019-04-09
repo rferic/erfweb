@@ -70,6 +70,10 @@ const slugMixin = {
             })
 
             return data
+        },
+        async getAllSlugsRequest () {
+            const { data } = await axios.post(this.routes.getAllSlugs, {})
+            return data
         }
     }
 }

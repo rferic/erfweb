@@ -76,6 +76,11 @@ Route::group(
         Route::post('/pages/get-all-slugs-page', 'Admin\PageController@getAllSlugsPage')->name('admin.pages.getAllSlugsPage');
         Route::delete('/pages/{page}/remove', 'Admin\PageController@remove')->name('admin.pages.remove');
         Route::delete('/pages/{page}/destroy', 'Admin\PageController@destroy')->name('admin.pages.destroy');
+        // Admin Apps
+        Route::get('/apps', 'Admin\AppController@index')->name('admin.apps');
+        Route::post('/apps', 'Admin\AppController@get')->name('admin.apps.get');
+        Route::post('/apps/store', 'Admin\AppController@store')->name('admin.apps.store');
+        Route::post('/pages/{page}/restore', 'Admin\PageController@restore')->name('admin.pages.restore');
         // Admin Menus
         Route::post('/menus', 'Admin\MenuController@get')->name('admin.menus.get');
         // Admin Redirections
@@ -85,5 +90,6 @@ Route::group(
         Route::delete('/redirections/{redirection}/destroy', 'Admin\RedirectionController@destroy')->name('admin.redirections.destroy');
         //Admin Slugs
         Route::post('/slugs/is-free', 'Admin\SlugController@getIsFree')->name('admin.slugs.getIsFree');
+        Route::post('/slugs/get-all-slugs', 'Admin\SlugController@getAllSlugs')->name('admin.slugs.getAllSlugs');
     }
 );
