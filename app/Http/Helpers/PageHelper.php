@@ -15,10 +15,12 @@ class PageHelper
     {
         return [
             [
-                'title' => 'default',
+                'key' => 'default',
+                'title' => 'Default',
                 'options' => [
                     'width' => [ 'fullwidth', 'container'],
-                    'cols' => [ '1', '2', '3', '4' ],
+                    'menu' => true,
+                    'footer' => true,
                     'inject' => [
                         'js',
                         'css'
@@ -26,10 +28,25 @@ class PageHelper
                 ]
             ],
             [
-                'title' => 'home',
+                'key' => 'home',
+                'title' => 'Home',
                 'options' => [
                     'width' => [ 'fullwidth', 'container'],
-                    'cols' => [ '1', '2', '3', '4' ],
+                    'menu' => true,
+                    'footer' => true,
+                    'inject' => [
+                        'js',
+                        'css'
+                    ]
+                ]
+            ],
+            [
+                'key' => 'landing',
+                'title' => 'Landing',
+                'options' => [
+                    'width' => [ 'fullwidth' ],
+                    'menu' => false,
+                    'footer' => true,
                     'inject' => [
                         'js',
                         'css'

@@ -5,6 +5,7 @@
             card
             vertical
             class="tabs-pills"
+            v-model="tab"
         >
             <b-tab
                 v-for="language in languages"
@@ -41,11 +42,12 @@
 <script>
     import { mapState } from 'vuex'
     import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
+    import cloneMixin from './../../mixins/clone'
 
     export default {
         name: 'MultilanguageTab',
         props: {
-            languages: {
+            languagesDefault: {
                 type: Array,
                 required: true
             },
@@ -60,18 +62,40 @@
                 default: null
             }
         },
+        mixins: [ cloneMixin ],
+        data () {
+            return {
+                languages: this.clone(this.languagesDefault),
+                tab: null
+            }
+        },
         computed: {
             ...mapState([ 'locale' ])
         },
-        filters: { capitalizeFilter }
+        filters: { capitalizeFilter },
+        methods: {
+            // Actions
+            toggleLanguage ({ enable, language }) {
+                for ( let languageData of this.languages ) {
+                    if ( languageData.iso === language.iso ) {
+                        languageData.enable = enable
+                    }
+                }
+            },
+            changeLanguageTab ( language ) {
+                for ( const [index, lang] of this.languages.entries() ) {
+                    if ( language.iso === lang.iso ) {
+                        this.tab = index
+                    }
+                }
+            },
+            // Getters
+            getCurrentLanguage () {
+                return this.languages[this.tab]
+            },
+            getAnyEnable () {
+                return this.languages.some(language => language.enable)
+            }
+        }
     }
 </script>
-
-<style scoped>
-    .semaphore {
-        border-radius: 12px;
-        width: 12px;
-        height: 12px;
-        line-height: 5px;
-    }
-</style>

@@ -22,7 +22,7 @@ class CreatePageLocalesTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('layout');
-            $table->json('options');
+            $table->json('options')->nullable();
             $table->string('seo_title')->nullable();
             $table->text('seo_description')->nullable();
             $table->json('seo_keywords')->nullable();

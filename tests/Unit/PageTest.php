@@ -29,7 +29,7 @@ class PageTest extends TestCase
 
     protected $page, $user, $author, $pages, $count;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

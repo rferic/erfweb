@@ -18,7 +18,7 @@ class RegisterTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

@@ -19,12 +19,20 @@
 @import 'filters';
 @import 'message';
 @import 'tabs';
+@import 'input-tags';
 
 .navbar-laravel {
-  background-color: #fff;
+  background-color: $white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 table#messages > thead {
     display: none;
+}
+
+.badge.semaphore {
+    border-radius: 12px;
+    width: 12px;
+    height: 12px;
+    line-height: 5px;
 }

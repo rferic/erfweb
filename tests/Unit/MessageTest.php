@@ -27,7 +27,7 @@ class MessageTest extends TestCase
 
     protected $message, $messageChild, $user, $author;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

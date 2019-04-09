@@ -1,0 +1,24 @@
+.input-tags {
+    border-radius: .25rem;
+    -webkit-appearance: initial !important;
+    -moz-appearance: initial !important;
+    -ms-progress-appearance: initial !important;
+
+    .input-tag,
+    input {
+        font-size: 1rem !important;
+    }
+
+    &.input-tags-primary > .input-tag {
+        background-color: $primary;
+        color: $white;
+        border-radius: .25rem;
+        border: 0;
+
+        a.remove {
+            color: $white !important;
+        }
+    }
+
+
+}

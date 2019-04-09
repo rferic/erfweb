@@ -63,9 +63,15 @@ Route::group(
         Route::delete('/remove-image-temporal', 'Admin\ImageTemporalController@remove')->name('admin.imagesTemporal.remove');
         // Admin Content
         Route::post('/contents', 'Admin\ContentController@get')->name('admin.contents.get');
+        Route::post('/contents/create', 'Admin\ContentController@create')->name('admin.contents.create');
+        Route::post('/contents/{content}/restore', 'Admin\ContentController@restore')->name('admin.contents.restore');
+        Route::post('/contents/{content}/update', 'Admin\ContentController@update')->name('admin.contents.update');
+        Route::delete('/contents/{content}/remove', 'Admin\ContentController@remove')->name('admin.contents.remove');
+        Route::delete('/contents/{content}/destroy', 'Admin\ContentController@destroy')->name('admin.contents.destroy');
         // Admin Pages
         Route::get('/pages', 'Admin\PageController@index')->name('admin.pages');
         Route::post('/pages', 'Admin\PageController@get')->name('admin.pages.get');
+        Route::post('/pages/store', 'Admin\PageController@store')->name('admin.pages.store');
         Route::post('/pages/{page}/restore', 'Admin\PageController@restore')->name('admin.pages.restore');
         Route::post('/pages/get-all-slugs-page', 'Admin\PageController@getAllSlugsPage')->name('admin.pages.getAllSlugsPage');
         Route::delete('/pages/{page}/remove', 'Admin\PageController@remove')->name('admin.pages.remove');
@@ -77,5 +83,7 @@ Route::group(
         Route::post('/redirections/get', 'Admin\RedirectionController@get')->name('admin.redirections.get');
         Route::post('/redirections/create', 'Admin\RedirectionController@create')->name('admin.redirections.create');
         Route::delete('/redirections/{redirection}/destroy', 'Admin\RedirectionController@destroy')->name('admin.redirections.destroy');
+        //Admin Slugs
+        Route::post('/slugs/is-free', 'Admin\SlugController@getIsFree')->name('admin.slugs.getIsFree');
     }
 );

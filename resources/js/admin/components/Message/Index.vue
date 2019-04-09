@@ -1,7 +1,7 @@
 <template>
     <div>
         <BlockUI v-if="isVisibleBlockui" :message="messageBlockui">
-            <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         </BlockUI>
         <b-row v-if="viewList">
             <b-col

@@ -1,8 +1,12 @@
 <template>
     <div>
         <BlockUI v-if="isVisibleBlockui" :message="messageBlockui">
-            <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         </BlockUI>
+        <notifications
+            group="notify"
+            position="top right"
+        />
         <b-row v-if="viewList">
             <b-col
                 cols="2"
@@ -20,6 +24,7 @@
                     :data="data"
                     :filters="filters"
                     @onGoToPage="goToPage"
+                    @onGoToCreatePage="goToCreatePage"
                 />
             </b-col>
         </b-row>
@@ -29,6 +34,7 @@
                 :data="data"
                 :page-origin="currentPage"
                 @onGoToList="goToList"
+                @onSavePage="onSavePage"
             />
         </b-row>
     </div>
@@ -56,7 +62,8 @@
             return {
                 filters: this.clone(filterPageStructure),
                 currentPage: null,
-                isLoaded: false
+                isLoaded: false,
+                languagesAvailable: JSON.parse(this.data).langsAvailable
             }
         },
         computed: {
@@ -76,11 +83,43 @@
             onChangeFilters ( filters ) {
                 this.filters = filters
             },
+            onSavePage ({ isNew }) {
+                this.$notify({
+                    group: 'notify',
+                    title: this.$t('Save page', { locale: this.locale }),
+                    text: this.$t(isNew ? 'Page has been created' : 'Page has been updated', { locale: this.locale }),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+
+                this.goToList()
+            },
             goToPage ( page ) {
                 this.currentPage = page
             },
+            goToCreatePage () {
+                this.currentPage = this.getNewPage()
+            },
             goToList () {
                 this.currentPage = null
+            },
+            getNewPage () {
+                let languages = []
+
+                for ( const languageAvailable of this.languagesAvailable ) {
+                    languages.push({
+                        iso: languageAvailable.iso,
+                        has: false
+                    })
+                }
+
+                return {
+                    id: null,
+                    locales: [],
+                    languages
+                }
             }
         },
         created () {

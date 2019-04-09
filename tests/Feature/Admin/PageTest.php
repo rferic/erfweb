@@ -37,7 +37,7 @@ class PageTest extends TestCase
 
         Role::create(['name' => 'admin']);
 
-        $this->numPages = $this->faker->numberBetween(0, 10);
+        $this->numPages = $this->faker->numberBetween(1, 10);
         $this->user = factory(User::class)->create()->assignRole('admin');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
         factory(Page::class, $this->numPages)->create()->each(function ($page) {
@@ -159,7 +159,7 @@ class PageTest extends TestCase
             ->assertExactJson(['result' => false]);
 
         // Call restore to page not in trash
-        $page = Page::get()->first();
+        $page = Page::onlyTrashed()->get()->first();
         $page->restore();
 
         $this
@@ -192,6 +192,124 @@ class PageTest extends TestCase
             ->assertExactJson(['result' => true]);
 
         $this->assertNull(Page::withTrashed()->find($page->id));
+    }
+
+    public function testPostStorePageWrongParams ()
+    {
+        $this->withExceptionHandling();
+
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.pages.store', []))
+            ->assertStatus(500);
+    }
+
+    public function testPostStorePageSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $langs = config('global.langsAvailables');
+        $pageLocales = [];
+        $allContents = [];
+
+        foreach ( $langs AS $lang ) {
+            $contents = [];
+
+            for ( $i = 0; $i < $this->faker->numberBetween(1, 10); $i++ ) {
+                $contents[] = [
+                    'id' => '',
+                    'page_locale_id' => '',
+                    'key' => $this->faker->word,
+                    'id_html' => $this->faker->word,
+                    'class_html' => $this->faker->word,
+                    'text' => $this->faker->randomHtml(),
+                    'header_inject' => $this->faker->word,
+                    'footer_inject' => $this->faker->word,
+                    'priority' => $this->faker->numberBetween(1, 10),
+                    'deleted_at' => $this->faker->boolean ? '' : $this->faker->date()
+                ];
+            }
+
+            $allContents = array_merge($allContents, $contents);
+            $pageLocales[] = [
+                'id' => '',
+                'page_id' => '',
+                'lang' => $lang['iso'],
+                'slug' => $this->faker->slug,
+                'title' => $this->faker->word,
+                'description' => $this->faker->paragraph,
+                'layout' => $this->faker->word,
+                'options' => $this->faker->word,
+                'seo_title' => $this->faker->word,
+                'seo_description' => $this->faker->word,
+                'seo_keywords' => $this->faker->word,
+                'deleted_at' => '',
+                'contents' => $contents
+            ];
+        }
+
+        $params = [
+            'id' => null,
+            'locales' => $pageLocales
+        ];
+        // Testing create a new page
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.pages.store', $params))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => true]);
+
+        $page = Page::with(['locales', 'contents'])->get()->last();
+
+        $this->assertsPageWithLocalesAndContents($page, [
+            'pageLocales' => $pageLocales,
+            'allContents' => $allContents,
+            'params' => $params
+        ]);
+        // Update page
+        $params = [
+            'id' => $page->id,
+            'locales' => []
+        ];
+
+        foreach ( $page->locales AS $locale ) {
+            $pageLocale = $locale->toArray();
+            $pageLocale['contents'] = $locale->contents->toArray();
+            // Overwrite
+            $pageLocale['title'] = $this->faker->word;
+            $pageLocale['description'] = $this->faker->paragraph;
+            $pageLocale['layout'] = $this->faker->word;
+            $pageLocale['options'] = $this->faker->word;
+            $pageLocale['seo_title'] = $this->faker->word;
+            $pageLocale['seo_description'] = $this->faker->word;
+            $pageLocale['seo_keywords'] = $this->faker->word;
+            $pageLocale['deleted_at'] = '';
+
+            foreach ( $pageLocale['contents'] AS $i => $content ) {
+                $pageLocale['contents'][$i]['key'] = $this->faker->word;
+                $pageLocale['contents'][$i]['id_html'] = $this->faker->word;
+                $pageLocale['contents'][$i]['class_html'] = $this->faker->word;
+                $pageLocale['contents'][$i]['text'] = $this->faker->randomHtml();
+                $pageLocale['contents'][$i]['header_inject'] = $this->faker->word;
+                $pageLocale['contents'][$i]['footer_inject'] = $this->faker->word;
+                $pageLocale['contents'][$i]['priority'] = $this->faker->numberBetween(1, 10);
+                $pageLocale['contents'][$i]['deleted_at'] = $this->faker->boolean ? '' : $this->faker->date();
+            }
+
+            $params['locales'][] = $pageLocale;
+        }
+        // Testing update a existed page
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.pages.store', $params))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => true]);
+
+        $this->assertsPageWithLocalesAndContents($page, [
+            'pageLocales' => $pageLocales,
+            'allContents' => $allContents,
+            'params' => $params
+        ]);
     }
 
     /**
@@ -265,6 +383,49 @@ class PageTest extends TestCase
         }
 
         return $params;
+    }
+
+    private function assertsPageWithLocalesAndContents ( Page $page, $data = [])
+    {
+        $pageLocales = $data['pageLocales'];
+        $allContents = $data['allContents'];
+        $params = $data['params'];
+
+        $this->assertCount(COUNT($pageLocales), $page->locales);
+        $this->assertCount(COUNT($allContents), $page->contents);
+
+        foreach ( $page->locales AS $item ) {
+            $pageLocale = PageLocale::where('id', $item->id)->with('contents')->withTrashed()->first();
+
+            foreach ( $params['locales'] AS $locale ) {
+                if ( $pageLocale->lang === $locale['lang'] ) {
+                    $this->assertEquals($pageLocale->title, $locale['title']);
+                    $this->assertEquals($pageLocale->slug, $locale['slug']);
+                    $this->assertEquals($pageLocale->description, $locale['description']);
+                    $this->assertEquals($pageLocale->layout, $locale['layout']);
+                    $this->assertEquals($pageLocale->options, $locale['options']);
+                    $this->assertEquals($pageLocale->seo_title, $locale['seo_title']);
+                    $this->assertEquals($pageLocale->seo_description, $locale['seo_description']);
+                    $this->assertEquals($pageLocale->seo_keywords, $locale['seo_keywords']);
+                    $this->assertEquals(is_null($pageLocale->deleted_at), $locale['deleted_at'] === '');
+                    $this->assertCount(COUNT($locale['contents']), $pageLocale->contents);
+
+                    foreach ( $pageLocale->contents AS $content ) {
+                        foreach ( $locale['contents'] AS $contentData ) {
+                            if ( $content->key === $contentData['key'] && $content->priority === $contentData['priority'] ) {
+                                $this->assertEquals($content->id_html, $contentData['id_html']);
+                                $this->assertEquals($content->class_html, $contentData['class_html']);
+                                $this->assertEquals($content->text, $contentData['text']);
+                                $this->assertEquals($content->header_inject, $contentData['header_inject']);
+                                $this->assertEquals($content->footer_inject, $contentData['footer_inject']);
+                                $this->assertEquals($content->priority, $contentData['priority']);
+                                $this->assertEquals(is_null($content->deleted_at), $contentData['deleted_at'] === '');
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

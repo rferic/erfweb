@@ -12,7 +12,7 @@
             </template>
             <div class="dropdown-divider" />
             <b-alert
-                :show="!hasPages"
+                :show="!hasPages && !isBusy"
                 variant="warning"
             >
                 {{ $t('Pages not found', { locale: this.locale }) }}
@@ -50,7 +50,7 @@
                     {{ $t('Confirm destroy selected pages', { locale }) }}
                 </b-button>
             </sweet-modal>
-            <div v-if="hasPages">
+            <div v-if="hasPages || isBusy">
                 <div class="mb-2">
                     <div class="pull-left">
                         <b-form-checkbox
@@ -75,7 +75,15 @@
                         </b-button>
                     </div>
                     <div class="text-right pull-right">
+                        <b-button
+                            size="sm"
+                            variant="success"
+                            @click.prevent="$emit('onGoToCreatePage')"
+                        >
+                            <i class="fa fa-plus" /> {{ $t('Create new', { locale }) }}
+                        </b-button>
                         <b-form-select
+                            class="w-auto"
                             size="sm"
                             v-model="selectPerPage"
                             :options="optionsPerPage"
@@ -93,7 +101,15 @@
                     striped
                     :fields="columns"
                     :items="pagesWithCheckedAttrAndDefaultData"
+                    :busy="isBusy"
                 >
+                    <div
+                        slot="table-busy"
+                        class="text-center text-primary my-2"
+                    >
+                        <b-spinner class="align-middle"></b-spinner>
+                        <strong>{{ $t('Loading', { locale }) }}...</strong>
+                    </div>
                     <template
                         slot="check"
                         slot-scope="data"
@@ -248,6 +264,7 @@
                         label: ''
                     }
                 ],
+                isBusy: true,
                 selectPerPage: null,
                 pageToDestroy: null,
                 pagesWithCheckedAttrAndDefaultData: [],
@@ -366,6 +383,7 @@
             // Actions
             async refreshList () {
                 this.pages = []
+                this.isBusy = true
 
                 for ( let page = 1; page <= this.currentPage; page++ ) {
                     await this.loadPage({
@@ -373,22 +391,30 @@
                         perPage: this.perPage
                     })
                 }
+
+                this.isBusy = false
             },
             async refresh () {
-                this.$wait.start('loader')
                 this.pages = []
+                this.isBusy = true
+
                 await this.loadPage({
                     page: this.page,
                     perPage: this.perPage
                 })
-                this.$wait.end('loader')
+
+                this.isBusy = false
             },
             async loadNextPage () {
-                this.loadPage({
+                this.isBusy = true
+
+                await this.loadPage({
                     page: this.currentPage,
                     perPage: this.perPage,
                     url: this.urlNextPage
                 })
+
+                this.isBusy = false
             },
             async confirmRedirectionsToPages ( page ) {
                 this.localesToCreateRedirections = []
@@ -537,6 +563,7 @@
                         author: page.author,
                         deleted_at: page.deleted_at,
                         locales: page.locales,
+                        contents: page.contents,
                         languages,
                         checked: force || typeof page.checked === typeof undefined ? this.checkAll : page.checked
                     }
@@ -547,9 +574,11 @@
                 this.pagesWithCheckedAttrAndDefaultData = this.clone(pagesWithCheckedAttrAndDefaultData)
             }
         },
-        mounted () {
+        async mounted () {
+            this.$wait.start('loader')
             this.selectPerPage = this.perPage
-            this.refresh()
+            await this.refresh()
+            this.$wait.end('loader')
         }
     }
 </script>

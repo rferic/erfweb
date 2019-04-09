@@ -136,7 +136,7 @@ class MessageTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->get(route('admin.messages'))
+            ->get(route('admin.messages.trash'))
             ->assertSuccessful();
     }
 
@@ -304,7 +304,7 @@ class MessageTest extends TestCase
         $this->assertNull(Message::withTrashed()->find($message->id));
     }
 
-    public function testUploadMessageWithWrongParams ()
+    public function testPostUploadMessageWithWrongParams ()
     {
         $this->withExceptionHandling();
 
@@ -331,7 +331,7 @@ class MessageTest extends TestCase
             ->assertStatus(400);
     }
 
-    public function testUpdateMessageSuccessful ()
+    public function tesPosttUpdateMessageSuccessful ()
     {
         $this->withExceptionHandling();
 
@@ -363,7 +363,7 @@ class MessageTest extends TestCase
         $this->assertEquals($message->tag, $params['tag']);
     }
 
-    public function testCreateMessageWithWrongParams ()
+    public function testPostCreateMessageWithWrongParams ()
     {
         $this->withExceptionHandling();
 
@@ -389,7 +389,7 @@ class MessageTest extends TestCase
             ->assertStatus(400);
     }
 
-    public function testCreateMessageSuccessful ()
+    public function testPostCreateMessageSuccessful ()
     {
         $this->withExceptionHandling();
 

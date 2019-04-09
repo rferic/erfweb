@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\PageHelper;
+use App\Models\Core\Content;
 use App\Models\Core\Page;
 use App\Models\Core\PageLocale;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class PageController extends Controller
@@ -44,6 +46,59 @@ class PageController extends Controller
     public function getAllSlugsPage ()
     {
         return Response::json(PageLocale::query()->pluck('slug')->all());
+    }
+
+    public function store ( Request $request )
+    {
+        $pageLocales = $request->input('locales');
+        $page_id = $request->input('id');
+
+        if ( is_null($page_id) ) {
+            $page_id = Page::create([ 'user_id' => Auth::id() ])->id;
+        }
+
+        foreach ( $pageLocales AS $pageLocale ) {
+            if ( is_null($pageLocale['id']) && is_null($pageLocale['deleted_at']) ) {
+                $page_locale_id = $this->createPageLocale($page_id, $pageLocale)->id;
+            } else {
+                $page_locale_id = $pageLocale['id'];
+                if ( !is_null($pageLocale['id']) && is_null($pageLocale['deleted_at']) ) {
+                    $this->updatePageLocale($pageLocale);
+                }
+            }
+
+            if ( !is_null($page_locale_id) ) {
+                $pageLocaleInst = PageLocale::where('id', $page_locale_id)->first();
+
+                if ( !is_null($pageLocale['deleted_at']) ) {
+                    $pageLocaleInst->delete();
+                } else {
+                    $pageLocaleInst->restore();
+                    $this->destroyContents($pageLocaleInst, $pageLocale['contents']);
+
+                    foreach ($pageLocale['contents'] AS $contentData) {
+                        if (is_null($contentData['id'])) {
+                            $content_id = $this->createContent($page_locale_id, $contentData)->id;
+                        } else {
+                            $this->updateContent($contentData);
+                            $content_id = $contentData['id'];
+                        }
+
+                        $content = Content::withTrashed()->where('id', $content_id)->first();
+
+                        if (!is_null($content)) {
+                            if (!is_null($contentData['deleted_at'])) {
+                                $content->delete();
+                            } else if (is_null($contentData['deleted_at'])) {
+                                $content->restore();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return Response::json(['result' => true]);
     }
 
     public function remove ( $id )
@@ -84,7 +139,7 @@ class PageController extends Controller
 
     protected function getPages ( $filters, $perPage, $orderBy )
     {
-        $query = Page::query()->with(['locales', 'author']);
+        $query = Page::query()->with(['locales', 'author', 'contents']);
         $onlyTrashed = isset($filters['enables']) && !$filters['enables'] && isset($filters['disables']) && $filters['disables'];
         $withTrashed = isset($filters['enables']) && $filters['enables'] && isset($filters['disables']) && $filters['disables'];
 
@@ -169,12 +224,92 @@ class PageController extends Controller
             'routes' => [
                 'getPages' => route('admin.pages.get'),
                 'getAllSlugsPage' => route('admin.pages.getAllSlugsPage'),
+                'storePages' => route('admin.pages.store'),
                 'getContents' => route('admin.contents.get'),
                 'getMenus' => route('admin.menus.get'),
                 'indexRedirections' => route('admin.redirections'),
                 'getRedirections' => route('admin.redirections.get'),
-                'createRedirection' => route('admin.redirections.create')
+                'createRedirection' => route('admin.redirections.create'),
+                'getSlugIsFree' => route('admin.slugs.getIsFree')
             ]
         ];
+    }
+
+    private function createPageLocale ( $page_id, $params )
+    {
+        return PageLocale::create([
+            'user_id' => Auth::id(),
+            'page_id' => $page_id,
+            'lang' => $params['lang'],
+            'slug' => $params['slug'],
+            'title' => $params['title'],
+            'description' => $params['description'],
+            'layout' => $params['layout'],
+            'options' => $params['options'],
+            'seo_title' => $params['seo_title'],
+            'seo_description' => $params['seo_description'],
+            'seo_keywords' => $params['seo_keywords']
+        ]);
+    }
+
+    private function updatePageLocale ( $params )
+    {
+        $pageLocale = PageLocale::find($params['id']);
+
+        $pageLocale->slug = $params['slug'];
+        $pageLocale->title = $params['title'];
+        $pageLocale->description = $params['description'];
+        $pageLocale->layout = $params['layout'];
+        $pageLocale->options = $params['options'];
+        $pageLocale->seo_title = $params['seo_title'];
+        $pageLocale->seo_description = $params['seo_description'];
+        $pageLocale->seo_keywords = $params['seo_keywords'];
+        $pageLocale->save();
+    }
+
+    private function createContent ( $page_locale_id, $params )
+    {
+        return Content::create([
+            'page_locale_id' => $page_locale_id,
+            'key' => $params['key'],
+            'id_html' => $params['id_html'],
+            'class_html' => $params['class_html'],
+            'text' => $params['text'],
+            'header_inject' => $params['header_inject'],
+            'footer_inject' => $params['footer_inject'],
+            'priority' => $params['priority']
+        ]);
+    }
+
+    private function updateContent ( $params )
+    {
+        $content = Content::find($params['id']);
+
+        foreach ( $params AS $attribute => $param ) {
+            if ( isset($content[$attribute]) ) {
+                $content[$attribute] = $param;
+                $content->save();
+            }
+        }
+    }
+
+    private function destroyContents ( $pageLocale, $currentContents ) {
+        $contents = $pageLocale->contents;
+
+        if ( COUNT($contents) > 0 ) {
+            foreach ( $contents AS $content ) {
+                $find = false;
+
+                foreach ( $currentContents AS $currentContent ) {
+                    if ( $currentContent['id'] === $content->id ) {
+                        $find = true;
+                    }
+                }
+
+                if ( !$find ) {
+                    $content->forceDelete();
+                }
+            }
+        }
     }
 }

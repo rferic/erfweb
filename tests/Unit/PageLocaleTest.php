@@ -29,7 +29,7 @@ class PageLocaleTest extends TestCase
 
     protected $pageLocale, $page, $user, $author;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

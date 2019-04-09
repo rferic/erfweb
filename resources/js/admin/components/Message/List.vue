@@ -85,7 +85,15 @@
                     striped
                     :fields="columns"
                     :items="messagesWithCheckedAttr"
+                    :busy="isBusy"
                 >
+                    <div
+                        slot="table-busy"
+                        class="text-center text-primary my-2"
+                    >
+                        <b-spinner class="align-middle"></b-spinner>
+                        <strong>{{ $t('Loading', { locale }) }}...</strong>
+                    </div>
                     <template
                         slot="check"
                         slot-scope="data"
@@ -226,6 +234,7 @@
                         label: ''
                     }
                 ],
+                isBusy: true,
                 selectPerPage: null,
                 messageToDestroy: null,
                 messagesWithCheckedAttr: [],
@@ -385,6 +394,7 @@
             },
             // Actions
             async refreshList () {
+                this.isBusy = true
                 this.messages = []
 
                 for ( let page = 1; page <= this.currentPage; page++ ) {
@@ -393,13 +403,19 @@
                         perPage: this.perPage
                     })
                 }
+
+                this.isBusy = false
             },
             async loadNextPage () {
-                this.loadPage({
+                this.isBusy = true
+
+                await this.loadPage({
                     page: this.currentPage,
                     perPage: this.perPage,
                     url: this.urlNextPage
                 })
+
+                this.isBusy = false
             },
             async loadPage ({ page, perPage, url }) {
                 this.filters.receivers = [ 'admin' ]
@@ -419,11 +435,15 @@
             },
             async refresh () {
                 this.$wait.start('loader')
+                this.isBusy = true
                 this.messages = []
+
                 await this.loadPage({
                     page: this.page,
                     perPage: this.perPage
                 })
+
+                this.isBusy = false
                 this.$wait.end('loader')
             },
             async remove ( message ) {

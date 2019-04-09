@@ -26,7 +26,7 @@ class ContentTest extends TestCase
 
     protected $content, $user, $page, $pageLocale;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

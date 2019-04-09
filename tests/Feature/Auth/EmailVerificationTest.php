@@ -15,7 +15,7 @@ class EmailVerificationTest extends TestCase
 
     protected $userNotVerified, $userVerified;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

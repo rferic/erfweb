@@ -119,6 +119,10 @@ const pageMixin = {
             const { data } = await axios.post(this.routes.getAllSlugsPage, {})
             return data
         },
+        async storePageRequest ( page ) {
+            const { data } = await axios.post(`${this.routes.storePages}`, page)
+            return data
+        },
         async removePageRequest ( page ) {
             const { data } = await axios.delete(`${this.routes.getPages}/${page.id}/remove`, {})
             return data

@@ -27,7 +27,7 @@ class MenuItemTest extends TestCase
 
     protected $menuItem, $menu, $user, $author, $pageLocale;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

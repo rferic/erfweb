@@ -1,18 +1,48 @@
 #sidebarnavcustom {
+    li {
+        > a > span {
+            display: inline;
+        }
+
+        &:hover {
+            > a,
+            > a i,
+            > a span {
+                background-color: $blue !important;
+                color: white;
+            }
+
+            > a.has-arrow:after {
+                border-color: white;
+            }
+
+            ul {
+                background-color: white !important;
+                color: $blue;
+            }
+        }
+
+        a.active,
+        a.active i,
+        a.active span {
+            background-color: $blue !important;
+            color: white;
+
+            &.has-arrow:after {
+                border-color: white;
+            }
+        }
+    }
+}
+
+.mini-sidebar #sidebarnavcustom {
     > li {
         > a > span {
             display: none;
         }
-        &:hover {
-            a,
-            a i,
-            ul {
-                background-color: $blue !important;
-                color: white;
-            }
-            > a > span {
-                display: $blue;
-            }
+
+        &:hover > a > span {
+            display: inline;
         }
     }
 }

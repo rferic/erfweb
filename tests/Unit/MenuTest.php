@@ -28,7 +28,7 @@ class MenuTest extends TestCase
 
     protected $menu,$user, $author;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

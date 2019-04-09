@@ -18,7 +18,7 @@ class LoginTest extends TestCase
 
     protected $admin, $user, $password;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 

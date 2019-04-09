@@ -43,7 +43,7 @@ class Page extends Model
     
     public function contents ()
     {
-        return $this->hasManyThrough(Content::class, PageLocale::class);
+        return $this->hasManyThrough(Content::class, PageLocale::class)->withTrashed();
     }
     
     public function menuItems ()

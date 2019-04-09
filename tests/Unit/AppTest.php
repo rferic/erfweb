@@ -26,7 +26,7 @@ class AppTest extends TestCase
 
     protected $appTest;
 
-    protected function setUp ()
+    protected function setUp (): void
     {
         parent::setUp();
 
