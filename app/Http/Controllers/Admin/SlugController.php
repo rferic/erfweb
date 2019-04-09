@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Core\AppLocale;
 use App\Models\Core\PageLocale;
 use App\Models\Core\Redirection;
 use Illuminate\Http\Request;
@@ -34,12 +35,17 @@ class SlugController extends Controller
                 case 'pageLocale':
                     $model = PageLocale::where('slug', $slug);
                     break;
+                case 'appLocale':
+                    $model = AppLocale::where('slug', $slug);
+                    break;
                 default:
                     $model = PageLocale::where('slug', $slug);
                     break;
             }
 
-            $isUsed = $model->where('lang', $lang)->get()->count() > 0;
+            $isUsedInPageLocale = PageLocale::where('slug', $slug)->where('lang', $lang)->get()->count() > 0;
+            $isUsedInAppLocale = AppLocale::where('slug', $slug)->where('lang', $lang)->get()->count() > 0;
+            $isUsed = $isUsedInPageLocale || $isUsedInAppLocale;
             $hasRedirection = Redirection::where('slug_origin', $slug)->get()->count() > 0;
             $isMine = false;
 

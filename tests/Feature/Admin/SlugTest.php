@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Core\App;
+use App\Models\Core\AppLocale;
 use App\Models\Core\Page;
 use App\Models\Core\PageLocale;
 use App\Models\Core\Redirection;
@@ -37,6 +39,15 @@ class SlugTest extends TestCase
                 factory(PageLocale::class)->create([
                     'lang' => $lang['iso'],
                     'page_id' => $page->id
+                ]);
+            }
+        });
+
+        factory(App::class, $this->faker->numberBetween(1, 10))->create()->each(function ($app) {
+            foreach ( $this->langs AS $lang ) {
+                factory(AppLocale::class)->create([
+                    'lang' => $lang['iso'],
+                    'app_id' => $app->id
                 ]);
             }
         });
