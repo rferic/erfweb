@@ -45,6 +45,12 @@ class AdminMenuHelper
                         'label' => __('Pages'),
                         'icon' => null,
                         'url' => route('admin.pages')
+                    ],
+                    [
+                        'key' => 'apps',
+                        'label' => __('Apps'),
+                        'icon' => null,
+                        'url' => route('admin.apps')
                     ]
                 ]
             ]

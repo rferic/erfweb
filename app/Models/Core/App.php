@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
-use App\Http\Controllers\Admin\AppImageController;
+use App\Http\Helpers\ImageHelper;
 
 class App extends Model
 {
@@ -21,11 +21,10 @@ class App extends Model
 
         static::deleting (function ($app) {
             if ( $app->forceDeleting ) {
-                AppImageController::destroyDirectory($app->id);
+                ImageHelper::destroyDirectory($app->imagePath());
 
                 $app->images()->forceDelete();
                 $app->locales()->forceDelete();
-
                 $app->users()->detach();
             }
         });
@@ -48,5 +47,10 @@ class App extends Model
 
     public function getCreatedAtAttribute($date){
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d/m/Y');
+    }
+
+    public function imagePath ()
+    {
+        return 'apps/' . $this->id;
     }
 }

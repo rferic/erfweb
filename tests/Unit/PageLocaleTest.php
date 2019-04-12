@@ -85,4 +85,12 @@ class PageLocaleTest extends TestCase
         $this->signIn($this->user)->assertFalse($this->pageLocale->isAuthor());
         $this->signIn($this->author)->assertTrue($this->pageLocale->isAuthor());
     }
+
+    public function testDestroy ()
+    {
+        factory(Content::class, $this->faker->numberBetween(1, 10))->create([ 'page_locale_id' => $this->pageLocale->id ]);
+
+        $this->page->forceDelete();
+        $this->assertCount(0, Content::where('page_locale_id', 'id')->get());
+    }
 }

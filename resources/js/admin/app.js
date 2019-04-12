@@ -57,6 +57,7 @@ import IndexDashboard from './components/Dashboard/Index'
 import IndexProfile from './components/Profile/Index'
 import IndexMessage from './components/Message/Index'
 import IndexPage from './components/Page/Index'
+import IndexApp from './components/App/Index'
 // filters
 import './filters/global'
 
@@ -72,6 +73,7 @@ const app = new Vue({
         IndexDashboard,
         IndexProfile,
         IndexMessage,
-        IndexPage
+        IndexPage,
+        IndexApp
     }
 });

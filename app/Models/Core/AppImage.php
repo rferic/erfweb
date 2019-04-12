@@ -2,19 +2,17 @@
 
 namespace App\Models\Core;
 
+use App\Http\Helpers\ImageHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
-use Storage;
-
-use App\Http\Controllers\Admin\AppImageController;
 
 class AppImage extends Model
 {
     use SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    protected $fillable = [ 'app_id', 'src', 'title', 'priority' ];
+    protected $fillable = [ 'app_id', 'src', 'title', 'priority', 'langs' ];
 
     protected static function boot ()
     {
@@ -22,7 +20,7 @@ class AppImage extends Model
 
         static::deleted (function ($appImage) {
             if ( $appImage->forceDeleting ) {
-                AppImageController::destroy($appImage);
+                ImageHelper::destroyImage($appImage->app->imagePath(), $appImage->src);
             }
         });
     }

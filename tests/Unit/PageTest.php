@@ -87,4 +87,15 @@ class PageTest extends TestCase
         $this->assertInstanceOf(Collection::class, $this->page->menuItems);
         $this->assertInstanceOf(MenuItem::class, $this->page->menuItems->first());
     }
+
+    public function testDestroy ()
+    {
+        factory(PageLocale::class, $this->faker->numberBetween(1, 10))->create([
+            'lang' => $this->faker->languageCode,
+            'page_id' => $this->page->id
+        ]);
+
+        $this->page->forceDelete();
+        $this->assertCount(0, PageLocale::where('app_id', 'id')->get());
+    }
 }

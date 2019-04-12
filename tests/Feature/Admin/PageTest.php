@@ -190,7 +190,7 @@ class PageTest extends TestCase
         $this
             ->actingAs($this->user)
             ->post(route('admin.pages.store', []))
-            ->assertStatus(500);
+            ->assertStatus(400);
     }
 
     public function testPostStorePageSuccessful ()
@@ -201,40 +201,42 @@ class PageTest extends TestCase
         $pageLocales = [];
         $allContents = [];
 
-        foreach ( $langs AS $lang ) {
-            $contents = [];
+        foreach ( $langs AS $index => $lang ) {
+            if ( $this->faker->boolean || $index === 0 ) {
+                $contents = [];
 
-            for ( $i = 0; $i < $this->faker->numberBetween(1, 10); $i++ ) {
-                $contents[] = [
+                for ($i = 0; $i < $this->faker->numberBetween(1, 10); $i++) {
+                    $contents[] = [
+                        'id' => '',
+                        'page_locale_id' => '',
+                        'key' => $this->faker->word,
+                        'id_html' => $this->faker->word,
+                        'class_html' => $this->faker->word,
+                        'text' => $this->faker->randomHtml(),
+                        'header_inject' => $this->faker->word,
+                        'footer_inject' => $this->faker->word,
+                        'priority' => $this->faker->numberBetween(1, 10),
+                        'deleted_at' => $this->faker->boolean ? '' : $this->faker->date()
+                    ];
+                }
+
+                $allContents = array_merge($allContents, $contents);
+                $pageLocales[] = [
                     'id' => '',
-                    'page_locale_id' => '',
-                    'key' => $this->faker->word,
-                    'id_html' => $this->faker->word,
-                    'class_html' => $this->faker->word,
-                    'text' => $this->faker->randomHtml(),
-                    'header_inject' => $this->faker->word,
-                    'footer_inject' => $this->faker->word,
-                    'priority' => $this->faker->numberBetween(1, 10),
-                    'deleted_at' => $this->faker->boolean ? '' : $this->faker->date()
+                    'page_id' => '',
+                    'lang' => $lang['iso'],
+                    'slug' => $this->faker->slug,
+                    'title' => $this->faker->word,
+                    'description' => $this->faker->paragraph,
+                    'layout' => $this->faker->word,
+                    'options' => $this->faker->word,
+                    'seo_title' => $this->faker->word,
+                    'seo_description' => $this->faker->word,
+                    'seo_keywords' => $this->faker->word,
+                    'deleted_at' => '',
+                    'contents' => $contents
                 ];
             }
-
-            $allContents = array_merge($allContents, $contents);
-            $pageLocales[] = [
-                'id' => '',
-                'page_id' => '',
-                'lang' => $lang['iso'],
-                'slug' => $this->faker->slug,
-                'title' => $this->faker->word,
-                'description' => $this->faker->paragraph,
-                'layout' => $this->faker->word,
-                'options' => $this->faker->word,
-                'seo_title' => $this->faker->word,
-                'seo_description' => $this->faker->word,
-                'seo_keywords' => $this->faker->word,
-                'deleted_at' => '',
-                'contents' => $contents
-            ];
         }
 
         $params = [
@@ -261,37 +263,38 @@ class PageTest extends TestCase
             'locales' => []
         ];
 
-        foreach ( $page->locales AS $locale ) {
-            $pageLocale = $locale->toArray();
-            $pageLocale['contents'] = $locale->contents->toArray();
-            // Overwrite
-            $pageLocale['title'] = $this->faker->word;
-            $pageLocale['description'] = $this->faker->paragraph;
-            $pageLocale['layout'] = $this->faker->word;
-            $pageLocale['options'] = $this->faker->word;
-            $pageLocale['seo_title'] = $this->faker->word;
-            $pageLocale['seo_description'] = $this->faker->word;
-            $pageLocale['seo_keywords'] = $this->faker->word;
-            $pageLocale['deleted_at'] = '';
+        foreach ( $page->locales AS $index => $locale ) {
+            if ( $this->faker->boolean || $index === 0 ) {
+                $pageLocale = $locale->toArray();
+                $pageLocale['contents'] = $locale->contents->toArray();
+                // Overwrite
+                $pageLocale['title'] = $this->faker->word;
+                $pageLocale['description'] = $this->faker->paragraph;
+                $pageLocale['layout'] = $this->faker->word;
+                $pageLocale['options'] = $this->faker->word;
+                $pageLocale['seo_title'] = $this->faker->word;
+                $pageLocale['seo_description'] = $this->faker->word;
+                $pageLocale['seo_keywords'] = $this->faker->word;
+                $pageLocale['deleted_at'] = '';
 
-            foreach ( $pageLocale['contents'] AS $i => $content ) {
-                $pageLocale['contents'][$i]['key'] = $this->faker->word;
-                $pageLocale['contents'][$i]['id_html'] = $this->faker->word;
-                $pageLocale['contents'][$i]['class_html'] = $this->faker->word;
-                $pageLocale['contents'][$i]['text'] = $this->faker->randomHtml();
-                $pageLocale['contents'][$i]['header_inject'] = $this->faker->word;
-                $pageLocale['contents'][$i]['footer_inject'] = $this->faker->word;
-                $pageLocale['contents'][$i]['priority'] = $this->faker->numberBetween(1, 10);
-                $pageLocale['contents'][$i]['deleted_at'] = $this->faker->boolean ? '' : $this->faker->date();
+                foreach ( $pageLocale['contents'] AS $i => $content ) {
+                    $pageLocale['contents'][$i]['key'] = $this->faker->word;
+                    $pageLocale['contents'][$i]['id_html'] = $this->faker->word;
+                    $pageLocale['contents'][$i]['class_html'] = $this->faker->word;
+                    $pageLocale['contents'][$i]['text'] = $this->faker->randomHtml();
+                    $pageLocale['contents'][$i]['header_inject'] = $this->faker->word;
+                    $pageLocale['contents'][$i]['footer_inject'] = $this->faker->word;
+                    $pageLocale['contents'][$i]['priority'] = $this->faker->numberBetween(1, 10);
+                    $pageLocale['contents'][$i]['deleted_at'] = $this->faker->boolean ? '' : $this->faker->date();
+                }
+
+                $params['locales'][] = $pageLocale;
             }
-
-            $params['locales'][] = $pageLocale;
         }
         // Testing update a existed page
-        $params2 = $params;
         $this
             ->actingAs($this->user)
-            ->post(route('admin.pages.store', $params2))
+            ->post(route('admin.pages.store', $params))
             ->assertSuccessful()
             ->assertExactJson(['result' => true]);
 
@@ -306,7 +309,6 @@ class PageTest extends TestCase
 
     /**
      * Internal test method
-     * @param bool $onlyTrashed
      * @return array
      */
     private function getParamsToPostGetPage ()
@@ -355,7 +357,6 @@ class PageTest extends TestCase
                 $params['filters']['langs'][] = $langs[$this->faker->numberBetween(0, COUNT($langs)-1)];
             }
         }
-
         // filter by menus
         if ( $this->faker->boolean ) {
             $params['filters']['menus'] = [];
@@ -367,7 +368,6 @@ class PageTest extends TestCase
                 }
             }
         }
-
         // filter by status
         if ( $this->faker->boolean ) {
             $params['filters']['enables'] = $this->faker->boolean;
@@ -400,7 +400,7 @@ class PageTest extends TestCase
                     $this->assertEquals($pageLocale->seo_description, $locale['seo_description']);
                     $this->assertEquals($pageLocale->seo_keywords, $locale['seo_keywords']);
                     $this->assertEquals(is_null($pageLocale->deleted_at), $locale['deleted_at'] === '');
-                    //$this->assertCount(COUNT($locale['contents']), $pageLocale->contents);
+                    $this->assertCount(COUNT($locale['contents']), $pageLocale->contents);
 
                     foreach ( $pageLocale->contents AS $content ) {
                         foreach ( $locale['contents'] AS $contentData ) {

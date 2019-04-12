@@ -80,7 +80,7 @@ Route::group(
         Route::get('/apps', 'Admin\AppController@index')->name('admin.apps');
         Route::post('/apps', 'Admin\AppController@get')->name('admin.apps.get');
         Route::post('/apps/store', 'Admin\AppController@store')->name('admin.apps.store');
-        Route::post('/pages/{page}/restore', 'Admin\PageController@restore')->name('admin.pages.restore');
+        Route::delete('/apps/{app}/destroy', 'Admin\AppController@destroy')->name('admin.apps.destroy');
         // Admin Menus
         Route::post('/menus', 'Admin\MenuController@get')->name('admin.menus.get');
         // Admin Redirections

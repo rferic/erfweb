@@ -71,4 +71,25 @@ class AppTest extends TestCase
         $this->assertInstanceOf(Collection::class, $this->appTest->users);
         $this->assertInstanceOf(User::class, $this->appTest->users->first());
     }
+
+    public function testHasPathImage ()
+    {
+        $this->assertIsString($this->appTest->imagePath());
+    }
+
+    public function testDestroy ()
+    {
+        factory(AppLocale::class, $this->faker->numberBetween(1, 10))->create([
+            'lang' => $this->faker->languageCode,
+            'app_id' => $this->appTest->id
+        ]);
+
+        factory(AppImage::class, $this->faker->numberBetween(1, 10))->create([
+            'app_id' => $this->appTest->id
+        ]);
+
+        $this->appTest->forceDelete();
+        $this->assertCount(0, AppLocale::where('app_id', 'id')->get());
+        $this->assertCount(0, AppImage::where('app_id', 'id')->get());
+    }
 }

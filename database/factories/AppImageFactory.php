@@ -7,6 +7,7 @@ $factory->define(App\Models\Core\AppImage::class, function (Faker $faker) {
         'app_id' => App\Models\Core\App::all()->random()->id,
         'src' => $faker->imageUrl(640, 480),
         'title' => $faker->word,
-        'priority' => $faker->numberBetween(0, 10)
+        'priority' => $faker->numberBetween(0, 10),
+        'langs' => json_encode([ 'enGB', 'esES' ])
     ];
 });

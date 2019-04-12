@@ -8,7 +8,6 @@ $factory->define(App\Models\Core\AppLocale::class, function (Faker $faker) {
 
     return [
         'app_id' => App\Models\Core\App::all()->random()->id,
-        'slug' => Str::slug($title, '-'),
         'title' => $title,
         'description' => $faker->paragraph
     ];

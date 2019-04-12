@@ -20,7 +20,7 @@ class AppsTableSeeder extends Seeder
     {
         $users = User::role('public')->get();
 
-        $apps = factory(App::class, 5)->create()->each(function ($app) {
+        $apps = factory(App::class, 30)->create()->each(function ($app) {
             $langs = config('global.langsAvailables');
 
             foreach ( $langs AS $lang ) {

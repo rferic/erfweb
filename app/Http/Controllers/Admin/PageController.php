@@ -10,6 +10,7 @@ use App\Models\Core\PageLocale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class PageController extends Controller
 {
@@ -45,55 +46,64 @@ class PageController extends Controller
 
     public function store ( Request $request )
     {
-        $pageLocales = $request->input('locales');
-        $page_id = $request->input('id');
+        $validator = Validator::make($request->all(), [
+            'id' => 'nullable|integer',
+            'locales' => 'nullable|array'
+        ]);
 
-        if ( is_null($page_id) ) {
-            $page_id = Page::create([ 'user_id' => Auth::id() ])->id;
-        }
+        if ( !$validator->fails() ) {
+            $pageLocales = $request->input('locales');
+            $page_id = $request->input('id');
 
-        foreach ( $pageLocales AS $pageLocale ) {
-            if ( is_null($pageLocale['id']) && is_null($pageLocale['deleted_at']) ) {
-                $page_locale_id = $this->createPageLocale($page_id, $pageLocale)->id;
-            } else {
-                $page_locale_id = $pageLocale['id'];
-                if ( !is_null($pageLocale['id']) && is_null($pageLocale['deleted_at']) ) {
-                    $this->updatePageLocale($pageLocale);
-                }
+            if ( is_null($page_id) ) {
+                $page_id = Page::create(['user_id' => Auth::id()])->id;
             }
 
-            if ( !is_null($page_locale_id) ) {
-                $pageLocaleInst = PageLocale::where('id', $page_locale_id)->first();
-
-                if ( !is_null($pageLocale['deleted_at']) ) {
-                    $pageLocaleInst->delete();
+            foreach ( $pageLocales AS $pageLocale ) {
+                if (is_null($pageLocale['id']) && is_null($pageLocale['deleted_at'])) {
+                    $page_locale_id = $this->createPageLocale($page_id, $pageLocale)->id;
                 } else {
-                    $pageLocaleInst->restore();
-                    $this->destroyContents($pageLocaleInst, $pageLocale['contents']);
+                    $page_locale_id = $pageLocale['id'];
+                    if (!is_null($pageLocale['id']) && is_null($pageLocale['deleted_at'])) {
+                        $this->updatePageLocale($pageLocale);
+                    }
+                }
 
-                    foreach ($pageLocale['contents'] AS $contentData) {
-                        if (is_null($contentData['id'])) {
-                            $content_id = $this->createContent($page_locale_id, $contentData)->id;
-                        } else {
-                            $this->updateContent($contentData);
-                            $content_id = $contentData['id'];
-                        }
+                if (!is_null($page_locale_id)) {
+                    $pageLocaleInst = PageLocale::where('id', $page_locale_id)->first();
 
-                        $content = Content::withTrashed()->where('id', $content_id)->first();
+                    if (!is_null($pageLocale['deleted_at'])) {
+                        $pageLocaleInst->delete();
+                    } else {
+                        $pageLocaleInst->restore();
+                        $this->destroyContents($pageLocaleInst, $pageLocale['contents']);
 
-                        if (!is_null($content)) {
-                            if (!is_null($contentData['deleted_at'])) {
-                                $content->delete();
-                            } else if (is_null($contentData['deleted_at'])) {
-                                $content->restore();
+                        foreach ($pageLocale['contents'] AS $contentData) {
+                            if (is_null($contentData['id'])) {
+                                $content_id = $this->createContent($page_locale_id, $contentData)->id;
+                            } else {
+                                $this->updateContent($contentData);
+                                $content_id = $contentData['id'];
+                            }
+
+                            $content = Content::withTrashed()->where('id', $content_id)->first();
+
+                            if (!is_null($content)) {
+                                if (!is_null($contentData['deleted_at'])) {
+                                    $content->delete();
+                                } else if (is_null($contentData['deleted_at'])) {
+                                    $content->restore();
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        return Response::json(['result' => true]);
+            return Response::json(['result' => true]);
+        } else {
+            abort(400);
+        }
     }
 
     public function remove ( $id )
@@ -218,7 +228,7 @@ class PageController extends Controller
             ],
             'routes' => [
                 'getPages' => route('admin.pages.get'),
-                'storePages' => route('admin.pages.store'),
+                'storePage' => route('admin.pages.store'),
                 'getContents' => route('admin.contents.get'),
                 'getMenus' => route('admin.menus.get'),
                 'indexRedirections' => route('admin.redirections'),

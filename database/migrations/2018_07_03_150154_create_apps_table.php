@@ -29,7 +29,6 @@ class CreateAppsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('app_id');
             $table->string('lang');
-            $table->string('slug');
             $table->string('title');
             $table->longText('description')->nullable();
             $table->timestamps();
@@ -44,6 +43,7 @@ class CreateAppsTable extends Migration
             $table->string('src');
             $table->string('title');
             $table->unsignedInteger('priority');
+            $table->json('langs');
             $table->timestamps();
             $table->softDeletes();
 

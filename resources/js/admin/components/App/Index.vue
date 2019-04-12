@@ -11,7 +11,7 @@
             <b-col
                 cols="2"
                 xs="12">
-                <filter-page
+                <filter-app
                     :data="data"
                     @onChangeFilters="onChangeFilters"
                 />
@@ -19,8 +19,8 @@
             <b-col
                 cols="10"
                 xs="12">
-                <list-page
-                    ref="listPages"
+                <list-app
+                    ref="listApps"
                     :data="data"
                     :filters="filters"
                     @onGoToPage="goToPage"
@@ -29,7 +29,7 @@
             </b-col>
         </b-row>
         <b-row v-if="viewForm">
-            <form-page
+            <form-app
                 class="col-12"
                 :data="data"
                 :page-origin="currentPage"
@@ -41,27 +41,27 @@
 </template>
 
 <script>
-    import filterPageStructure from './../../structures/filterPage'
+    import filterAppStructure from './../../structures/filterApp'
     import cloneMixin from './../../mixins/clone'
-    import FilterPage from './Filter'
-    import ListPage from './List'
-    import FormPage from './Form'
+    import FilterApp from './Filter'
+    import ListApp from './List'
+    import FormApp from './Form'
     import { mapState } from 'vuex'
 
     export default {
-        name: 'IndexPage',
+        name: 'IndexApp',
         props: {
             data: {
                 type: String,
                 required: true
             }
         },
-        components: { FilterPage, ListPage, FormPage },
+        components: { FilterApp, ListApp, FormApp },
         mixins: [ cloneMixin ],
         data () {
             return {
-                filters: this.clone(filterPageStructure),
-                currentPage: null,
+                filters: this.clone(filterAppStructure),
+                currentApp: null,
                 isLoaded: false,
                 languagesAvailable: JSON.parse(this.data).langsAvailable
             }
@@ -72,10 +72,10 @@
                 messageBlockui: state => state.blockui.message
             }),
             viewList () {
-                return this.currentPage === null && this.isLoaded
+                return this.currentApp === null && this.isLoaded
             },
             viewForm () {
-                return this.currentPage !== null && this.isLoaded
+                return this.currentApp !== null && this.isLoaded
             }
         },
         mixins: [ cloneMixin ],
@@ -86,8 +86,8 @@
             onSavePage ({ isNew }) {
                 this.$notify({
                     group: 'notify',
-                    title: this.$t('Save page', { locale: this.locale }),
-                    text: this.$t(isNew ? 'Page has been created' : 'Page has been updated', { locale: this.locale }),
+                    title: this.$t('Save app', { locale: this.locale }),
+                    text: this.$t(isNew ? 'App has been created' : 'App has been updated', { locale: this.locale }),
                     type: 'success',
                     config: {
                         closeOnClick: true
@@ -100,12 +100,12 @@
                 this.currentPage = page
             },
             goToCreatePage () {
-                this.currentPage = this.getNewPage()
+                this.currentPage = this.getNewApp()
             },
             goToList () {
                 this.currentPage = null
             },
-            getNewPage () {
+            getNewApp () {
                 let languages = []
 
                 for ( const languageAvailable of this.languagesAvailable ) {

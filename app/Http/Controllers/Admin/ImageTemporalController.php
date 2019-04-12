@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\ImageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -35,14 +36,12 @@ class ImageTemporalController extends Controller
             abort(400);
         }
 
-        $file = $request->file('image');
-        // Upload file
-        $imagePath = Storage::disk( self::$disk )->putFile(self::$temporalPath, $file, self::$disk);
+        $image = ImageHelper::upload($request->file('image'));
 
         return Response::json( [
             'result' => true,
             'data' => [
-                'image' => Storage::url($imagePath)
+                'image' => $image
             ]
         ], 200 );
     }

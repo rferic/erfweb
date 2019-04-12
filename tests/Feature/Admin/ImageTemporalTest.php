@@ -112,7 +112,7 @@ class ImageTemporalTest extends TestCase
         $imagePath = Storage::disk(ImageTemporalController::$disk)->putFile(
             ImageTemporalController::$temporalPath,
             UploadedFile::fake()->image($this->faker->word . '.jpg'),
-            'public'
+            ImageTemporalController::$disk
         );
 
         $this

@@ -51,7 +51,7 @@ const pageMixin = {
                 this.pages = data.data
             }
 
-            this.totalMessages = data.total
+            this.totalPages = data.total
             this.urlNextPage = data.next_page_url
             return data
         },
@@ -116,7 +116,7 @@ const pageMixin = {
             return data
         },
         async storePageRequest ( page ) {
-            const { data } = await axios.post(`${this.routes.storePages}`, page)
+            const { data } = await axios.post(`${this.routes.storePage}`, page)
             return data
         },
         async removePageRequest ( page ) {
