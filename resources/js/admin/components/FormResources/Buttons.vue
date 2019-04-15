@@ -28,13 +28,13 @@
     import { mapState } from 'vuex'
 
     export default {
-        name: 'FormButtonsPage',
+        name: 'FormButtons',
         props: {
-          showCancel: {
-              type: Boolean,
-              required: false,
-              default: true
-          }
+            showCancel: {
+                type: Boolean,
+                required: false,
+                default: true
+            }
         },
         computed: {
             ...mapState([ 'locale' ])

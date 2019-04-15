@@ -35,17 +35,13 @@ class SlugController extends Controller
                 case 'pageLocale':
                     $model = PageLocale::where('slug', $slug);
                     break;
-                case 'appLocale':
-                    $model = AppLocale::where('slug', $slug);
-                    break;
                 default:
                     $model = PageLocale::where('slug', $slug);
                     break;
             }
 
             $isUsedInPageLocale = PageLocale::where('slug', $slug)->where('lang', $lang)->get()->count() > 0;
-            $isUsedInAppLocale = AppLocale::where('slug', $slug)->where('lang', $lang)->get()->count() > 0;
-            $isUsed = $isUsedInPageLocale || $isUsedInAppLocale;
+            $isUsed = $isUsedInPageLocale;
             $hasRedirection = Redirection::where('slug_origin', $slug)->get()->count() > 0;
             $isMine = false;
 
@@ -67,9 +63,6 @@ class SlugController extends Controller
 
     public function getAllSlugs ()
     {
-        $slugsPages = PageLocale::query()->pluck('slug')->all();
-        $slugsApps = AppLocale::query()->pluck('slug')->all();
-
-        return Response::json(array_merge($slugsPages, $slugsApps));
+        return Response::json(PageLocale::query()->pluck('slug')->all());
     }
 }

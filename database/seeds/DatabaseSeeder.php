@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             MenusTableSeeder::class,
             AppsTableSeeder::class,
             RedirectionsTableSeeder::class,
+            ImagesTableSeeder::class,
         ]);
     }
 

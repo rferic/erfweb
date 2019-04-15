@@ -23,18 +23,18 @@
                     ref="listApps"
                     :data="data"
                     :filters="filters"
-                    @onGoToPage="goToPage"
-                    @onGoToCreatePage="goToCreatePage"
+                    @onGoToApp="goToApp"
+                    @onGoToCreateApp="goToCreateApp"
                 />
             </b-col>
         </b-row>
         <b-row v-if="viewForm">
-            <form-app
+            <index-form-app
                 class="col-12"
                 :data="data"
-                :page-origin="currentPage"
+                :app-origin="currentApp"
                 @onGoToList="goToList"
-                @onSavePage="onSavePage"
+                @onSaveApp="onSaveApp"
             />
         </b-row>
     </div>
@@ -45,8 +45,9 @@
     import cloneMixin from './../../mixins/clone'
     import FilterApp from './Filter'
     import ListApp from './List'
-    import FormApp from './Form'
+    import IndexFormApp from './Form/Index'
     import { mapState } from 'vuex'
+    import { appStructure, appLocaleStructure } from './../../structures/app'
 
     export default {
         name: 'IndexApp',
@@ -56,7 +57,7 @@
                 required: true
             }
         },
-        components: { FilterApp, ListApp, FormApp },
+        components: { FilterApp, ListApp, IndexFormApp },
         mixins: [ cloneMixin ],
         data () {
             return {
@@ -83,7 +84,7 @@
             onChangeFilters ( filters ) {
                 this.filters = filters
             },
-            onSavePage ({ isNew }) {
+            onSaveApp ({ isNew }) {
                 this.$notify({
                     group: 'notify',
                     title: this.$t('Save app', { locale: this.locale }),
@@ -96,30 +97,27 @@
 
                 this.goToList()
             },
-            goToPage ( page ) {
-                this.currentPage = page
+            goToApp ( page ) {
+                this.currentApp = page
             },
-            goToCreatePage () {
-                this.currentPage = this.getNewApp()
+            goToCreateApp () {
+                this.currentApp = this.getNewApp()
             },
             goToList () {
-                this.currentPage = null
+                this.currentApp = null
             },
             getNewApp () {
-                let languages = []
+                let app = appStructure
+                let locales = []
 
                 for ( const languageAvailable of this.languagesAvailable ) {
-                    languages.push({
-                        iso: languageAvailable.iso,
-                        has: false
-                    })
+                    locales.push(appLocaleStructure)
+                    locales[locales.length - 1].lang = languageAvailable.iso
                 }
 
-                return {
-                    id: null,
-                    locales: [],
-                    languages
-                }
+                app.locales = locales
+
+                return app
             }
         },
         created () {

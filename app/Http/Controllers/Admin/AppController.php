@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Helpers\AppHelper;
 use App\Http\Helpers\ImageHelper;
 use App\Models\Core\App;
 use App\Models\Core\AppImage;
@@ -168,15 +169,14 @@ class AppController extends Controller
         return [
             'component' => 'index-app',
             'data' => [
-                'langsAvailable' => config('global.langsAvailables')
+                'langsAvailable' => config('global.langsAvailables'),
+                'types' => AppHelper::getTypes(),
+                'status' => AppHelper::getStatus()
             ],
             'routes' => [
                 'getApps' => route('admin.apps.get'),
-                'storeApp' => route('admin.pages.store'),
-                'getMenus' => route('admin.menus.get'),
-                'indexRedirections' => route('admin.redirections'),
-                'getRedirections' => route('admin.redirections.get'),
-                'createRedirection' => route('admin.redirections.create')
+                'storeApp' => route('admin.apps.store'),
+                'uploadImage' => route('admin.imagesTemporal.upload')
             ]
         ];
     }
@@ -272,7 +272,7 @@ class AppController extends Controller
 
         $image->title = $imageData['title'];
         $image->langs = $imageData['langs'];
-        $image->src = $destination;
+        $image->src = $image->src !== $imageData['src'] ? $destination : $imageData['src'];
         $image->priority = $imageData['priority'];
         $image->save();
     }

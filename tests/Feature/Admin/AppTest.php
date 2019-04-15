@@ -117,7 +117,7 @@ class AppTest extends TestCase
 
     public function testPostStoreSuccessful()
     {
-        //$this->withExceptionHandling();
+        $this->withExceptionHandling();
 
         $langs = config('global.langsAvailables');
         $appLocales = [];

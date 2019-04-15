@@ -21,7 +21,7 @@
                     <hr />
                 </b-col>
             </b-row>
-            <form-buttons-page
+            <form-buttons
                 :show-cancel="false"
                 @onSave="onSave"
             />
@@ -50,7 +50,7 @@
                     <hr>
                 </b-col>
             </b-row>
-            <form-buttons-page
+            <form-buttons
                 @onSave="onSave"
                 @onCancel="$emit('onGoToList')"
             />
@@ -62,7 +62,7 @@
     import { mapState, mapActions }  from 'vuex'
     import MultilanguageTab from './../Multilanguage/Tab'
     import LocaleForm from './Locale/Form'
-    import FormButtonsPage from './FormButtons'
+    import FormButtons from '../FormResources/Buttons'
     import pageLocaleStructure from './../../structures/pageLocale'
     import cloneMixin from './../../mixins/clone'
     import pageMixin from './../../mixins/page'
@@ -79,7 +79,7 @@
                 required: true
             }
         },
-        components: { MultilanguageTab, LocaleForm, FormButtonsPage },
+        components: { MultilanguageTab, LocaleForm, FormButtons },
         mixins: [ cloneMixin, pageMixin ],
         data () {
             return {

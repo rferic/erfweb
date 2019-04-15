@@ -190,7 +190,7 @@ class PageTest extends TestCase
         $this
             ->actingAs($this->user)
             ->post(route('admin.pages.store', []))
-            ->assertStatus(400);
+            ->assertStatus(500);
     }
 
     public function testPostStorePageSuccessful ()

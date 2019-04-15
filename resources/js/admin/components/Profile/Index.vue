@@ -151,7 +151,7 @@
                             v-if="user.avatar !== null && avatarIsImage"
                             class="avatar avatar-100"
                         >
-                            <img :src="user.avatar" />
+                            <img :src="`./../${user.avatar}`" />
                         </div>
                         <div
                             v-else
@@ -163,7 +163,7 @@
                         cols="6"
                         xs="12"
                     >
-                        <vue-dropzone
+                        <vue2-dropzone
                             ref="avatarDropzone"
                             id="dropzone"
                             :options="dropzoneOptions"
@@ -231,9 +231,7 @@
             }
         },
         mixins: [ cloneMixin, profileMixin ],
-        components: {
-            vueDropzone: vue2Dropzone
-        },
+        components: { vue2Dropzone },
         data () {
             return {
                 user: null,

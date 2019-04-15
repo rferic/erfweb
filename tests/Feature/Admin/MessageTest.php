@@ -191,12 +191,14 @@ class MessageTest extends TestCase
                 $message->delete();
             }
         }
+
         $responseToAssert = $controller->getTesting($params);
 
         $response = $this
             ->actingAs($this->user)
             ->post(route('admin.messages.get', $params))
             ->assertStatus(200);
+
         $response = json_decode(json_encode($response))->baseResponse->original;
         $responseToAssert = json_decode(json_encode($responseToAssert))->original;
 
