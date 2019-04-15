@@ -99,7 +99,7 @@
                 <b-col cols="3" xs="12">
                     <b-form-group :label="`${$t('Status', { locale: locale })}: *`">
                         <b-form-select
-                            name="type"
+                            name="status"
                             v-model="app.status"
                             v-validate
                             data-vv-rules="required"
@@ -239,7 +239,15 @@
             },
             // Actions
             async processForm () {
+                let locales = []
+
+                for ( const language of this.languagesAvailable ) {
+                    locales.push(this.$refs[`localeForm${language.iso}`].appLocale)
+                }
+
+                this.app.locales = locales
                 this.app.images = this.$refs.formAppImages.images
+
                 await this.storeAppRequest(this.app)
                 this.successForm()
             },
@@ -273,7 +281,6 @@
                     this.$refs.multilanguageTab.changeLanguageTab(language)
 
                     if ( !await this.$refs[`localeForm${language.iso}`].getIsValid() && firstNotValid === null ) {
-                        console.log(language)
                         firstNotValid = language
                     }
                 }

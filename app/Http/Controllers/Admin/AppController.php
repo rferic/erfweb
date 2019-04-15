@@ -54,7 +54,7 @@ class AppController extends Controller
             'type' => 'required|string',
             'status' => 'required|string',
             'locales' => 'required|array',
-            'images' => 'required|array'
+            'images' => 'array'
         ]);
 
         if ( !$validator->fails() ) {

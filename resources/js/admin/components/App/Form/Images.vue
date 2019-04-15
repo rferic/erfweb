@@ -143,7 +143,7 @@
             },
             onSuccessDropzone ( file, response ) {
                 if ( response.result ) {
-                    let image = appImageStructure
+                    let image = this.clone(appImageStructure)
                     image.src = response.data.image
                     image.priority = this.images.length
                     this.images.push(image)
