@@ -22,6 +22,7 @@ import vueDebounce from 'vue-debounce'
 import SweetModal from 'sweet-modal-vue/src/plugin.js'
 import ToggleButton from 'vue-js-toggle-button'
 import BlockUI from 'vue-blockui'
+import VueClipboard from 'vue-clipboard2'
 // CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -46,6 +47,7 @@ Vue.use(vueDebounce)
 Vue.use(SweetModal)
 Vue.use(ToggleButton)
 Vue.use(BlockUI)
+Vue.use(VueClipboard)
 // Store
 import store from './store'
 // Components
@@ -58,6 +60,7 @@ import IndexProfile from './components/Profile/Index'
 import IndexMessage from './components/Message/Index'
 import IndexPage from './components/Page/Index'
 import IndexApp from './components/App/Index'
+import IndexImage from './components/Image/Index'
 // filters
 import './filters/global'
 
@@ -74,6 +77,7 @@ const app = new Vue({
         IndexProfile,
         IndexMessage,
         IndexPage,
-        IndexApp
+        IndexApp,
+        IndexImage
     }
 });

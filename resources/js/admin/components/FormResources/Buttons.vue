@@ -7,8 +7,8 @@
                 sm
                 @click="$emit('onCancel')"
             >
-                <i class="fa fa-close" />
-                {{ $t('Cancel', { locale }) }}
+                <i class="fa" :class="iconCancel" />
+                {{ $t(labelCancel, { locale }) }}
             </b-button>
         </b-col>
         <b-col cols="6" class="text-right">
@@ -34,6 +34,16 @@
                 type: Boolean,
                 required: false,
                 default: true
+            },
+            labelCancel: {
+                type: String,
+                required: false,
+                default: 'Cancel'
+            },
+            iconCancel: {
+                type: String,
+                required: false,
+                default: 'fa-close'
             }
         },
         computed: {

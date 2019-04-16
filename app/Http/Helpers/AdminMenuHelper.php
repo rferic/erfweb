@@ -53,6 +53,13 @@ class AdminMenuHelper
                         'url' => route('admin.apps')
                     ]
                 ]
+            ],
+            [
+                'key' => 'Images',
+                'label' => __('Images'),
+                'icon' => 'fa-image',
+                'url' => route('admin.images'),
+                'childrens' => []
             ]
         ];
     }

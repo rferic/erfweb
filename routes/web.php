@@ -85,9 +85,14 @@ Route::group(
         Route::post('/menus', 'Admin\MenuController@get')->name('admin.menus.get');
         // Admin Redirections
         Route::get('/redirections', 'Admin\RedirectionController@index')->name('admin.redirections');
-        Route::post('/redirections/get', 'Admin\RedirectionController@get')->name('admin.redirections.get');
         Route::post('/redirections/create', 'Admin\RedirectionController@create')->name('admin.redirections.create');
         Route::delete('/redirections/{redirection}/destroy', 'Admin\RedirectionController@destroy')->name('admin.redirections.destroy');
+        // Admin Images
+        Route::get('/images', 'Admin\ImageController@index')->name('admin.images');
+        Route::post('/images', 'Admin\ImageController@get')->name('admin.images.get');
+        Route::post('/images/create', 'Admin\ImageController@create')->name('admin.images.create');
+        Route::post('/images/{image}/update', 'Admin\ImageController@update')->name('admin.images.update');
+        Route::delete('/images/{image}/delete', 'Admin\ImageController@delete')->name('admin.images.delete');
         //Admin Slugs
         Route::post('/slugs/is-free', 'Admin\SlugController@getIsFree')->name('admin.slugs.getIsFree');
         Route::post('/slugs/get-all-slugs', 'Admin\SlugController@getAllSlugs')->name('admin.slugs.getAllSlugs');

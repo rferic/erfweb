@@ -1,5 +1,6 @@
 const imageMixin = {
     methods: {
+        // Getters
         getCalculatedSrcFromAdmin ( image ) {
             return this.getIsExternal(image.src) ? image.src : `./../${image.src}`
         },
