@@ -63,6 +63,14 @@
                     >
                         <i class="fa fa-eye" />
                     </b-button>
+                    <b-button
+                        variant="outline-primary"
+                        size="sm"
+                        class="ml-2"
+                        @click="onCopy(getCalculatedSrcFromAdmin(image))"
+                    >
+                        <i class="fa fa-link" />
+                    </b-button>
                 </div>
             </b-col>
         </b-row>
