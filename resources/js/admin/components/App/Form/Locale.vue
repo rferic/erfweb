@@ -27,7 +27,7 @@
                 :label="`${$t('Description', { locale })}:`"
                 label-for="text">
                 <b-form-textarea
-                    name="Description"
+                    name="description"
                     v-model="appLocale.description"
                     :rows="4"
                 />

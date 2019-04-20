@@ -76,15 +76,21 @@ Route::group(
         Route::post('/pages/get-all-slugs-page', 'Admin\PageController@getAllSlugsPage')->name('admin.pages.getAllSlugsPage');
         Route::delete('/pages/{page}/remove', 'Admin\PageController@remove')->name('admin.pages.remove');
         Route::delete('/pages/{page}/destroy', 'Admin\PageController@destroy')->name('admin.pages.destroy');
+        // Admin Page Locales
+        Route::post('/page-locales', 'Admin\PageLocaleController@get')->name('admin.pageLocales.get');
         // Admin Apps
         Route::get('/apps', 'Admin\AppController@index')->name('admin.apps');
         Route::post('/apps', 'Admin\AppController@get')->name('admin.apps.get');
         Route::post('/apps/store', 'Admin\AppController@store')->name('admin.apps.store');
         Route::delete('/apps/{app}/destroy', 'Admin\AppController@destroy')->name('admin.apps.destroy');
         // Admin Menus
+        Route::get('/menus', 'Admin\MenuController@index')->name('admin.menus');
         Route::post('/menus', 'Admin\MenuController@get')->name('admin.menus.get');
+        Route::post('/menus/store', 'Admin\MenuController@store')->name('admin.menus.store');
+        Route::delete('/menus/{menu}/destroy', 'Admin\MenuController@destroy')->name('admin.menus.destroy');
         // Admin Redirections
         Route::get('/redirections', 'Admin\RedirectionController@index')->name('admin.redirections');
+        Route::post('/redirections', 'Admin\RedirectionController@get')->name('admin.redirections.get');
         Route::post('/redirections/create', 'Admin\RedirectionController@create')->name('admin.redirections.create');
         Route::delete('/redirections/{redirection}/destroy', 'Admin\RedirectionController@destroy')->name('admin.redirections.destroy');
         // Admin Images

@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('clean:directories')->daily();
+        $schedule->command('clean:directories')->daily(); // clear temporal directories
+        $schedule->command('telescope:prune')->daily(); // clear telescope registers
     }
 
     /**

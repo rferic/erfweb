@@ -61,6 +61,7 @@ import IndexMessage from './components/Message/Index'
 import IndexPage from './components/Page/Index'
 import IndexApp from './components/App/Index'
 import IndexImage from './components/Image/Index'
+import IndexMenu from './components/Menu/Index'
 // filters
 import './filters/global'
 
@@ -78,6 +79,7 @@ const app = new Vue({
         IndexMessage,
         IndexPage,
         IndexApp,
-        IndexImage
+        IndexImage,
+        IndexMenu
     }
 });

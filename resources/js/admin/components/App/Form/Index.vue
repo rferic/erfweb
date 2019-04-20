@@ -1,5 +1,5 @@
 <template>
-    <transition name="bounceRight">
+        <transition name="bounceRight">
         <div>
             <BlockUI v-if="isVisibleBlockui" :message="messageBlockui">
                 <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>

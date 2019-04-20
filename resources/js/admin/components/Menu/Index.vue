@@ -1,0 +1,94 @@
+<template>
+    <b-row>
+        <b-col v-if="hasMenus" cols="3" xs="12">
+            <list-menu
+                :menus="menus"
+                :current-menu="currentMenu"
+                @onCreateMenu="onCreateMenu"
+                @onEditMenu="onEditMenu"
+            />
+        </b-col>
+        <b-col v-if="hasMenus" cols="9" xs="12">
+            <index-form-menu
+                :data="data"
+                :menu-origin="currentMenu"
+                @onSaveMenuSuccess="onSaveMenuSuccess"
+                @onDestroyMenuSuccess="onDestroyMenuSuccess"
+            />
+        </b-col>
+        <b-col v-else cols="12">
+            <b-alert :show="!hasMenus" variant="warning">
+                {{ $t('Menus not found', { locale }) }}
+            </b-alert>
+        </b-col>
+    </b-row>
+</template>
+
+<script>
+    import { mapState } from 'vuex'
+    import ListMenu from './List'
+    import IndexFormMenu from './Form/Index'
+    import cloneMixin from './../../mixins/clone'
+    import { menuStructure } from './../../structures/menu'
+
+    export default {
+        name: 'IndexMenu',
+        props: {
+            data: {
+                type: String,
+                required: true
+            }
+        },
+        components: { ListMenu, IndexFormMenu },
+        mixins: [ cloneMixin ],
+        data () {
+            return {
+                languagesAvailable: JSON.parse(this.data).langsAvailable,
+                menus: JSON.parse(this.data).menus,
+                currentMenu: this.clone(menuStructure)
+            }
+        },
+        computed: {
+            ...mapState([ 'locale' ]),
+            hasMenus () {
+                return this.menus.length > 0
+            }
+        },
+        methods: {
+            // Events
+            onCreateMenu () {
+                this.currentMenu = this.clone(menuStructure)
+            },
+            onEditMenu ( menu ) {
+                this.currentMenu = this.clone(menu)
+            },
+            onSaveMenuSuccess ( menuStored ) {
+                let find = false
+
+                for ( let menu of this.menus ) {
+                    if ( menuStored.id === menu.id ) {
+                        find = true
+                        menu = this.clone(menuStored)
+                    }
+                }
+
+                if ( !find ) {
+                    this.menus.push(this.clone(menuStored))
+                    this.currentMenu = this.clone(menuStored)
+                }
+            },
+            onDestroyMenuSuccess ( menuDeleted ) {
+                for ( const [index, menu] of this.menus.entries() ) {
+                    if ( menu.id === menuDeleted.id ) {
+                        this.menus.splice(index, 1)
+                    }
+                }
+            }
+        },
+        mounted () {
+            if ( this.hasMenus ) {
+                this.currentMenu = this.menus[0]
+            }
+        }
+    }
+</script>
