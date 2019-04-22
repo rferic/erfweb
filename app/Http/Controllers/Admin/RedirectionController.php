@@ -16,7 +16,20 @@ class RedirectionController extends Controller
     }
 
     public function index ()
-    {}
+    {
+        $title = __('Redirections');
+        $component = 'index-redirection';
+        $data = [
+            'menus' => Redirection::get()->all()
+        ];
+        $routes = [
+            'indexRedirections' => route('admin.redirections'),
+            'getRedirections' => route('admin.redirections.get'),
+            'createRedirection' => route('admin.redirections.create')
+        ];
+
+        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+    }
 
     public function get ( Request $request )
     {
@@ -79,6 +92,14 @@ class RedirectionController extends Controller
 
         if ( isset($filters['code']) ) {
             $query->where('code', $filters['code']);
+        }
+
+        if ( isset($filters['slug_origin']) ) {
+            $query->where('slug_origin', 'LIKE', '%' . $filters['slug_origin']. '%');
+        }
+
+        if ( isset($filters['slug_destine']) ) {
+            $query->where('slug_destine', 'LIKE', '%' . $filters['slug_destine']. '%');
         }
 
         if ( isset($filters['slugs_origin']) && COUNT($filters['slugs_origin']) > 0 ) {

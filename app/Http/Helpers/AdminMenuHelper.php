@@ -57,6 +57,12 @@ class AdminMenuHelper
                         'label' => __('Menus'),
                         'icon' => null,
                         'url' => route('admin.menus')
+                    ],
+                    [
+                        'key' => 'redirections',
+                        'label' => __('Redirections'),
+                        'icon' => null,
+                        'url' => route('admin.redirections')
                     ]
                 ]
             ],

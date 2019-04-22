@@ -41,6 +41,16 @@ class RedirectionTest extends TestCase
         factory(Redirection::class, $this->numRedirections)->create();
     }
 
+    public function testViewIndex ()
+    {
+        $this->withExceptionHandling();
+
+        $this
+            ->actingAs($this->user)
+            ->get(route('admin.redirections'))
+            ->assertSuccessful();
+    }
+
     public function testPostGetRedirections ()
     {
         $this->withExceptionHandling();
@@ -55,14 +65,20 @@ class RedirectionTest extends TestCase
             ]
         ];
 
-        foreach ( $redirections as $redirection ) {
-            if ( $this->faker->boolean ) {
-                $params['filters']['slugs_origin'][] = $redirection->slug_origin;
-            }
+        if ( $this->faker->boolean ) {
+            foreach ($redirections as $redirection) {
+                if ($this->faker->boolean) {
+                    $params['filters']['slugs_origin'][] = $redirection->slug_origin;
+                }
 
-            if ( $this->faker->boolean ) {
-                $params['filters']['slugs_destine'][] = $redirection->slug_destine;
+                if ($this->faker->boolean) {
+                    $params['filters']['slugs_destine'][] = $redirection->slug_destine;
+                }
             }
+        } else {
+            $redirection = $redirections->random();
+            $params['filters']['slug_origin'] = $redirection->slug_origin;
+            $params['filters']['slug_destine'] = $redirection->slug_origin;
         }
 
         $response = $this

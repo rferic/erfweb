@@ -34,7 +34,7 @@
     import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
 
     export default {
-        name: 'CheckboxesFilterMessage',
+        name: 'CheckboxesFilter',
         props: {
             options: {
                 type: Array,
