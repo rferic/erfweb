@@ -27,7 +27,7 @@ class PageTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    protected $page, $user, $author, $pages, $count;
+    protected $page, $childs, $user, $author, $count, $countPagesChild;
 
     protected function setUp (): void
     {
@@ -38,10 +38,15 @@ class PageTest extends TestCase
         Role::create(['name' => 'admin']);
 
         $this->count = $this->faker->numberBetween(1, 10);
+        $this->countPagesChild = $this->faker->numberBetween(1, 10);
 
         $this->user = factory(User::class)->create()->assignRole('admin');
         $this->author = factory(User::class)->create()->assignRole('admin');
         $this->page = factory(Page::class)->create([ 'user_id' => $this->author->id]);
+        $this->childs = factory(Page::class, $this->countPagesChild)->create([
+            'page_id' => $this->page->id,
+            'user_id' => $this->author->id
+        ]);
         factory(Menu::class)->create([ 'user_id' => $this->author->id]);
         factory(PageLocale::class, $this->count)->create([
             'lang' => $this->faker->languageCode,
@@ -74,6 +79,19 @@ class PageTest extends TestCase
         $this->assertFalse($this->page->isAuthor());
         $this->signIn($this->user)->assertFalse($this->page->isAuthor());
         $this->signIn($this->author)->assertTrue($this->page->isAuthor());
+    }
+
+    public function testHasParent ()
+    {
+        $this->assertInstanceOf(Page::class, $this->childs->first()->parent);
+        $this->assertObjectNotHasAttribute('parent', $this->page);
+    }
+
+    public function testHasChilds ()
+    {
+        $this->assertInstanceOf(Collection::class, $this->page->childs);
+        $this->assertInstanceOf(Page::class, $this->page->childs->first());
+        $this->assertObjectNotHasAttribute('childs', $this->childs->first());
     }
 
     public function testHasContents ()

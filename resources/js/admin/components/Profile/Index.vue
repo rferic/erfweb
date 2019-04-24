@@ -217,7 +217,7 @@
 <script>
     import { mapState, mapActions } from 'vuex'
     import cloneMixin from '../../../includes/mixins/clone'
-    import profileMixin from '../../mixins/profile'
+    import userMixin from '../../mixins/user'
     import { Validator } from 'vee-validate'
     import passwordIsStrongRule from '../../../includes/validators/passwordIsStrongRule'
     import vue2Dropzone from 'vue2-dropzone'
@@ -230,7 +230,7 @@
                 required: true
             }
         },
-        mixins: [ cloneMixin, profileMixin ],
+        mixins: [ cloneMixin, userMixin ],
         components: { vue2Dropzone },
         data () {
             return {
@@ -260,8 +260,14 @@
         },
         computed: {
             ...mapState([ 'locale', 'routes', 'csrfToken' ]),
+            ...mapState({
+                auth: state => state.auth.user
+            }),
             userDataOrigin () {
                 return JSON.parse(this.data)
+            },
+            userIsCurrentAuth () {
+                return this.auth.id === this.user.id
             }
         },
         methods: {
@@ -355,9 +361,6 @@
                             })
 
                             if ( this.password !== '' ) {
-                                this.password = ''
-                                this.passwordConfirm = ''
-
                                 this.$notify({
                                     group: 'notify',
                                     title: this.$t('Profile'),
@@ -369,7 +372,11 @@
                                 })
                             }
 
-                            this.setAuth(await this.getDataProfileRequest())
+                            if ( this.userIsCurrentAuth ) {
+                                this.setAuth(await this.getUserDataRequest())
+                            }
+
+                            this.clearPasswords()
                         } else {
                             this.$notify({
                                 group: 'notify',
@@ -400,7 +407,7 @@
                 }
 
                 try {
-                    const response = await axios.post(this.routes.profileUpdate, paramsRequest)
+                    const response = await axios.post(this.routes.userUpdate, paramsRequest)
                     return response.data
                 } catch (err) {
                     return { result: false }
@@ -421,6 +428,9 @@
             },
             getAvatarIsImage () {
                 return !(this.user.avatar !== null && this.userDataOrigin.avatars.includes(this.user.avatar))
+            },
+            clearPasswords () {
+                setTimeout(() => { this.password = '' }, 1000)
             }
         },
         created () {
@@ -440,6 +450,9 @@
 
             this.setEmailIsFreeValidator()
             Validator.extend('password', passwordIsStrongRule)
+        },
+        mounted () {
+            this.clearPasswords()
         }
     }
 </script>

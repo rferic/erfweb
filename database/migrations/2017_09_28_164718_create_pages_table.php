@@ -15,10 +15,12 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('page_id')->nullable();
             $table->unsignedInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('page_id')->references('id')->on('pages');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

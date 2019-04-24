@@ -44,6 +44,11 @@ class PageController extends Controller
         return Response::json($this->getPages($filters, $perPage, $orderBy));
     }
 
+    public function getAllParents ()
+    {
+        return Response::json(Page::whereNull('page_id')->with('locales')->get()->toArray());
+    }
+
     public function store ( Request $request )
     {
         $validator = Validator::make($request->all(), [
@@ -54,9 +59,13 @@ class PageController extends Controller
         if ( !$validator->fails() ) {
             $pageLocales = $request->input('locales');
             $page_id = $request->input('id');
+            $page_parent_id = $request->input('page_parent_id');
 
             if ( is_null($page_id) ) {
-                $page_id = Page::create(['user_id' => Auth::id()])->id;
+                $page_id = Page::create([
+                    'page_parent_id' => $page_parent_id,
+                    'user_id' => Auth::id()
+                ])->id;
             }
 
             foreach ( $pageLocales AS $pageLocale ) {
@@ -176,6 +185,10 @@ class PageController extends Controller
                     });
             });
         }
+        // Filter parent
+        if ( isset($filters['parent']) ) {
+            $query->where('parent_id', $filters['parent']);
+        }
         // Filter author
         if  ( isset($filters['authors']) ) {
             $query->where(function ($query) use ($filters) {
@@ -228,6 +241,7 @@ class PageController extends Controller
             ],
             'routes' => [
                 'getPages' => route('admin.pages.get'),
+                'getAllParents' => route('admin.pages.getAllParents'),
                 'storePage' => route('admin.pages.store'),
                 'getContents' => route('admin.contents.get'),
                 'getMenus' => route('admin.menus.get'),

@@ -26,6 +26,32 @@
                 @onSave="onSave"
             />
             <b-row>
+                <b-col v-if="hasPagesParent" cols="12">
+                    <b-form-group :label="`${$t('Parent page', { locale: locale })}: *`">
+                        <b-form-select
+                            name="parent"
+                            v-model="parent"
+                            :disabled="!isNew"
+                        >
+                            <template slot="first">
+                                <option
+                                    value=""
+                                    disabled
+                                    :selected="parent === null"
+                                >
+                                    {{ $t('Has not parent page', { locale }) }}
+                                </option>
+                            </template>
+                            <option
+                                v-for="pageParent in pagesParent"
+                                :key="pageParent.id"
+                                :value="pageParent.id"
+                            >
+                                {{ $t(getDefaultLocale(pageParent).title, { locale }) }}
+                            </option>
+                        </b-form-select>
+                    </b-form-group>
+                </b-col>
                 <b-col cols="12">
                     <multilanguage-tab
                         ref="multilanguageTab"
@@ -77,6 +103,11 @@
             pageOrigin: {
                 type: Object,
                 required: true
+            },
+            pagesParent: {
+                type: Array,
+                required: false,
+                default: Array
             }
         },
         components: { MultilanguageTab, LocaleForm, FormButtons },
@@ -84,7 +115,8 @@
         data () {
             return {
                 languagesAvailable: JSON.parse(this.data).langsAvailable,
-                layouts: JSON.parse(this.data).layouts
+                layouts: JSON.parse(this.data).layouts,
+                parent: this.clone(this.pageOrigin.page_id)
             }
         },
         computed: {
@@ -95,6 +127,9 @@
             }),
             isNew () {
                 return this.pageOrigin.id === null
+            },
+            hasPagesParent () {
+                return this.pagesParent.length > 0
             }
         },
         methods: {
@@ -130,6 +165,7 @@
             async processForm () {
                 let page = {
                     id: this.pageOrigin.id,
+                    page_id: this.parent,
                     locales: []
                 }
 
@@ -183,6 +219,17 @@
                 this.$refs.multilanguageTab.changeLanguageTab(firstNotValid === null ? defaultLanguageSelected : firstNotValid)
 
                 return { isValid: firstNotValid === null && anyEnable, anyEnable, firstNotValid }
+            },
+            getDefaultLocale ( page ) {
+                let locale = null
+
+                for ( const pageLocale of page.locales ) {
+                    if ( locale === null || pageLocale.lang === this.locale ) {
+                        locale = this.clone(pageLocale)
+                    }
+                }
+
+                return locale
             }
         },
         created () {

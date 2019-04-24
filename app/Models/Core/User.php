@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Support\Facades\App as Application;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
@@ -39,7 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
         parent::boot();
 
         static::deleting (function ($user) {
-            if ($user->forceDeleting && !App::runningInConsole()) {
+            if ($user->forceDeleting && !Application::runningInConsole()) {
                 $user->comments()->forceDelete();
                 $user->messages()->forceDelete();
                 $user->apps()->detach();

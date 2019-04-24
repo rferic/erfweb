@@ -33,6 +33,7 @@
                 class="col-12"
                 :data="data"
                 :page-origin="currentPage"
+                :pages-parent="pagesParent"
                 @onGoToList="goToList"
                 @onSavePage="onSavePage"
             />
@@ -63,7 +64,8 @@
                 filters: this.clone(filterPageStructure),
                 currentPage: null,
                 isLoaded: false,
-                languagesAvailable: JSON.parse(this.data).langsAvailable
+                languagesAvailable: JSON.parse(this.data).langsAvailable,
+                pagesParent: []
             }
         },
         computed: {
@@ -76,10 +78,14 @@
             },
             viewForm () {
                 return this.currentPage !== null && this.isLoaded
+            },
+            hasPagesParent () {
+                return this.pagesParent.length > 0
             }
         },
         mixins: [ cloneMixin ],
         methods: {
+            // Events
             onChangeFilters ( filters ) {
                 this.filters = filters
             },
@@ -105,6 +111,10 @@
             goToList () {
                 this.currentPage = null
             },
+            // Getters
+            async getAllPagesParent () {
+                this.pagesParent = await this.getAllPagesParentRequest()
+            },
             getNewPage () {
                 let languages = []
 
@@ -123,6 +133,7 @@
             }
         },
         created () {
+            this.getAllPagesParent()
             this.filters.onlyTrashed = JSON.parse(this.data).onlyTrashed
         },
         mounted () {

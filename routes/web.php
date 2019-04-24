@@ -44,8 +44,6 @@ Route::group(
         // Admin Profile
         Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
         Route::post('/profile/get-data', 'Admin\ProfileController@getData')->name('admin.profile.getData');
-        Route::post('/profile/email-is-free', 'Admin\ProfileController@emailIsFree')->name('admin.profile.emailIsFree');
-        Route::post('/profile/update', 'Admin\ProfileController@update')->name('admin.profile.update');
         // Admin Messages
         Route::get('/messages', 'Admin\MessageController@index')->name('admin.messages');
         Route::get('/messages/trash', 'Admin\MessageController@indexTrash')->name('admin.messages.trash');
@@ -73,7 +71,7 @@ Route::group(
         Route::post('/pages', 'Admin\PageController@get')->name('admin.pages.get');
         Route::post('/pages/store', 'Admin\PageController@store')->name('admin.pages.store');
         Route::post('/pages/{page}/restore', 'Admin\PageController@restore')->name('admin.pages.restore');
-        Route::post('/pages/get-all-slugs-page', 'Admin\PageController@getAllSlugsPage')->name('admin.pages.getAllSlugsPage');
+        Route::post('/pages/get-all-parents', 'Admin\PageController@getAllParents')->name('admin.pages.getAllParents');
         Route::delete('/pages/{page}/remove', 'Admin\PageController@remove')->name('admin.pages.remove');
         Route::delete('/pages/{page}/destroy', 'Admin\PageController@destroy')->name('admin.pages.destroy');
         // Admin Page Locales
@@ -102,5 +100,17 @@ Route::group(
         //Admin Slugs
         Route::post('/slugs/is-free', 'Admin\SlugController@getIsFree')->name('admin.slugs.getIsFree');
         Route::post('/slugs/get-all-slugs', 'Admin\SlugController@getAllSlugs')->name('admin.slugs.getAllSlugs');
+        // Admin Users
+        Route::get('/users', 'Admin\UserController@index')->name('admin.users');
+        Route::get('/admins', 'Admin\UserController@indexAdmins')->name('admin.admins');
+        Route::get('/users/{user}', 'Admin\UserController@detail')->name('admin.users.detail');
+        Route::get('/admins/{user}', 'Admin\UserController@detail')->name('admin.admins.detail');
+        Route::post('/users/get', 'Admin\UserController@get')->name('admin.users.get');
+        Route::post('/users/{user}/get-data', 'Admin\UserController@getData')->name('admin.users.getData');
+        Route::post('/users/{user}/update', 'Admin\UserController@update')->name('admin.users.update');
+        Route::post('/users/{user}/email-is-free', 'Admin\UserController@emailIsFree')->name('admin.users.emailIsFree');
+        Route::post('/users/{user}/disable', 'Admin\UserController@disable')->name('admin.users.disable');
+        Route::post('/users/{user}/enable', 'Admin\UserController@enable')->name('admin.users.enable');
+        Route::delete('/users/{user}/destroy', 'Admin\UserController@destroy')->name('admin.users.destroy');
     }
 );

@@ -27,10 +27,10 @@ class UserHelper
         return $rolesAssign;
     }
 
-    static function emailIsFree ( $email )
+    static function emailIsFree ( User $user, $email )
     {
-        $user = User::where('email', $email)->first();
-        return is_null($user) || (isset($user->id) && $user->id === auth()->id());
+        $user2 = User::where('email', $email)->first();
+        return is_null($user2) || (isset($user2->id) && $user2->id === $user->id);
     }
 
     static function refreshRoles ( User $user, $roles)

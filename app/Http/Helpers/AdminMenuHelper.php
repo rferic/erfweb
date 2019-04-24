@@ -72,6 +72,20 @@ class AdminMenuHelper
                 'icon' => 'fa-image',
                 'url' => route('admin.images'),
                 'childrens' => []
+            ],
+            [
+                'key' => 'Users',
+                'label' => __('Users'),
+                'icon' => 'fa-users',
+                'url' => route('admin.users'),
+                'childrens' => []
+            ],
+            [
+                'key' => 'Admins',
+                'label' => __('Admins'),
+                'icon' => 'fa-lock',
+                'url' => route('admin.admins'),
+                'childrens' => []
             ]
         ];
     }

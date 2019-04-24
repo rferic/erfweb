@@ -72,7 +72,7 @@
                 }
             },
             getIsCurrent ( item ) {
-                let findChildrenCurrent = item.url === routesGlobal.current
+                let findChildrenCurrent = item.url === routesGlobal.current || routesGlobal.current.includes(item.url)
 
                 if ( !findChildrenCurrent && typeof item.childrens !== typeof undefined && item.childrens.length > 0 ) {
                     for ( let children of item.childrens ) {

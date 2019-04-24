@@ -22,6 +22,7 @@ class Page extends Model
                 $page->contents()->forceDelete();
                 $page->menuItems()->forceDelete();
                 $page->locales()->forceDelete();
+                $page->childs()->forceDelete();
             }
         });
     }
@@ -34,6 +35,16 @@ class Page extends Model
     public function author ()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function parent ()
+    {
+        return $this->belongsTo(Page::class, 'page_id');
+    }
+
+    public function childs ()
+    {
+        return $this->hasMany(Page::class);
     }
 
     public function isAuthor ()

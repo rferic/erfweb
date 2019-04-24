@@ -111,6 +111,17 @@ class PageTest extends TestCase
         $this->assertEquals($response->total, $responseToAssert->total);
     }
 
+    public function testPostGetAllParents ()
+    {
+        $this->withExceptionHandling();
+
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.pages.getAllParents'))
+            ->assertSuccessful()
+            ->assertExactJson(Page::whereNull('page_id')->get()->toArray());
+    }
+
     public function testPostRestorePage ()
     {
         $this->withExceptionHandling();
@@ -326,6 +337,10 @@ class PageTest extends TestCase
         if ( $this->faker->boolean ) {
             $params['filters']['text'] = $this->faker->word;
         }
+        // filter by parent
+        if ( $this->faker->boolean ) {
+            $params['filters']['parent'] = Page::all()->random()->id;
+        }
         // filter by authors
         if ( $this->faker->boolean ) {
             $params['filters']['authors'] = [];
@@ -383,6 +398,11 @@ class PageTest extends TestCase
         $allContents = $data['allContents'];
         $params = $data['params'];
 
+        if ( isset($params['filters']['parent']) ) {
+            $this->assertEquals($params['filters']['parent'], $page->parent_id);
+        } else {
+            $this->assertNull($page->parent_id);
+        }
         $this->assertCount(COUNT($pageLocales), $page->locales);
         $this->assertCount(COUNT($allContents), $page->contents);
 

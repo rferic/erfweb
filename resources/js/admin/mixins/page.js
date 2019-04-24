@@ -115,6 +115,10 @@ const pageMixin = {
             })
             return data
         },
+        async getAllPagesParentRequest () {
+            const { data } = await axios.post(this.routes.getAllPagesParent, {})
+            return data
+        },
         async storePageRequest ( page ) {
             const { data } = await axios.post(`${this.routes.storePage}`, page)
             return data
