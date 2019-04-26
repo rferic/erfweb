@@ -5,11 +5,10 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('../bootstrap');
-
 window.Vue = require('vue');
 // Resources
 import BootstrapVue from 'bootstrap-vue'
+import ArgonDashboard from './../../vue-argon/src/plugins/argon-dashboard'
 import VeeValidate from 'vee-validate'
 import i18n from 'voo-i18n'
 import translations from './../includes/translations'
@@ -18,12 +17,11 @@ import VueInstant from 'vue-instant'
 import VueMoment from 'vue-moment'
 import Notifications from 'vue-notification'
 // CSS
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-instant/dist/vue-instant.css'
 
 // Uses
 Vue.use(BootstrapVue)
+Vue.use(ArgonDashboard)
 Vue.use(Notifications)
 Vue.use(VeeValidate, { fieldsBagName: 'veeFields' })
 Vue.use(i18n, translations)
@@ -34,19 +32,11 @@ Vue.use(VueMoment)
 // Store
 import store from './store'
 // Components
-import Login from './components//Login'
-import Register from './components//Register'
-import ResetEmail from './components//ResetEmail'
-import ResetPassword from './components//ResetPassword'
+import AuthLayout from './Layout'
 
 const app = new Vue({
     el: '#app',
     store,
-    components: {
-        Login,
-        Register,
-        ResetEmail,
-        ResetPassword
-    },
+    components: { AuthLayout },
 
 });

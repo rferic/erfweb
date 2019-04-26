@@ -18,7 +18,7 @@
 
         <!-- Styles -->
         <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
-        <link href="{{ asset('admin/css/eladmin.css') }}" rel="stylesheet">
+        <!--<link href="{{ asset('admin/css/eladmin.css') }}" rel="stylesheet">-->
     </head>
     <body class="fix-header fix-sidebar mini-sidebar">
         <div id="app">

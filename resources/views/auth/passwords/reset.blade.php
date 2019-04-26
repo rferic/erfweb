@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <reset-password></reset-password>
+    <auth-layout component="reset-password" />
 @endsection
 
 @section('script')

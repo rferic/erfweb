@@ -5,11 +5,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('../bootstrap');
-
 window.Vue = require('vue');
 // Resources
-import BootstrapVue from 'bootstrap-vue'
+import ArgonDashboard from './../../vue-argon/src/plugins/argon-dashboard'
 import VeeValidate from 'vee-validate'
 import i18n from 'voo-i18n'
 import translations from './../includes/translations'
@@ -24,8 +22,6 @@ import ToggleButton from 'vue-js-toggle-button'
 import BlockUI from 'vue-blockui'
 import VueClipboard from 'vue-clipboard2'
 // CSS
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-instant/dist/vue-instant.css'
 const moment = require('moment')
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
@@ -35,7 +31,7 @@ if ( locale !== 'en' ) {
 }
 
 // Uses
-Vue.use(BootstrapVue)
+Vue.use(ArgonDashboard)
 Vue.use(Notifications)
 Vue.use(VeeValidate, { fieldsBagName: 'veeFields' })
 Vue.use(i18n, translations)

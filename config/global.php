@@ -21,5 +21,9 @@ return [
             'iso' => 'esES',
             'default' => false
         ]
+    ],
+    'links' => [
+        'github' => 'https://github.com/rferic/',
+        'linkedin' => 'https://www.linkedin.com/in/eric-rojas-fuertes-2665502b/'
     ]
 ];

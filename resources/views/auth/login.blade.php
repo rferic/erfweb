@@ -1,8 +1,12 @@
 @extends('layouts.auth')
 
 @section('content')
-    <login
-        session-errors-json="{{ json_encode($errors->all()) }}"
+    <auth-layout
+        component="login"
+        component-data="{{ json_encode([
+            'sessionErrors' => json_encode($errors->all()),
+            'remember' => old('remember') ? 0 : 1
+        ]) }}"
         dusk="login"
-        remember-value="{{ old('remember') ? 0 : 1 }}" />
+    />
 @endsection

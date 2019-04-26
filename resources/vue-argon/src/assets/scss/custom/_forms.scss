@@ -1,0 +1,32 @@
+//
+// Forms
+//
+
+@import "../core/forms/form";
+@import "../core/forms/form-validation";
+@import "../core/forms/input-group";
+
+input.form-control:-webkit-autofill,
+input.form-control:-webkit-autofill:hover,
+input.form-control:-webkit-autofill:focus
+textarea.form-control:-webkit-autofill,
+textarea.form-control:-webkit-autofill:hover
+textarea.form-control:-webkit-autofill:focus,
+select.form-control:-webkit-autofill,
+select.form-control:-webkit-autofill:hover,
+select.form-control:-webkit-autofill:focus {
+    border: 1px solid white;
+    -webkit-text-fill-color: #acb5bd;
+    -webkit-box-shadow: 0 0 0px 30px white inset;
+}
+
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+    background-image: none;
+}
+
+.form-group {
+    &.input-group-alternative.has-danger {
+        border: 1px solid $danger;
+    }
+}
