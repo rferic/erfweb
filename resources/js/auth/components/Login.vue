@@ -1,85 +1,4 @@
 <template>
-    <!--
-    <b-form
-        id="loginForm"
-        method="POST"
-        :action="routesGlobal.login"
-        @submit.prevent="validateBeforeSubmit"
-        novalidate>
-        <input type="hidden" name="_token" :value="csrfToken">
-        <b-form-group :label="$t('Email', { locale: locale })">
-            <b-form-input
-                v-model="email"
-                id="email"
-                type="email"
-                name="email"
-                class="form-control"
-                :placeholder="$t('Email', { locale: locale })"
-                v-validate
-                data-vv-rules="required|email"
-                :class="{'input': true, 'is-invalid': errors.has('email') }"
-            />
-            <i
-                v-show="errors.has('email')"
-                class="fa fa-warning text-danger"></i>
-            <span
-                v-show="errors.has('email')"
-                class="text-danger">{{ errors.first('email') }}</span>
-        </b-form-group>
-        <b-form-group :label="$t('Password', { locale: locale })">
-            <b-form-input
-                v-model="password"
-                id="password"
-                type="password"
-                name="password"
-                class="form-control"
-                :placeholder="$t('Password', { locale: locale })"
-                v-validate
-                data-vv-rules="required|password"
-                :class="{'input': true, 'is-invalid': errors.has('password') }"
-            />
-            <i
-                v-show="errors.has('password')"
-                class="fa fa-warning text-danger"></i>
-            <span
-                v-show="errors.has('password')"
-                class="text-danger">{{ errors.first('password') }}</span>
-        </b-form-group>
-        <div class="checkbox">
-            <b-form-checkbox
-                id="remember"
-                v-model="remember"
-                value="1"
-                unchecked-value="2"
-                name="remember">
-                {{ $t('Remember Me', { locale: this.locale }) }}
-            </b-form-checkbox>
-            <label class="pull-right">
-                <a :href="routesGlobal.forgottenPassword">{{ $t('Forgotten Password?', { locale: this.locale }) }}</a>
-            </label>
-        </div>
-        <b-button
-            type="submit"
-            variant="primary"
-            class="btn-flat m-b-30 m-t-30">
-            {{ $t('Sign in', { locale: this.locale }) }}
-        </b-button>
-        <div class="register-link m-t-15 text-center">
-            <p>
-                {{ $t('Don\'t have account ?', { locale: this.locale }) }} <a :href="routesGlobal.register"> {{ $t('Sign Up Here', { locale: this.locale }) }}</a>
-            </p>
-        </div>
-    </b-form>
-    <div v-if="hasSessionErrors">
-        <b-alert
-            v-for="(sessionError, index) in sessionErrors"
-            :key="index"
-            show
-            variant="danger">
-            {{ $t(sessionError, { locale: this.locale }) }}
-        </b-alert>
-    </div>
-    -->
     <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7">
             <div class="card bg-secondary shadow border-0">
@@ -205,7 +124,7 @@
                 email: '',
                 password: '',
                 remember: JSON.parse(this.data).remember === 1,
-                sessionErrors: JSON.parse(JSON.parse(this.data).sessionErrors)
+                sessionErrors: JSON.parse(this.data).sessionErrors
             }
         },
         computed: {

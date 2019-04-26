@@ -5,7 +5,7 @@
             menu-data="menuData"
         />
         <!-- Header -->
-        <div class="header bg-gradient-success py-7 py-lg-8">
+        <div class="header bg-gradient-success py-7 py-lg-7">
             <div class="container">
                 <div class="header-body text-center mb-7">
                     <div class="row justify-content-center">
@@ -25,12 +25,12 @@
                 </svg>
             </div>
         </div>
-        <div class="container mt--9 pb-5">
+        <div class="container mt--9 pb-4">
             <slide-y-up-transition mode="out-in" origin="center top">
                 <component :is="component" :data="componentData"/>
             </slide-y-up-transition>
         </div>
-        <footer class="py-7">
+        <footer class="py-3">
             <div class="container">
                 <div class="row align-items-center justify-content-xl-between">
                     <div class="col-xl-6">
@@ -68,6 +68,7 @@
     import Register from './components/Register'
     import ResetEmail from './components/ResetEmail'
     import ResetPassword from './components/ResetPassword'
+    import PasswordConfirm from './components/PasswordConfirm'
 
     export default {
         name: 'AuthLayout',
@@ -92,7 +93,7 @@
                 default: Array
             }
         },
-        components: { SlideYUpTransition, AuthNavbar, Login, Register, ResetEmail, ResetPassword },
+        components: { SlideYUpTransition, AuthNavbar, Login, Register, ResetEmail, ResetPassword, PasswordConfirm },
         data () {
             return {
                 links: links

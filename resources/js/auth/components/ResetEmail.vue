@@ -1,50 +1,88 @@
 <template>
-    <div class="unix-login">
-        <div class="container-fluid">
-            <b-row class="justify-content-center">
-                <b-col lg="5" md="6" sm="12">
-                    <b-card class="login-content">
-                        <div class="login-form">
-                            <h4>{{ $t('Request reset password', { locale: this.locale }) }}</h4>
-                            <b-alert
-                                :show="showAlertStatus"
-                                variante="success">{{ $t(statusResetEmail , { locale: locale }) }}</b-alert>
-                            <b-form
-                                id="resetEmailForm"
-                                method="POST"
-                                :action="routesGlobal.resetEmail"
-                                @submit.prevent="validateBeforeSubmit"
-                                novalidate>
-                                <input type="hidden" name="_token" :value="csrfToken">
-                                <b-form-group :label="$t('Email', { locale: locale })">
-                                    <b-form-input
-                                        v-model="email"
-                                        type="email"
-                                        name="email"
-                                        class="form-control"
-                                        :placeholder="$t('Email', { locale: locale })"
-                                        v-validate
-                                        data-vv-rules="required|email"
-                                        :class="{'input': true, 'is-invalid': errors.has('email') }"
-                                    />
-                                    <i
-                                        v-show="errors.has('email')"
-                                        class="fa fa-warning text-danger"></i>
-                                    <span
-                                        v-show="errors.has('email')"
-                                        class="text-danger">{{ errors.first('email') }}</span>
-                                </b-form-group>
-                                <b-button
-                                    type="submit"
-                                    variant="primary"
-                                    class="btn-flat m-b-30 m-t-30">
-                                    {{ $t('Refresh password', { locale: this.locale }) }}
-                                </b-button>
-                            </b-form>
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card bg-secondary shadow border-0">
+                <div class="card-header bg-transparent pb-2">
+                    <h1 class="text-center">{{ $t('Request reset password', { locale }) }}</h1>
+                </div>
+                <div class="card-body px-lg-5 py-lg-5">
+                    <b-form
+                        id="resetEmailForm"
+                        method="POST"
+                        :action="routesGlobal.resetEmail"
+                        @submit.prevent="validateBeforeSubmit"
+                        novalidate
+                    >
+                        <input type="hidden" name="_token" :value="csrfToken">
+
+                        <div class="form-group input-group-alternative mb-3 input-group" :class="{ 'has-danger': errors.has('email') }">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-email-83" />
+                                </span>
+                            </div>
+                            <input
+                                v-model="email"
+                                type="email"
+                                name="email"
+                                aria-describedby="addon-right addon-left"
+                                class="form-control"
+                                :class="{ 'is-invalid': errors.has('email') }"
+                                :placeholder="$t('Email', { locale })"
+                                v-validate
+                                data-vv-rules="required|email"
+                            />
                         </div>
-                    </b-card>
-                </b-col>
-            </b-row>
+                        <base-alert
+                            v-show="errors.has('email')"
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ errors.first('email') }}
+                        </base-alert>
+
+                        <div class="text-center">
+                            <base-button
+                                type="primary"
+                                class="my-4"
+                                nativeType="submit"
+                            >
+                                {{ $t('Refresh password', { locale }) }}
+                            </base-button>
+                        </div>
+                    </b-form>
+                    <base-alert
+                        v-if="showAlertStatus"
+                        type="success"
+                        :show="showAlertStatus"
+                    >
+                        {{ $t(statusResetEmail , { locale: locale }) }}
+                    </base-alert>
+                    <div v-if="hasSessionErrors">
+                        <base-alert
+                            v-for="(sessionError, index) in sessionErrors"
+                            :key="index"
+                            show
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ $t(sessionError, { locale: locale }) }}
+                        </base-alert>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-6">
+                    <a :href="routesGlobal.login" class="text-light">
+                        <small>{{ $t('Login into your account', { locale }) }}</small>
+                    </a>
+                </div>
+                <div class="col-6 text-right">
+                    <a :href="routesGlobal.register" class="text-light">
+                        <small>{{ $t('Create new account', { locale }) }}</small>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -54,14 +92,24 @@
 
     export default {
         name: 'ResetEmail',
+        props: {
+            data: {
+                type: String,
+                required: true
+            }
+        },
         data () {
             return {
                 email: '',
-                statusResetEmail: statusResetEmail
+                statusResetEmail: statusResetEmail,
+                sessionErrors: JSON.parse(this.data).sessionErrors
             }
         },
         computed: {
             ...mapState([ 'csrfToken', 'locale', 'routesGlobal' ]),
+            hasSessionErrors () {
+                return this.sessionErrors.length > 0
+            },
             showAlertStatus () {
                 return this.statusResetEmail !== ''
             }

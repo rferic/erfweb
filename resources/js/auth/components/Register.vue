@@ -1,146 +1,190 @@
 <template>
-    <div class="unix-login">
-        <div class="container-fluid">
-            <transition name="bounceRight" :style="transitionStyleTime">
-                <b-row
-                    v-show="enableRegisterForm"
-                    class="justify-content-center">
-                    <b-col lg="5" md="6" sm="12">
-                        <b-card class="login-content">
-                            <div class="login-form">
-                                <h4>{{ $t('Register', { locale: this.locale }) }}</h4>
-                                <b-form
-                                    id="registerForm"
-                                    method="POST"
-                                    :action="routesGlobal.register"
-                                    @submit.prevent="validateBeforeSubmit"
-                                    novalidate>
-                                    <input type="hidden" name="_token" :value="csrfToken">
-                                    <b-form-group :label="$t('Name', { locale: locale })">
-                                        <b-form-input
-                                            v-model="name"
-                                            type="email"
-                                            id="name"
-                                            name="name"
-                                            ref="name"
-                                            class="form-control"
-                                            :placeholder="$t('Email', { locale: locale })"
-                                            v-validate
-                                            data-vv-rules="required|min:3"
-                                            :class="{'input': true, 'is-invalid': errors.has('name') }"
-                                        />
-                                        <i
-                                            v-show="errors.has('name')"
-                                            class="fa fa-warning text-danger"></i>
-                                        <span
-                                            v-show="errors.has('name')"
-                                            class="text-danger">{{ errors.first('name') }}</span>
-                                    </b-form-group>
-                                    <b-form-group :label="$t('Email', { locale: locale })">
-                                        <b-form-input
-                                            v-model="email"
-                                            type="email"
-                                            name="email"
-                                            class="form-control"
-                                            :placeholder="$t('Email', { locale: locale })"
-                                            v-validate
-                                            data-vv-rules="required|email"
-                                            :class="{'input': true, 'is-invalid': errors.has('email') }"
-                                        />
-                                        <i
-                                            v-show="errors.has('email')"
-                                            class="fa fa-warning text-danger"></i>
-                                        <span
-                                            v-show="errors.has('email')"
-                                            class="text-danger">{{ errors.first('email') }}</span>
-                                    </b-form-group>
-                                    <b-form-group :label="$t('Password', { locale: locale })">
-                                        <b-form-input
-                                            v-model="password"
-                                            type="password"
-                                            name="password"
-                                            ref="password"
-                                            class="form-control"
-                                            :placeholder="$t('Password', { locale: locale })"
-                                            v-validate
-                                            data-vv-rules="required|password"
-                                            :class="{'input': true, 'is-invalid': errors.has('password') }"
-                                        />
-                                        <i
-                                            v-show="errors.has('password')"
-                                            class="fa fa-warning text-danger"></i>
-                                        <span
-                                            v-show="errors.has('password')"
-                                            class="text-danger">{{ errors.first('password') }}</span>
-                                    </b-form-group>
-                                    <b-form-group :label="$t('Password confirm', { locale: locale })">
-                                        <b-form-input
-                                            v-model="passwordConfirm"
-                                            type="password"
-                                            name="password_confirmation"
-                                            class="form-control"
-                                            :placeholder="$t('Password', { locale: locale })"
-                                            v-validate
-                                            data-vv-rules="required|confirmed:password"
-                                            :class="{'input': true, 'is-invalid': errors.has('password_confirmation') }"
-                                        />
-                                        <i
-                                            v-show="errors.has('password_confirmation')"
-                                            class="fa fa-warning text-danger"></i>
-                                        <span
-                                            v-show="errors.has('password_confirmation')"
-                                            class="text-danger">{{ errors.first('password_confirmation') }}</span>
-                                    </b-form-group>
-                                    <div>
-                                        <a href="" @click.prevent="showTermsAndPolicy">{{ $t('Read the terms and policy', { locale: this.locale }) }}</a>
-                                    </div>
-                                    <b-form-checkbox
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card bg-secondary shadow border-0">
+                <div class="card-header bg-transparent pb-2">
+                    <h1 class="text-center">{{ $t('Register', { locale }) }}</h1>
+                </div>
+                <div class="card-body px-lg-5 py-lg-5">
+                    <b-form
+                        id="registerForm"
+                        method="POST"
+                        :action="routesGlobal.register"
+                        @submit.prevent="validateBeforeSubmit"
+                        novalidate
+                    >
+                        <input type="hidden" name="_token" :value="csrfToken">
+
+                        <div class="form-group input-group-alternative mb-3 input-group" :class="{ 'has-danger': errors.has('name') }">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-hat-3" />
+                                </span>
+                            </div>
+                            <input
+                                v-model="name"
+                                type="text"
+                                name="name"
+                                aria-describedby="addon-right addon-left"
+                                class="form-control"
+                                :class="{ 'is-invalid': errors.has('name') }"
+                                :placeholder="$t('Name', { locale })"
+                                v-validate
+                                data-vv-rules="required"
+                            />
+                        </div>
+                        <base-alert
+                            v-show="errors.has('name')"
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ errors.first('name') }}
+                        </base-alert>
+
+                        <div class="form-group input-group-alternative mb-3 input-group" :class="{ 'has-danger': errors.has('email') }">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-email-83" />
+                                </span>
+                            </div>
+                            <input
+                                v-model="email"
+                                type="email"
+                                name="email"
+                                aria-describedby="addon-right addon-left"
+                                class="form-control"
+                                :class="{ 'is-invalid': errors.has('email') }"
+                                :placeholder="$t('Email', { locale })"
+                                v-validate
+                                data-vv-rules="required|email"
+                            />
+                        </div>
+                        <base-alert
+                            v-show="errors.has('email')"
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ errors.first('email') }}
+                        </base-alert>
+
+                        <div class="form-group input-group-alternative mb-3 input-group" :class="{ 'has-danger': errors.has('password') }">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-lock-circle-open" />
+                                </span>
+                            </div>
+                            <input
+                                v-model="password"
+                                ref="password"
+                                type="password"
+                                name="password"
+                                aria-describedby="addon-right addon-left"
+                                class="form-control"
+                                :class="{ 'is-invalid': errors.has('password') }"
+                                :placeholder="$t('Password', { locale })"
+                                v-validate
+                                data-vv-rules="required|password"
+                            />
+                        </div>
+                        <base-alert
+                            v-show="errors.has('password')"
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ errors.first('password') }}
+                        </base-alert>
+
+                        <div class="form-group input-group-alternative mb-3 input-group" :class="{ 'has-danger': errors.has('password_confirmation') }">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-lock-circle-open" />
+                                </span>
+                            </div>
+                            <input
+                                v-model="password_confirmation"
+                                type="password"
+                                name="password_confirmation"
+                                aria-describedby="addon-right addon-left"
+                                class="form-control"
+                                :class="{ 'is-invalid': errors.has('password_confirmation') }"
+                                :placeholder="$t('Password confirmation', { locale })"
+                                v-validate
+                                data-vv-rules="required|confirmed:password"
+                            />
+                        </div>
+                        <base-alert
+                            v-show="errors.has('password_confirmation')"
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ errors.first('password_confirmation') }}
+                        </base-alert>
+
+                        <div class="row my-4">
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox custom-control-alternative">
+                                    <input
                                         v-model="terms"
                                         id="terms"
                                         name="terms"
-                                        value="1"
-                                        unchecked-value=""
+                                        type="checkbox"
+                                        class="custom-control-input"
                                         v-validate
-                                        data-vv-rules="required">
-                                        {{ $t('Agree the terms and policy', { locale: this.locale }) }}
-                                        <div
-                                            v-show="errors.has('terms')"
-                                            class="help text-danger">{{ errors.first('terms') }}</div>
-                                    </b-form-checkbox>
-                                    <b-button
-                                        type="submit"
-                                        variant="primary"
-                                        class="btn-flat m-b-30 m-t-30">
-                                        {{ $t('Register', { locale: this.locale }) }}
-                                    </b-button>
-                                </b-form>
+                                        data-vv-rules="required"
+                                        :class="{ 'is-invalid': errors.has('terms') }"
+                                    />
+                                    <label for="terms" class="custom-control-label">
+                                        <span class="text-muted">
+                                            {{ $t('I accept the use of my data without any commercial use', { locale }) }}
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
-                        </b-card>
-                    </b-col>
-                </b-row>
-            </transition>
-            <transition name="bounceRight">
-                <b-row
-                    v-show="enableTermsAndPolicy"
-                    class="justify-content-center">
-                    <b-col lg="5" md="6" sm="12">
-                        <b-card class="login-content">
-                            <h4>{{ $t('Terms and Policy', { locale: this.locale }) }}</h4>
-                            <div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!</p>
-                                <p>Ad dolore dignissimos asperiores dicta facere optio quod commodi nam tempore recusandae. Rerum sed nulla eum vero expedita ex delectus voluptates rem at neque quos facere sequi unde optio aliquam!</p>
-                                <p>Tenetur quod quidem in voluptatem corporis dolorum dicta sit pariatur porro quaerat autem ipsam odit quam beatae tempora quibusdam illum! Modi velit odio nam nulla unde amet odit pariatur at!</p>
-                                <p>Consequatur rerum amet fuga expedita sunt et tempora saepe? Iusto nihil explicabo perferendis quos provident delectus ducimus necessitatibus reiciendis optio tempora unde earum doloremque commodi laudantium ad nulla vel odio?</p>
-                            </div>
-                            <b-button
-                                variant="primary"
-                                class="pull-right"
-                                @click="showRegisterForm">{{ $t('Close', { locale: this.locale }) }}
-                            </b-button>
-                        </b-card>
-                    </b-col>
-                </b-row>
-            </transition>
+                        </div>
+                        <base-alert
+                            v-show="errors.has('terms')"
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ errors.first('terms') }}
+                        </base-alert>
+
+                        <div class="text-center">
+                            <base-button
+                                type="primary"
+                                class="my-4"
+                                nativeType="submit"
+                            >
+                                {{ $t('Create account', { locale }) }}
+                            </base-button>
+                        </div>
+                    </b-form>
+
+                    <div v-if="hasSessionErrors">
+                        <base-alert
+                            v-for="(sessionError, index) in sessionErrors"
+                            :key="index"
+                            show
+                            type="danger"
+                        >
+                            <i class="fa fa-warning" />
+                            {{ $t(sessionError, { locale: locale }) }}
+                        </base-alert>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-6">
+                    <a :href="routesGlobal.forgottenPassword" class="text-light">
+                        <small>{{ $t('Forgot password?', { locale }) }}</small>
+                    </a>
+                </div>
+                <div class="col-6 text-right">
+                    <a :href="routesGlobal.login" class="text-light">
+                        <small>{{ $t('Login into your account', { locale }) }}</small>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -152,22 +196,26 @@
 
     export default {
         name: 'Register',
+        props: {
+            data: {
+                type: String,
+                required: true
+            }
+        },
         data () {
             return {
                 name: '',
                 email: '',
                 password: '',
-                passwordConfirm: '',
-                terms: '',
-                enableRegisterForm: true,
-                enableTermsAndPolicy: false,
-                transitionTime: 300,
+                password_confirmation: '',
+                terms: false,
+                sessionErrors: JSON.parse(this.data).sessionErrors
             }
         },
         computed: {
             ...mapState([ 'csrfToken', 'locale', 'routesGlobal' ]),
-            transitionStyleTime () {
-                return `animation-duration: ${this.transitionTime}ms`
+            hasSessionErrors () {
+                return this.sessionErrors.length > 0
             }
         },
         methods: {
@@ -177,20 +225,6 @@
                         document.querySelector('#registerForm').submit()
                     }
                 })
-            },
-
-            showTermsAndPolicy () {
-                this.enableRegisterForm = false
-                setTimeout(() => {
-                    this.enableTermsAndPolicy = true
-                }, this.transitionTime * 3)
-            },
-
-            showRegisterForm () {
-                this.enableTermsAndPolicy = false
-                setTimeout(() => {
-                    this.enableRegisterForm = true
-                }, this.transitionTime * 3)
             }
         },
         mounted () {

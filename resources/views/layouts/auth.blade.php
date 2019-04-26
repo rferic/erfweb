@@ -20,7 +20,7 @@
         <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
         <link href="{{ asset('admin/css/argon.css') }}" rel="stylesheet">
     </head>
-    <body>
+    <body class="bg-default">
         <div id="app">
             <main>
                 @yield('content')

@@ -4,7 +4,7 @@
     <auth-layout
         component="login"
         component-data="{{ json_encode([
-            'sessionErrors' => json_encode($errors->all()),
+            'sessionErrors' => $errors->all(),
             'remember' => old('remember') ? 0 : 1
         ]) }}"
         dusk="login"
