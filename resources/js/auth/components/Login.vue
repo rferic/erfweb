@@ -67,6 +67,25 @@
                             {{ errors.first('password') }}
                         </base-alert>
 
+                        <div class="row my-4">
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox custom-control-alternative">
+                                    <input
+                                        v-model="remember"
+                                        id="terms"
+                                        name="remember"
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                    />
+                                    <label for="terms" class="custom-control-label">
+                                        <span class="text-muted">
+                                            {{ $t('Remember me', { locale }) }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="text-center">
                             <base-button
                                 type="primary"

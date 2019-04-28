@@ -201,7 +201,7 @@
             },
             // API Request
             async destroyImageRequest ( image ) {
-                return await axios.delete(`${this.routes.baseRouteImage}/${image.id}/delete`, image)
+                return await this.axios.delete(`${this.routes.baseRouteImage}/${image.id}/delete`, image)
             }
         },
         created () {

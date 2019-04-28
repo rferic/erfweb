@@ -1,35 +1,30 @@
 <template>
-    <div class="left-sidebar">
-        <!-- Sidebar scroll-->
-        <div class="scroll-sidebar">
-            <!-- Sidebar navigation-->
-            <nav class="sidebar-nav">
-                <ul id="sidebarnavcustom" v-if="menuIsLoaded">
-                    <li class="nav-devider"></li>
-                    <sidebar-item
-                        v-for="(item, index) in menu"
-                        :key="index"
-                        :item="item"
-                    />
-                    <!-- Reload menu button -->
-                    <li class="item-refresh text-center">
-                        <i class="fa fa-refresh btn" @click="forceRefresh" />
-                    </li>
-                </ul>
-            </nav>
-            <!-- End Sidebar navigation -->
-        </div>
-        <!-- End Sidebar scroll-->
-    </div>
+    <side-bar
+        :background-color="sidebarBackground"
+        short-title="Argon"
+        title="Argon"
+    >
+        <template slot="links">
+            <sidebar-item
+                v-for="item in menu"
+                :key="item.key"
+                :link="item"
+                :sidebar-background="sidebarBackground"
+            />
+        </template>
+    </side-bar>
 </template>
 
 <script>
     import { mapState, mapGetters, mapActions } from 'vuex'
-    import SidebarItem from './Item'
 
     export default {
         name: 'SidebarIndex',
-        components: { SidebarItem },
+        data () {
+            return {
+                sidebarBackground: 'vue', //vue|blue|orange|green|red|primary
+            }
+        },
         computed: {
             ...mapState([ 'routesGlobal'  ]),
             ...mapState({
@@ -47,7 +42,7 @@
                 await this.getAdminMenu()
             },
             async getAdminMenu () {
-                const { data } = await axios.post(this.routesGlobal.adminMenu, {})
+                const { data } = await this.axios.post(this.routesGlobal.adminMenu, {})
                 this.refreshAdminMenu(data.result)
             }
         },
@@ -58,11 +53,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .sidebar-nav #sidebarnavcustom li.item-refresh {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-    }
-</style>

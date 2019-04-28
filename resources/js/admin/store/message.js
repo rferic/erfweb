@@ -9,10 +9,10 @@ const message = {
     },
     getters: {
         hasPendings: (state) => {
-            return state.state !== null ? state.state.status.pending > 0 : false
+            return state.state !== null ? parseInt(state.state.status.pending) > 0 : false
         },
         countPendings: (state) => {
-            return state.state !== null ? state.state.status.pending : 0
+            return state.state !== null ? parseInt(state.state.status.pending) : 0
         }
     },
     mutations: {

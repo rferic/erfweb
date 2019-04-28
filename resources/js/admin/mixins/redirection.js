@@ -86,7 +86,7 @@ const redirectionMixin = {
                 url = page !== null ? `${this.routes.getRedirections}?page=${page}` : this.routes.getRedirections
             }
 
-            const { data } = await axios.post(url, {
+            const { data } = await this.axios.post(url, {
                 perPage,
                 filters,
                 orderBy
@@ -94,11 +94,11 @@ const redirectionMixin = {
             return data
         },
         async createRedirectionRequest ({ code, slug_origin, slug_destine }) {
-            const { data } = await axios.post(this.routes.createRedirection, { code, slug_origin, slug_destine })
+            const { data } = await this.axios.post(this.routes.createRedirection, { code, slug_origin, slug_destine })
             return data
         },
         async destroyRedirectionRequest ( redirection ) {
-            const { data } = await axios.delete(`${this.routes.indexRedirections}/${redirection.id}/destroy`, {})
+            const { data } = await this.axios.delete(`${this.routes.indexRedirections}/${redirection.id}/destroy`, {})
             return data
         }
     }

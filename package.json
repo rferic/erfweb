@@ -10,7 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.18",
+        "axios": "^0.18.0",
         "bootstrap": "^4.3.1",
         "cross-env": "^5.1",
         "jquery": "^3.4.0",
@@ -42,6 +42,7 @@
         "v-clipboard": "^2.2.2",
         "vee-validate": "^2.2.4",
         "voo-i18n": "^1.0.10",
+        "vue-axios": "^2.1.4",
         "vue-blockui": "^1.1.7",
         "vue-chartjs": "3.4.2",
         "vue-clipboard2": "0.3.0",

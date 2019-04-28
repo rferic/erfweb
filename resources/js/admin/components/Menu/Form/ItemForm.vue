@@ -181,7 +181,7 @@
             },
             // API Request
             async getPageLocalesRequest ({ filters }) {
-                const { data } = await axios.post(this.routes.getPageLocales, { filters })
+                const { data } = await this.axios.post(this.routes.getPageLocales, { filters })
                 return data
             }
         },

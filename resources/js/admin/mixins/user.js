@@ -6,19 +6,19 @@ const userMixin = {
     },
     methods: {
         async getUserDataRequest () {
-            const { data } = await axios.post(this.routes.getUserData, {})
+            const { data } = await this.axios.post(this.routes.getUserData, {})
             return data
         },
         async disableUserRequest () {
-            const { data } = await axios.post(this.routes.disableUser, {})
+            const { data } = await this.axios.post(this.routes.disableUser, {})
             return data
         },
         async enableUserRequest () {
-            const { data } = await axios.post(this.routes.enableUser, {})
+            const { data } = await this.axios.post(this.routes.enableUser, {})
             return data
         },
         async destroyUserRequest () {
-            const { data } = await axios.delete(this.routes.destroyUser, {})
+            const { data } = await this.axios.delete(this.routes.destroyUser, {})
             return data
         }
     }

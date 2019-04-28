@@ -1,43 +1,25 @@
 <template>
-    <b-navbar toggleable="md" class="top-navbar">
-        <div class="navbar-header">
-            <a class="navbar-brand" :href="routesGlobal.dashboard">
-                <b>ERF</b>W
-                <span>Admin</span>
-            </a>
-        </div>
-        <div class="navbar-collapse">
-            <ul class="navbar-nav mr-auto mt-md-0">
-                <li class="nav-item">
-                    <a class="nav-link nav-toggler hidden-md-up text-muted" href="javascript:void(0)">
-                        <i class="mdi mdi-menu"></i>
-                    </a>
-                </li>
-                <li class="nav-item m-l-10">
-                    <a class="nav-link sidebartoggler hidden-sm-down text-muted" href="javascript:void(0)">
-                        <i class="ti-menu"></i>
-                    </a>
-                </li>
-            </ul>
-            <nav-right ref="navRight" />
-        </div>
-    </b-navbar>
+    <base-nav class="   navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
+        <ul class="navbar-nav align-items-center d-none d-md-flex">
+            <nav-message-notify
+                :title="titleNavMessages"
+                :alert="hasPendingMessages"
+                :items="lastPendingsToNotify"
+                :count="countPendings"
+                :url="`${routesGlobal.messages.index}?status=pending`"
+                :url-text="textUrlNavMessages"
+                icon="ni ni-email-83"
+            />
+            <nav-account />
+        </ul>
+    </base-nav>
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-    import NavRight from './Right'
+    import navMixin from './../../mixins/nav'
 
     export default {
         name: 'NavIndex',
-        components: {
-            NavRight
-        },
-        computed: {
-            ...mapState([ 'routesGlobal' ])
-        },
-        mounted () {
-            this.$emit('eventToRoot')
-        }
+        mixins: [ navMixin ],
     }
 </script>

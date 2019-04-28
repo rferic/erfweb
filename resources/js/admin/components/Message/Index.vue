@@ -55,7 +55,7 @@
         data () {
             return {
                 filters: this.clone(filterMessageStructure),
-                currentMessage: null,
+                currentMessage: JSON.parse(this.data).defaultMessage,
                 isLoaded: false
             }
         },

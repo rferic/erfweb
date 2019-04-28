@@ -62,7 +62,7 @@ const slugMixin = {
                 currentPageLocale = null
             }
 
-            const { data } = await axios.post(this.routes.getSlugIsFree, {
+            const { data } = await this.axios.post(this.routes.getSlugIsFree, {
                 type,
                 slug: this.slug.text,
                 lang: this.slug.lang,
@@ -72,7 +72,7 @@ const slugMixin = {
             return data
         },
         async getAllSlugsRequest () {
-            const { data } = await axios.post(this.routes.getAllSlugs, {})
+            const { data } = await this.axios.post(this.routes.getAllSlugs, {})
             return data
         }
     }

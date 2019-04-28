@@ -15,76 +15,82 @@ class AdminMenuHelper
     {
         return [
             [
+                'key' => 'dashboard',
+                'name' => __('Dashboard'),
+                'icon' => 'ni ni-tv-2 text-default',
+                'path' => route('admin.dashboard')
+            ],
+            [
                 'key' => 'messages',
-                'label' => __('Messages'),
-                'icon' => 'fa-envelope',
-                'url' => null,
+                'name' => __('Messages'),
+                'icon' => 'ni ni-email-83 text-orange',
+                'path' => null,
                 'childrens' => [
                     [
                         'key' => 'messages-inbox',
-                        'label' => __('Inbox'),
+                        'name' => __('Inbox'),
                         'icon' => null,
-                        'url' => route('admin.messages')
+                        'path' => route('admin.messages')
                     ],
                     [
                         'key' => 'messages-trash',
-                        'label' => __('Trash'),
+                        'name' => __('Trash'),
                         'icon' => null,
-                        'url' => route('admin.messages.trash')
+                        'path' => route('admin.messages.trash')
                     ]
                 ]
             ],
             [
                 'key' => 'Web',
-                'label' => __('Web'),
-                'icon' => 'fa-mixcloud',
-                'url' => null,
+                'name' => __('Web'),
+                'icon' => 'ni ni-world-2 text-green',
+                'path' => null,
                 'childrens' => [
                     [
                         'key' => 'pages',
-                        'label' => __('Pages'),
+                        'name' => __('Pages'),
                         'icon' => null,
-                        'url' => route('admin.pages')
+                        'path' => route('admin.pages')
                     ],
                     [
                         'key' => 'apps',
-                        'label' => __('Apps'),
+                        'name' => __('Apps'),
                         'icon' => null,
-                        'url' => route('admin.apps')
+                        'path' => route('admin.apps')
                     ],
                     [
                         'key' => 'menus',
-                        'label' => __('Menus'),
+                        'name' => __('Menus'),
                         'icon' => null,
-                        'url' => route('admin.menus')
+                        'path' => route('admin.menus')
                     ],
                     [
                         'key' => 'redirections',
-                        'label' => __('Redirections'),
+                        'name' => __('Redirections'),
                         'icon' => null,
-                        'url' => route('admin.redirections')
+                        'path' => route('admin.redirections')
                     ]
                 ]
             ],
             [
                 'key' => 'Images',
-                'label' => __('Images'),
-                'icon' => 'fa-image',
-                'url' => route('admin.images'),
+                'name' => __('Images'),
+                'icon' => 'ni ni-image text-info',
+                'path' => route('admin.images'),
                 'childrens' => []
             ],
             [
                 'key' => 'Users',
-                'label' => __('Users'),
-                'icon' => 'fa-users',
-                'url' => route('admin.users'),
+                'name' => __('Users'),
+                'icon' => 'ni ni-circle-08 text-blue',
+                'path' => route('admin.users'),
                 'childrens' => []
             ],
             [
                 'key' => 'Admins',
-                'label' => __('Admins'),
-                'icon' => 'fa-lock',
-                'url' => route('admin.admins'),
+                'name' => __('Admins'),
+                'icon' => 'ni ni-key-25 text-yellow',
+                'path' => route('admin.admins'),
                 'childrens' => []
             ]
         ];

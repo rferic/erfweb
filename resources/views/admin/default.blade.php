@@ -1,15 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <h1 class="box-title">{{ $title }}</h1>
-            <{{ $component }}
-                class="mt-4"
-                data="{{ isset($data) ? json_encode($data) : null }}"
-            />
-        </div>
-    </div>
+    <admin-layout
+        component="{{ $component }}"
+        title-page="{{ $title }}"
+        data="{{ isset($data) ? json_encode($data) : null }}"
+    />
 @endsection
 
 @section('script')

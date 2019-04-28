@@ -18,32 +18,11 @@
 
         <!-- Styles -->
         <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
-        <!--<link href="{{ asset('admin/css/eladmin.css') }}" rel="stylesheet">-->
+        <link href="{{ asset('admin/css/argon.css') }}" rel="stylesheet">
     </head>
     <body class="fix-header fix-sidebar mini-sidebar">
         <div id="app">
-            <main id="main-wrapper">
-                <!-- header header  -->
-                <div class="header">
-                    <nav-index ref="nav" />
-                </div>
-                <!-- End header header -->
-                <!-- Left Sidebar  -->
-                <div class="left-sidebar">
-                    <sidebar-index ref="sidebar" />
-                </div>
-                <!-- End Left Sidebar  -->
-                <!-- Page wrapper  -->
-                <div class="page-wrapper">
-                    <div class="container-fluid">
-                        <div class="row justify-content-center">
-                            <div class="col-md-11">
-                                @yield('content')
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+            @yield('content')
         </div>
         <script>
             const locale = "{{ App::getLocale() }}"

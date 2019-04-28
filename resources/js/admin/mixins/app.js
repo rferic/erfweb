@@ -78,7 +78,7 @@ const appMixin = {
                 url = page !== null ? `${this.routes.getApps}?page=${page}` : this.routes.getApps
             }
 
-            const { data } = await axios.post(url, {
+            const { data } = await this.axios.post(url, {
                 perPage,
                 filters,
                 orderBy
@@ -86,11 +86,11 @@ const appMixin = {
             return data
         },
         async storeAppRequest ( app ) {
-            const { data } = await axios.post(`${this.routes.storeApp}`, app)
+            const { data } = await this.axios.post(`${this.routes.storeApp}`, app)
             return data
         },
         async destroyAppRequest ( app ) {
-            const { data } = await axios.delete(`${this.routes.getApps}/${app.id}/destroy`, {})
+            const { data } = await this.axios.delete(`${this.routes.getApps}/${app.id}/destroy`, {})
             return data
         }
     }

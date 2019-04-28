@@ -108,7 +108,7 @@ const pageMixin = {
                 url = page !== null ? `${this.routes.getPages}?page=${page}` : this.routes.getPages
             }
 
-            const { data } = await axios.post(url, {
+            const { data } = await this.axios.post(url, {
                 perPage,
                 filters,
                 orderBy
@@ -116,23 +116,23 @@ const pageMixin = {
             return data
         },
         async getAllPagesParentRequest () {
-            const { data } = await axios.post(this.routes.getAllPagesParent, {})
+            const { data } = await this.axios.post(this.routes.getAllPagesParent, {})
             return data
         },
         async storePageRequest ( page ) {
-            const { data } = await axios.post(`${this.routes.storePage}`, page)
+            const { data } = await this.axios.post(`${this.routes.storePage}`, page)
             return data
         },
         async removePageRequest ( page ) {
-            const { data } = await axios.delete(`${this.routes.getPages}/${page.id}/remove`, {})
+            const { data } = await this.axios.delete(`${this.routes.getPages}/${page.id}/remove`, {})
             return data
         },
         async restorePageRequest ( page ) {
-            const { data } = await axios.post(`${this.routes.getPages}/${page.id}/restore`, {})
+            const { data } = await this.axios.post(`${this.routes.getPages}/${page.id}/restore`, {})
             return data
         },
         async destroyPageRequest ( page ) {
-            const { data } = await axios.delete(`${this.routes.getPages}/${page.id}/destroy`, {})
+            const { data } = await this.axios.delete(`${this.routes.getPages}/${page.id}/destroy`, {})
             return data
         }
     }

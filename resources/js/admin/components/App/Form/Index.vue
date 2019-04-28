@@ -291,7 +291,7 @@
             },
             // API Request
             async storeAppRequest ( app ) {
-                const { data } = await axios.post(`${this.routes.storeApp}`, app)
+                const { data } = await this.axios.post(`${this.routes.storeApp}`, app)
                 return data
             }
         }

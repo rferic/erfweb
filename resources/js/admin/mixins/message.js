@@ -97,7 +97,7 @@ const messageMixin = {
                 url = page !== null ? `${routes.getMessages}?page=${page}` : routes.getMessages
             }
 
-            const { data } = await axios.post(url, {
+            const { data } = await this.axios.post(url, {
                 perPage,
                 filters,
                 orderBy
@@ -105,27 +105,27 @@ const messageMixin = {
             return data
         },
         async getMessageStateRequest ({ filters }) {
-            const response = await axios.post(this.routesGlobal.messages.getState, { filters })
+            const response = await this.axios.post(this.routesGlobal.messages.getState, { filters })
             return response.data
         },
         async getAuthorRequest ( message ) {
-            const { data } = await axios.post(`${routes.getMessages}/${message.id}/get-author`, {})
+            const { data } = await this.axios.post(`${routes.getMessages}/${message.id}/get-author`, {})
             return data
         },
         async updateMessageRequest ( message ) {
-            const { data } = await axios.post(`${this.routes.getMessages}/${message.id}/update`, message)
+            const { data } = await this.axios.post(`${this.routes.getMessages}/${message.id}/update`, message)
             return data
         },
         async removeMessageRequest ( message ) {
-            const { data } = await axios.delete(`${this.routes.getMessages}/${message.id}/remove`, {})
+            const { data } = await this.axios.delete(`${this.routes.getMessages}/${message.id}/remove`, {})
             return data
         },
         async restoreMessageRequest ( message ) {
-            const { data } = await axios.post(`${this.routes.getMessages}/${message.id}/restore`, {})
+            const { data } = await this.axios.post(`${this.routes.getMessages}/${message.id}/restore`, {})
             return data
         },
         async destroyMessageRequest ( message ) {
-            const { data } = await axios.delete(`${this.routes.getMessages}/${message.id}/destroy`, {})
+            const { data } = await this.axios.delete(`${this.routes.getMessages}/${message.id}/destroy`, {})
             return data
         }
     }

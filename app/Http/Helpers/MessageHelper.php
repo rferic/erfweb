@@ -49,14 +49,15 @@ class MessageHelper
         );
     }
 
-    static function getIndexViewOptions ( $onlyTrashed = false )
+    static function getIndexViewOptions ( $onlyTrashed = false, $defaultMessage = null )
     {
         return [
             'component' => 'index-message',
             'data' => [
                 'statusList' => MessageHelper::getStatusList(),
                 'tagsList' => MessageHelper::getTagsList(),
-                'onlyTrashed' => $onlyTrashed
+                'onlyTrashed' => $onlyTrashed,
+                'defaultMessage' => $defaultMessage
             ],
             'routes' => [
                 'getMessages' => route('admin.messages.get'),

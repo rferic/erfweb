@@ -1,55 +1,29 @@
 <template>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-muted text-muted" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa" :class="icon"></i>
-            <div class="notify">
-                <span
-                    v-if="count !== null"
-                    class="count">{{ count }}</span>
-                <span
-                    v-if="alert"
-                    class="heartbit"></span>
-                <span
-                    v-if="alert"
-                    class="point"></span>
-            </div>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right mailbox animated zoomIn">
-            <ul>
-                <li>
-                    <div class="drop-title">{{ title }} <span v-if="count !== null">({{ count }})</span></div>
-                </li>
-                <li>
-                    <div class="message-center">
-                        <!-- Message -->
-                        <a
-                            v-for="(item, index) in items"
-                            :key="index"
-                            :href="item.url">
-                            <div
-                                class="btn btn-circle m-r-10"
-                                :class="item.prepend.class">
-                                <i
-                                    class="fa"
-                                    :class="item.prepend.icon"></i>
-                            </div>
-                            <div class="mail-contnet">
-                                <h5>{{ item.title }}</h5>
-                                <span class="mail-desc">{{ item.content }}</span> <span class="time">{{ item.time | moment("LLL") }}</span>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-                <li>
-                    <a
-                        class="nav-link text-center"
-                        :href="url">
-                        <strong>{{ urlText }}</strong> <i class="fa fa-angle-right"></i>
-                    </a>
-                </li>
-            </ul>
+    <base-dropdown class="nav-link pr-0">
+        <div class="media align-items-center" slot="title">
+            <i :class="icon" />
+            <sup v-if="count !== null" class="ml-1">{{ count }}</sup>
         </div>
-    </li>
+        <template>
+            <div class=" dropdown-header noti-title">
+                <h6 class="text-overflow m-0">{{ title }} <span v-if="count !== null">({{ count }})</span></h6>
+                <div class="dropdown-divider"></div>
+                <a v-for="(item, index) in items"
+                    :key="index"
+                    :href="item.url"
+                    class="dropdown-item"
+                >
+                    <div :class="`text-${item.prepend.class}`">
+                        <i class="fa" :class="item.prepend.icon" />
+                        <b>{{ item.title }}</b>
+                    </div>
+                    <div>
+                        <span class="time">{{ item.time | moment("LLL") }}</span>
+                    </div>
+                </a>
+            </div>
+        </template>
+    </base-dropdown>
 </template>
 
 <script>
@@ -98,12 +72,7 @@
 </script>
 
 <style scoped>
-    .notify .count {
-        font-size: 80%;
-        position: absolute;
-        color: #ff4249;
-        font-weight: bold;
-        margin-top: -5px;
-        margin-left: 5px;
+    .icon i {
+        font-size: .8rem;
     }
 </style>

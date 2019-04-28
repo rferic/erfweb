@@ -143,7 +143,7 @@
                 this.$emit('onSaveMessageSuccess', data)
             },
             async createRequest ( message ) {
-                return await axios.post(this.routes.createMessage, message)
+                return await this.axios.post(this.routes.createMessage, message)
             }
         }
     }

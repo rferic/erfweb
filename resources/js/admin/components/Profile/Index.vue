@@ -326,7 +326,7 @@
                     return { result: false }
                 }
 
-                const response = await axios.post(this.routes.emailIsFree, {
+                const response = await this.axios.post(this.routes.emailIsFree, {
                     email: this.user.email
                 })
 
@@ -407,7 +407,7 @@
                 }
 
                 try {
-                    const response = await axios.post(this.routes.userUpdate, paramsRequest)
+                    const response = await this.axios.post(this.routes.userUpdate, paramsRequest)
                     return response.data
                 } catch (err) {
                     return { result: false }
@@ -415,7 +415,7 @@
             },
             async removeTemporalImage () {
                 if ( this.user.avatar !== null && this.getAvatarIsImage() && this.imageIsTemporal ) {
-                    const { result, data } = await axios.delete(this.routes.removeImage, {
+                    const { result, data } = await this.axios.delete(this.routes.removeImage, {
                         data: {
                             image: this.user.avatar
                         }

@@ -140,6 +140,16 @@ class MessageTest extends TestCase
             ->assertSuccessful();
     }
 
+    public function testViewDetail ()
+    {
+        $this->withExceptionHandling();
+
+        $this
+            ->actingAs($this->user)
+            ->get(route('admin.messages.detail', Message::all()->random()->id))
+            ->assertSuccessful();
+    }
+
     public function testPostGetMessagesWithoutParams ()
     {
         $this->withExceptionHandling();

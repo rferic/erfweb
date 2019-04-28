@@ -1,40 +1,40 @@
 <template>
-    <li
-        v-if=""
-        class="nav-item dropdown background-avatar"
-        :style="`background-image: url(${avatar})`"
-    >
-        <a class="nav-link dropdown-toggle text-white text-center" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ acronym }}
-        </a>
-        <div class="dropdown-menu dropdown-menu-right animated zoomIn">
-            <ul class="dropdown-user">
-                <li>
-                    <a :href="routesGlobal.profile.index">
-                        <i class="ti-user"></i> {{ $t('Profile', locale) }}
-                    </a>
-                </li>
-                <li>
-                    <form
-                        id="logout-form"
-                        ref="logoutForm"
-                        :action="routesGlobal.logout"
-                        method="POST"
-                        style="display: none;">
-                        <input
-                            type="hidden"
-                            name="_token"
-                            :value="csrfToken" />
-                    </form>
-                    <a
-                        href="#"
-                        @click="logout">
-                        <i class="fa fa-power-off"></i> Logout
-                    </a>
-                </li>
-            </ul>
+    <base-dropdown class="nav-link pr-0" tag="li">
+        <div class="media align-items-center" slot="title">
+            <span class="avatar avatar-sm rounded-circle">
+              <img alt="Image placeholder" :src="avatar">
+            </span>
+            <div class="media-body ml-2 d-none d-lg-block">
+                <span class="mb-0 text-sm  font-weight-bold">{{ acronym }}</span>
+            </div>
         </div>
-    </li>
+        <form
+            id="logout-form"
+            ref="logoutForm"
+            :action="routesGlobal.logout"
+            method="POST"
+            style="display: none;">
+            <input
+                type="hidden"
+                name="_token"
+                :value="csrfToken" />
+        </form>
+
+        <template>
+            <div class=" dropdown-header noti-title">
+                <h6 class="text-overflow m-0">{{ $t('Welcome!', { locale }) }}</h6>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a :href="routesGlobal.profile.index" class="dropdown-item">
+                <i class="ni ni-single-02"></i>
+                <span>{{ $t('Profile', locale) }}</span>
+            </a>
+            <a href="#" @click="logout" class="dropdown-item">
+                <i class="ni ni-user-run"></i>
+                <span>{{ $t('Logout', { locale }) }}</span>
+            </a>
+        </template>
+    </base-dropdown>
 </template>
 
 <script>

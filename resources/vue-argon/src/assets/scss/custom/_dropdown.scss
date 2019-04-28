@@ -3,3 +3,26 @@
 //
 
 @import "../core/dropdowns/dropdown";
+
+// Custom
+.dropdown-menu {
+    margin-left: -100px;
+    max-width: 250px;
+
+    .dropdown-item {
+        span {
+            white-space: normal;
+        }
+
+        &.active,
+        &:active {
+            color: $dropdown-link-hover-color;
+            text-decoration: none;
+            @include gradient-bg($dropdown-link-hover-bg);
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        margin-left: -130px;
+    }
+}

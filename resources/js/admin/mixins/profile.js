@@ -6,7 +6,7 @@ const profileMixin = {
     },
     methods: {
         async getDataProfileRequest () {
-            const { data } = await axios.post(this.routesGlobal.profile.getData, {})
+            const { data } = await this.axios.post(this.routesGlobal.profile.getData, {})
             return data
         }
     }

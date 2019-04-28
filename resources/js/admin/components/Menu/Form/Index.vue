@@ -175,11 +175,11 @@
             },
             // API Request
             async storeMenuRequest ( menu ) {
-                const { data } = await axios.post(this.routes.storeMenu, menu)
+                const { data } = await this.axios.post(this.routes.storeMenu, menu)
                 return data
             },
             async destroyMenuRequest ( menu ) {
-                await axios.delete(`${this.routes.getMenus}/${menu.id}/destroy`, {})
+                await this.axios.delete(`${this.routes.getMenus}/${menu.id}/destroy`, {})
             }
         }
     }

@@ -7,3 +7,22 @@
 @import "../core/navbars/navbar-search";
 @import "../core/navbars/navbar-dropdown";
 @import "../core/navbars/navbar-collapse";
+
+// Custom
+.navbar-nav {
+    margin-left: auto;
+
+    li.nav-item {
+        cursor: pointer;
+
+        &.nav-item-current > a {
+            color: $navbar-light-hover-color;
+        }
+    }
+
+    .nav-childrens {
+        -webkit-box-shadow: inset 0px 0px 8px 0px rgba(183, 178, 178, 0.75);
+        -moz-box-shadow: inset 0px 0px 8px 0px rgba(183, 178, 178, 0.75);
+        box-shadow: inset 0px 0px 9px 0px rgba(183, 178, 178, 0.75);
+    }
+}

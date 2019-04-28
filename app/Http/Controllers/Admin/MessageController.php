@@ -35,6 +35,17 @@ class MessageController extends Controller
         return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
     }
 
+    public function detail ( Message $message)
+    {
+        $vieOptions = MessageHelper::getIndexViewOptions(false, $message);
+        $title = __('Messages');
+        $component = $vieOptions['component'];
+        $data = $vieOptions['data'];
+        $routes = $vieOptions['routes'];
+
+        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+    }
+
     public function indexTrash ()
     {
         $vieOptions = MessageHelper::getIndexViewOptions(true);

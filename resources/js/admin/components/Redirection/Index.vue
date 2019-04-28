@@ -285,7 +285,7 @@
                     url = page !== null ? `${this.routes.getRedirections}?page=${page}` : this.routes.getRedirections
                 }
 
-                const { data } = await axios.post(url, {
+                const { data } = await this.axios.post(url, {
                     perPage,
                     filters
                 })

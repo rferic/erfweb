@@ -46,6 +46,7 @@ Route::group(
         Route::post('/profile/get-data', 'Admin\ProfileController@getData')->name('admin.profile.getData');
         // Admin Messages
         Route::get('/messages', 'Admin\MessageController@index')->name('admin.messages');
+        Route::get('/messages/{message}', 'Admin\MessageController@detail')->name('admin.messages.detail');
         Route::get('/messages/trash', 'Admin\MessageController@indexTrash')->name('admin.messages.trash');
         Route::post('/messages/get-state', 'Admin\MessageController@getState')->name('admin.messages.getState');
         Route::post('/messages/get-last-pending', 'Admin\MessageController@getLastPending')->name('admin.messages.getLastPending');

@@ -191,11 +191,11 @@
             },
             // API Request
             async createImageRequest ( image ) {
-                const { data } = await axios.post(`${this.routes.baseRouteImage}/create`, image)
+                const { data } = await this.axios.post(`${this.routes.baseRouteImage}/create`, image)
                 return data
             },
             async updateImageRequest ( image ) {
-                const { data } = await axios.post(`${this.routes.baseRouteImage}/${image.id}/update`, image)
+                const { data } = await this.axios.post(`${this.routes.baseRouteImage}/${image.id}/update`, image)
                 return data
             }
         },
