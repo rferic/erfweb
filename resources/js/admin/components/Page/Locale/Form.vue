@@ -18,10 +18,7 @@
                 leave-active-class="slideOutUp"
             >
                 <b-row v-if="enable">
-                    <b-col
-                        cols="6"
-                        xs="12"
-                    >
+                    <b-col lg="6" sm="12">
                         <b-form-group :label="`${$t('Title', { locale: locale })}: *`">
                             <b-form-input
                                 v-model="pageLocale.title"
@@ -43,8 +40,8 @@
                         </b-form-group>
                     </b-col>
                     <b-col
-                        cols="6"
-                        xs="12"
+                        lg="6"
+                        sm="12"
                     >
                         <slug-input
                             ref="slug"
@@ -93,7 +90,7 @@
                         <label>{{ $t('SEO Keywords', { locale } ) }}:</label>
                         <input-tag v-model="keywords" class="input-tags input-tags-primary" />
                     </b-col>
-                    <b-col cols="6">
+                    <b-col lg="6">
                         <b-form-group :label="`${$t('Layout', { locale: locale })}: *`">
                             <b-form-select
                                 name="layout"
@@ -122,7 +119,7 @@
                             </b-form-select>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
+                    <b-col lg="6">
                         <b-form-group :label="`${$t('Container width', { locale: locale })}: *`">
                             <b-form-select
                                 name="width"

@@ -1,25 +1,33 @@
 <template>
     <b-row>
-        <b-col v-if="hasMenus" cols="3" xs="12">
-            <list-menu
-                :menus="menus"
-                :current-menu="currentMenu"
-                @onCreateMenu="onCreateMenu"
-                @onEditMenu="onEditMenu"
-            />
+        <b-col v-if="hasMenus" lg="3" sm="12">
+            <b-card>
+                <h3>{{ $t('Menus list', { locale }) }}</h3>
+                <list-menu
+                    :menus="menus"
+                    :current-menu="currentMenu"
+                    @onCreateMenu="onCreateMenu"
+                    @onEditMenu="onEditMenu"
+                />
+            </b-card>
         </b-col>
-        <b-col v-if="hasMenus" cols="9" xs="12">
-            <index-form-menu
-                :data="data"
-                :menu-origin="currentMenu"
-                @onSaveMenuSuccess="onSaveMenuSuccess"
-                @onDestroyMenuSuccess="onDestroyMenuSuccess"
-            />
+        <b-col v-if="hasMenus" lg="9" sm="12">
+            <b-card>
+                <h3>{{ $t('Menu form', { locale }) }}</h3>
+                <index-form-menu
+                    :data="data"
+                    :menu-origin="currentMenu"
+                    @onSaveMenuSuccess="onSaveMenuSuccess"
+                    @onDestroyMenuSuccess="onDestroyMenuSuccess"
+                />
+            </b-card>
         </b-col>
-        <b-col v-else cols="12">
-            <b-alert :show="!hasMenus" variant="warning">
-                {{ $t('Menus not found', { locale }) }}
-            </b-alert>
+        <b-col v-else lg="12">
+            <b-card>
+                <b-alert :show="!hasMenus" variant="warning">
+                    {{ $t('Menus not found', { locale }) }}
+                </b-alert>
+            </b-card>
         </b-col>
     </b-row>
 </template>
@@ -30,6 +38,7 @@
     import IndexFormMenu from './Form/Index'
     import cloneMixin from './../../mixins/clone'
     import { menuStructure } from './../../structures/menu'
+    import BCard from "bootstrap-vue/src/components/card/card";
 
     export default {
         name: 'IndexMenu',
@@ -39,7 +48,7 @@
                 required: true
             }
         },
-        components: { ListMenu, IndexFormMenu },
+        components: {BCard, ListMenu, IndexFormMenu },
         mixins: [ cloneMixin ],
         data () {
             return {

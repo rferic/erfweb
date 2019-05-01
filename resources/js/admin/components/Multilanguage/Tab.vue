@@ -4,7 +4,7 @@
             pills
             card
             vertical
-            class="tabs-pills"
+            class="tabs-pills tabs-multilanguage"
             v-model="tab"
         >
             <b-tab

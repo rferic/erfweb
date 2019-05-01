@@ -3,14 +3,16 @@
         <div class="filters">
             <b-nav vertical>
                 <div class="dropdown-divider" />
-                <input-text-filter @onChangeFilter="onChangeTextFilter" />
+                <input-text-filter @onChangeFilter="onChangeTextFilter" class="mb-2" />
                 <div class="dropdown-divider" />
                 <checkboxes-filter
                     :title="$t('Status', { locale })"
                     :options="statusList"
                     :translate-label="true"
                     @onChangeFilter="onChangeStatusFilter"
+                    class="mb-2"
                 />
+                <div class="dropdown-divider" />
                 <checkboxes-filter
                     :title="$t('Tags', { locale })"
                     :options="tagsList"

@@ -4,23 +4,23 @@
             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         </BlockUI>
         <b-row v-if="viewList">
-            <b-col
-                cols="2"
-                xs="12">
-                <filter-message
-                    :data="data"
-                    @onChangeFilters="onChangeFilters"
-                />
+            <b-col lg="3" sm="12" class="mb-2">
+                <b-card>
+                    <filter-message
+                        :data="data"
+                        @onChangeFilters="onChangeFilters"
+                    />
+                </b-card>
             </b-col>
-            <b-col
-                cols="10"
-                xs="12">
-                <list-message
-                    ref="listMessage"
-                    :data="data"
-                    :filters="filters"
-                    @onGoToMessage="goToMessage"
-                />
+            <b-col lg="9" sm="12" class="mb-2">
+                <b-card>
+                    <list-message
+                        ref="listMessage"
+                        :data="data"
+                        :filters="filters"
+                        @onGoToMessage="goToMessage"
+                    />
+                </b-card>
             </b-col>
         </b-row>
         <b-row v-if="viewForm">

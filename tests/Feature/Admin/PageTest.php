@@ -252,6 +252,7 @@ class PageTest extends TestCase
 
         $params = [
             'id' => null,
+            'page_id' => $this->faker->boolean ? '' : Page::all()->random()->id,
             'locales' => $pageLocales
         ];
         // Testing create a new page
@@ -271,6 +272,7 @@ class PageTest extends TestCase
         // Update page
         $params = [
             'id' => $page->id,
+            'page_id' => $params['page_id'],
             'locales' => []
         ];
 
@@ -397,6 +399,12 @@ class PageTest extends TestCase
         $pageLocales = $data['pageLocales'];
         $allContents = $data['allContents'];
         $params = $data['params'];
+
+        if ( is_null($params['page_id']) ) {
+            $this->assertNull($page->page_id);
+        } else {
+            $this->assertEquals($params['page_id'], $page->page_id);
+        }
 
         if ( isset($params['filters']['parent']) ) {
             $this->assertEquals($params['filters']['parent'], $page->parent_id);

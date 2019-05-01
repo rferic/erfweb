@@ -27,23 +27,25 @@ class UserController extends Controller
     public function index ()
     {
         $vieOptions = $this->getIndexViewOptions('public');
-        $title = __('Users');
+        $title = __('Users management');
+        $description = __('These people have seen your work');
         $component = $vieOptions['component'];
         $data = $vieOptions['data'];
         $routes = $vieOptions['routes'];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function indexAdmins ()
     {
         $vieOptions = $this->getIndexViewOptions('admin');
-        $title = __('Admin users');
+        $title = __('Admin management');
+        $description = __('Here you have your companions');
         $component = $vieOptions['component'];
         $data = $vieOptions['data'];
         $routes = $vieOptions['routes'];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function detail ( User $user )
@@ -186,23 +188,36 @@ class UserController extends Controller
             'component' => 'index-user',
             'data' => [
                 'role' => $role,
-                'defaultUser' => $user
+                'defaultUser' => $user,
+                'roles' => RoleHelper::getRoles()
             ],
             'routes' => [
+                'basePath' => route('admin.users'),
                 'getUsers' => route('admin.users.get')
             ]
         ];
     }
 
-    private function getUsers ( $filters, $perPage )
+    protected function getUsers ( $filters, $perPage )
     {
-        $query = User::role($filters['role'])->query();
+        $query = User::query();
+
+        if ( isset($filters['role']) && in_array($filters['role'], RoleHelper::getRoles()) ) {
+            $usersWithRole = isset($filters['banned']) && $filters['banned']
+                ? User::withTrashed()->role($filters['role'])->get()
+                : User::role($filters['role'])->get();
+            $query->where(function ($query) use ($usersWithRole) {
+                foreach ( $usersWithRole AS $userWithRole ){
+                    $query->orWhere('id', $userWithRole->id);
+                }
+            });
+        }
 
         if ( isset($filters['banned']) && $filters['banned'] ) {
             $query = $query->withTrashed();
         }
 
-        if (  isset($filters['text']) && !is_null($filters['text']) ) {
+        if (  isset($filters['text']) && !is_null($filters['text']) && $filters['text'] !== '' ) {
             $text = $filters['text'];
             $query->where(function ($query) use ($text) {
                 return $query

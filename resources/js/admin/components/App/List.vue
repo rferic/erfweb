@@ -190,14 +190,16 @@
             >
                 <em>{{ apps.length }} / {{ totalApps }}</em>
             </div>
-            <b-button
-                v-if="hasNextPage"
-                block
-                variant="primary"
-                @click="loadNextPage"
-            >
-                {{ $t('View more', { locale: this.locale }) }}
-            </b-button>
+            <div id="viewMore">
+                <b-button
+                    v-if="hasNextPage"
+                    block
+                    variant="primary"
+                    @click="loadNextPage"
+                >
+                    {{ $t('View more', { locale: this.locale }) }}
+                </b-button>
+            </div>
         </v-wait>
     </transition>
 </template>
@@ -333,6 +335,10 @@
                 })
 
                 this.isBusy = false
+                this.$scrollTo(`#viewMore`, 1000, {
+                    easing: 'ease-in',
+                    offset: 1000
+                })
             },
             async destroy () {
                 await this.destroyAppRequest(this.appToDestroy)

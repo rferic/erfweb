@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-row>
-            <b-col cols="6" xs="12">
+            <b-col lg="6" sm="12">
                 <img v-if="image.src !== ''" :src="getCalculatedSrcFromAdmin(image)" :title="image.title" />
                 <b-alert
                     :show="image.src === ''"
@@ -11,7 +11,7 @@
                     {{ $t('Image is required', { locale }) }}
                 </b-alert>
             </b-col>
-            <b-col cols="6" xs="12">
+            <b-col lg="6" sm="12">
                 <b-form-group :label="`${$t('Title', { locale: locale })}: *`">
                     <b-form-input
                         v-model="image.title"
@@ -40,7 +40,7 @@
                     v-on:vdropzone-error="onErrorDropzone"
                 />
             </b-col>
-            <b-col cols="6" xs="12">
+            <b-col lg="6" sm="12">
                 <b-input-group class="mt-3">
                     <b-form-input
                         :value="link"
@@ -58,7 +58,7 @@
                     </b-input-group-append>
                 </b-input-group>
             </b-col>
-            <b-col v-if="showError && !hasImage" cols="12">
+            <b-col v-if="showError && !hasImage" lg="12">
                 <b-alert
                     :show="!hasImage"
                     variant="danger"
@@ -66,9 +66,6 @@
                     <i class="fa fa-warning" />
                     {{ $t('Image is required', { locale }) }}
                 </b-alert>
-            </b-col>
-            <b-col cols="12">
-                <hr>
             </b-col>
         </b-row>
         <form-buttons

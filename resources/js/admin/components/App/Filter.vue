@@ -3,19 +3,22 @@
         <div>
             <b-nav vertical>
                 <div class="dropdown-divider" />
-                <input-text-filter @onChangeFilter="onChangeTextFilter" />
+                <input-text-filter @onChangeFilter="onChangeTextFilter" class="mb-2" />
                 <div class="dropdown-divider" />
                 <checkboxes-filter
                     :title="$t('Types', { locale })"
                     :options="filters.types"
                     :translate-label="true"
                     @onChangeFilter="onChangeTypesFilter"
+                    class="mb-2"
                 />
+                <div class="dropdown-divider" />
                 <checkboxes-filter
                     :title="$t('Status', { locale })"
                     :options="filters.status"
                     :translate-label="true"
                     @onChangeFilter="onChangeStatusFilter"
+                    class="mb-2"
                 />
             </b-nav>
         </div>

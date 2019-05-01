@@ -28,12 +28,13 @@ class AppController extends Controller
     public function index ()
     {
         $vieOptions = $this->getIndexViewOptions();
-        $title = __('Apps');
+        $title = __('Apps management');
+        $description = __('CRUD for yours apps');
         $component = $vieOptions['component'];
         $data = $vieOptions['data'];
         $routes = $vieOptions['routes'];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function get ( Request $request )

@@ -12,7 +12,8 @@
 .navbar-nav {
     margin-left: auto;
 
-    li.nav-item {
+    li.nav-item,
+    li.nav-link {
         cursor: pointer;
 
         &.nav-item-current > a {

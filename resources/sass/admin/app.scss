@@ -24,10 +24,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-table#messages > thead {
-    display: none;
-}
-
 .badge.semaphore {
     border-radius: 12px;
     width: 12px;
@@ -51,5 +47,24 @@ table#messages > thead {
     top: 0;
     &:hover {
         opacity: 1;
+    }
+}
+
+.tabs-multilanguage {
+    .nav-item {
+        padding-right: 0 !important;
+         a {
+             border-radius: 0;
+         }
+
+        &:first-child a {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        &:last-child a {
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Http\Controllers\Admin\ImageTemporalController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Helpers\RoleHelper;
 use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -30,20 +32,24 @@ class Usertest extends TestCase
         app()['cache']->forget('spatie.permission.cache');
 
         foreach ( RoleHelper::getRoles() AS $role ) {
-            Role::create(['name' => $role]);
-        }
-
-        $this->admin = factory(User::class)->create()->assignRole('admin');
-        factory(User::class, $this->faker->numberBetween(1, 10))->create()->each(function ($user) {
-            $user->assignRole('admin');
-        });
-
-        foreach ( RoleHelper::getRoles() AS $role ) {
             array_push($this->roles, [
                 'key' => $role,
                 'value' => $this->faker->boolean
             ]);
         }
+
+        foreach ( $this->roles AS $role ) {
+            Role::create(['name' => $role['key']]);
+        }
+
+        $this->admin = factory(User::class)->create()->assignRole('admin');
+        factory(User::class, $this->faker->numberBetween(1, 100))->create()->each(function ($user) {
+            foreach ( $this->roles AS $role ) {
+                if ( $this->faker->boolean ) {
+                    $user->assignRole($role['key']);
+                }
+            }
+        });
     }
 
     public function testEmailIsFreeWrongParamsRequest ()
@@ -89,6 +95,40 @@ class Usertest extends TestCase
             ->post(route('admin.users.emailIsFree', $user->id), [ 'email' => $user2->email ])
             ->assertSuccessful()
             ->assertExactJson(['result' => $user->email === $user2->email]);
+    }
+
+    public function testPostGetUsers ()
+    {
+        $this->withExceptionHandling();
+
+        $controller = new UserControllerTest();
+
+        $params = [
+            'filters' => [
+                'text' => $this->faker->boolean ? '' : User::all()->random()->email,
+                'role' => $this->faker->boolean ? null : $this->roles[$this->faker->numberBetween(0, COUNT($this->roles)-1)]['key'],
+                'banned' => $this->faker->boolean ? true : false
+            ],
+            'perPage' => $this->faker->numberBetween(1, 100),
+        ];
+
+        $responseToAssert = $controller->getTesting($params);
+        $response = $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.get'), $params)
+            ->assertSuccessful();
+
+        $response = json_decode(json_encode($response))->baseResponse->original;
+        $responseToAssert = json_decode(json_encode($responseToAssert))->original;
+
+        $this->assertEquals($response->per_page, $params['perPage']);
+        $this->assertEquals(
+            intval($response->per_page) > intval($response->total)
+                ? intval($response->total)
+                : intval($response->per_page),
+            COUNT($response->data)
+        );
+        $this->assertEquals($response->total, $responseToAssert->total);
     }
 
     public function testPostGetData ()
@@ -331,7 +371,7 @@ class Usertest extends TestCase
 
     public function testDeleteDestroy ()
     {
-        //$this->withExceptionHandling();
+        $this->withExceptionHandling();
 
         $user = User::all()->random();
 
@@ -351,5 +391,13 @@ class Usertest extends TestCase
             ->assertSuccessful();
 
         $this->assertNull(User::withTrashed()->find($user->id));
+    }
+}
+
+class UserControllerTest extends UserController
+{
+    public function getTesting ( $params )
+    {
+        return Response::json($this->getUsers($params['filters'], $params['perPage']));
     }
 }

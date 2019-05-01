@@ -4,7 +4,12 @@
     <admin-layout
         component="{{ $component }}"
         title-page="{{ $title }}"
-        data="{{ isset($data) ? json_encode($data) : null }}"
+        @isset($description)
+            description-page="{{ $description }}"
+        @endisset
+        @isset($data)
+            data="{{ json_encode($data) }}"
+        @endisset
     />
 @endsection
 

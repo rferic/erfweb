@@ -27,34 +27,38 @@ class MessageController extends Controller
     public function index ()
     {
         $vieOptions = MessageHelper::getIndexViewOptions(false);
-        $title = __('Messages');
+        $title = __('Messages inbox');
+        $description = __('Your inbox. Keep in touch with the outside!');
         $component = $vieOptions['component'];
         $data = $vieOptions['data'];
         $routes = $vieOptions['routes'];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function detail ( Message $message)
     {
+        $message = Message::with('author')->find($message->id);
         $vieOptions = MessageHelper::getIndexViewOptions(false, $message);
-        $title = __('Messages');
+        $title = __('Message');
+        $description = __('Here is your message. Read and answer!');
         $component = $vieOptions['component'];
         $data = $vieOptions['data'];
         $routes = $vieOptions['routes'];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function indexTrash ()
     {
         $vieOptions = MessageHelper::getIndexViewOptions(true);
-        $title = __('Messages in trash');
+        $title = __('Messages trash');
+        $description = __('Your trahs. Be clean!');
         $component = $vieOptions['component'];
         $data = $vieOptions['data'];
         $routes = $vieOptions['routes'];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function get ( Request $request )

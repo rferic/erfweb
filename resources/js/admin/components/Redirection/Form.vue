@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-row>
-            <b-col cols="4" xs="12">
+            <b-col lg="4" sm="12">
                 <b-form-group :label="`${$t('Code', { locale: locale })}: *`">
                     <b-form-select
                         name="code"
@@ -22,7 +22,7 @@
                     </div>
                 </b-form-group>
             </b-col>
-            <b-col cols="4" xs="12">
+            <b-col lg="4" sm="12">
                 <b-form-group :label="`${$t('Origin', { locale: locale })}: *`">
                     <b-form-input
                         v-model="slug_origin"
@@ -43,7 +43,7 @@
                     </div>
                 </b-form-group>
             </b-col>
-            <b-col cols="4" xs="12">
+            <b-col lg="4" sm="12">
                 <b-form-group :label="`${$t('Destine', { locale: locale })}: *`">
                     <b-form-input
                         v-model="slug_destine"

@@ -10,7 +10,6 @@
                     {{ $t('Loading...', locale) }}
                 </div>
             </template>
-            <div class="dropdown-divider" />
             <b-alert
                 :show="!hasPages && !isBusy"
                 variant="warning"
@@ -63,7 +62,7 @@
                             @click="onRemoveSelected"
                             :disabled="!hasPagesSelected"
                         >
-                            <i class="fa fa-trash" /> {{ $t('Delete selected pages', { locale }) }}
+                            <i class="fa fa-trash mr-0" /><span class="d-none d-sm-inline"> {{ $t('Delete selected pages', { locale }) }}</span>
                         </b-button>
                         <b-button
                             size="sm"
@@ -71,7 +70,7 @@
                             @click="onRestoreSelected"
                             :disabled="!hasPagesSelected"
                         >
-                            <i class="fa fa-undo" /> {{ $t('Restore selected pages', { locale }) }}
+                            <i class="fa fa-undo mr-0" /><span class="d-none d-sm-inline"> {{ $t('Restore selected pages', { locale }) }}</span>
                         </b-button>
                     </div>
                     <div class="text-right pull-right">
@@ -80,7 +79,7 @@
                             variant="success"
                             @click.prevent="$emit('onGoToCreatePage')"
                         >
-                            <i class="fa fa-plus" /> {{ $t('Create new', { locale }) }}
+                            <i class="fa fa-plus mr-0" /><span class="d-none d-sm-inline"> {{ $t('Create new', { locale }) }}</span>
                         </b-button>
                         <b-form-select
                             class="w-auto"
@@ -96,12 +95,12 @@
                     id="pages"
                     ref="table"
                     responsive
-                    small
-                    hover
-                    striped
                     :fields="columns"
                     :items="pagesWithCheckedAttrAndDefaultData"
                     :busy="isBusy"
+                    table-class="table align-items-center table-flush light"
+                    thead-class="thead-light"
+                    tbody-classes="list"
                 >
                     <div
                         slot="table-busy"
@@ -115,6 +114,12 @@
                         slot-scope="data"
                     >
                         <b-form-checkbox v-model="data.item.checked" />
+                    </template>
+                    <template slot="page_id" slot-scope="data">
+                        <span v-if="data.item.page_id !== null && data.item.parent !== null">
+                            {{ data.item.parent.default.title }}
+                        </span>
+                        <i v-else>{{ $t('Is parent', { locale }) }}</i>
                     </template>
                     <template
                         slot="languages"
@@ -163,7 +168,7 @@
                             class="mr-2"
                             @click.prevent="$emit('onGoToPage', data.item)"
                         >
-                            <i class="fa fa-pencil text-secondary" />
+                            <i class="fa fa-pencil text-primary" />
                         </a>
                         <a
                             href="#"
@@ -187,14 +192,16 @@
             >
                 <em>{{ pages.length }} / {{ totalPages }}</em>
             </div>
-            <b-button
-                v-if="hasNextPage"
-                block
-                variant="primary"
-                @click="loadNextPage"
-            >
-                {{ $t('View more', { locale: this.locale }) }}
-            </b-button>
+            <div id="viewMore">
+                <b-button
+                    v-if="hasNextPage"
+                    block
+                    variant="primary"
+                    @click="loadNextPage"
+                >
+                    {{ $t('View more', { locale: this.locale }) }}
+                </b-button>
+            </div>
         </v-wait>
     </transition>
 </template>
@@ -218,6 +225,16 @@
                 type: Object,
                 required: false,
                 default: {}
+            },
+            pagesParentOrigin: {
+                type: Array,
+                required: false,
+                default: Array
+            },
+            pagePaginatorDefault: {
+                type: [ String, Number ],
+                required: false,
+                default: 1
             }
         },
         components: { RedirectionsPage },
@@ -242,6 +259,10 @@
                     {
                         key: 'title',
                         label: this.$t('Title', this.locale)
+                    },
+                    {
+                        key: 'page_id',
+                        label: this.$t('Parent page', this.locale)
                     },
                     {
                         key: 'layout',
@@ -287,8 +308,11 @@
                 deep: true,
                 handler () {
                     this.page = 1
-                    this.refresh()
+                    this.refreshList()
                 }
+            },
+            pagesParentOrigin () {
+                this.pagesParent = this.pagesParentOrigin
             }
         },
         methods: {
@@ -382,13 +406,15 @@
             },
             // Actions
             async refreshList () {
+                const currentPage = this.currentPage
                 this.pages = []
                 this.isBusy = true
 
-                for ( let page = 1; page <= this.currentPage; page++ ) {
+                for ( let page = 1; page <= currentPage; page++ ) {
                     await this.loadPage({
                         page: page,
-                        perPage: this.perPage
+                        perPage: this.perPage,
+
                     })
                 }
 
@@ -414,7 +440,13 @@
                     url: this.urlNextPage
                 })
 
+
+                this.$emit('onChangePagePaginator', this.currentPage)
                 this.isBusy = false
+                this.$scrollTo(`#viewMore`, 1000, {
+                    easing: 'ease-in',
+                    offset: 1000
+                })
             },
             async confirmRedirectionsToPages ( page ) {
                 this.localesToCreateRedirections = []
@@ -524,6 +556,24 @@
                     }
                 })
             },
+            // Getters
+            getParentPage ( page ) {
+                let parent = null
+
+                for ( const pageParent of this.pagesParent ) {
+                    if ( pageParent.id === page.page_id ) {
+                        parent = this.clone(pageParent)
+
+                        for ( const locale of pageParent.locales ) {
+                            if ( typeof parent.default === typeof undefined || locale.lang === this.locale ) {
+                                parent.default = locale
+                            }
+                        }
+                    }
+                }
+
+                return parent
+            },
             // Setters
             setPagesCheckAttrAndDefaultData ( force ) {
                 let pagesWithCheckedAttrAndDefaultData = []
@@ -556,6 +606,7 @@
 
                     item = {
                         id: page.id,
+                        page_id: page.page_id,
                         slug: localeDefault !== null ? localeDefault.slug : '',
                         title: localeDefault !== null ? localeDefault.title : '',
                         description: localeDefault !== null ? localeDefault.description : '',
@@ -565,7 +616,8 @@
                         locales: page.locales,
                         contents: page.contents,
                         languages,
-                        checked: force || typeof page.checked === typeof undefined ? this.checkAll : page.checked
+                        checked: force || typeof page.checked === typeof undefined ? this.checkAll : page.checked,
+                        parent: this.getParentPage(page)
                     }
 
                     pagesWithCheckedAttrAndDefaultData.push(item)
@@ -577,7 +629,9 @@
         async mounted () {
             this.$wait.start('loader')
             this.selectPerPage = this.perPage
-            await this.refresh()
+            this.pagesParent = this.clone(this.pagesParentOrigin)
+            this.currentPage = this.clone(this.pagePaginatorDefault)
+            await this.refreshList()
             this.$wait.end('loader')
         }
     }

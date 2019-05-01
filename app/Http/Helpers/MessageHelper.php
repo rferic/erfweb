@@ -61,7 +61,8 @@ class MessageHelper
             ],
             'routes' => [
                 'getMessages' => route('admin.messages.get'),
-                'createMessage' => route('admin.messages.create')
+                'createMessage' => route('admin.messages.create'),
+                'baseUser' => route('admin.users')
             ]
         ];
     }

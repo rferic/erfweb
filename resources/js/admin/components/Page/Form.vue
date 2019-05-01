@@ -18,68 +18,64 @@
                         <i class="fa fa-chevron-left" />
                         {{ $t('Return to list', { locale }) }}
                     </b-button>
-                    <hr />
                 </b-col>
             </b-row>
-            <form-buttons
-                :show-cancel="false"
-                @onSave="onSave"
-            />
-            <b-row>
-                <b-col v-if="hasPagesParent" cols="12">
-                    <b-form-group :label="`${$t('Parent page', { locale: locale })}: *`">
-                        <b-form-select
-                            name="parent"
-                            v-model="parent"
-                            :disabled="!isNew"
-                        >
-                            <template slot="first">
-                                <option
-                                    value=""
-                                    disabled
-                                    :selected="parent === null"
-                                >
-                                    {{ $t('Has not parent page', { locale }) }}
-                                </option>
-                            </template>
-                            <option
-                                v-for="pageParent in pagesParent"
-                                :key="pageParent.id"
-                                :value="pageParent.id"
+            <b-card class="mt-2">
+                <b-row>
+                    <b-col v-if="hasPagesParent" lg="6" md="12">
+                        <b-form-group :label="`${$t('Parent page', { locale: locale })}: *`">
+                            <b-form-select
+                                name="parent"
+                                v-model="page_id"
+                                :disabled="!isNew"
                             >
-                                {{ $t(getDefaultLocale(pageParent).title, { locale }) }}
-                            </option>
-                        </b-form-select>
-                    </b-form-group>
-                </b-col>
-                <b-col cols="12">
-                    <multilanguage-tab
-                        ref="multilanguageTab"
-                        :languages-default="languagesAvailable"
-                        :show-enable-icons="true"
-                        :default-active="locale"
-                    >
-                        <template slot-scope="{ language }">
-                            <locale-form
-                                :ref="`localeForm${language.iso}`"
-                                :language="language"
-                                :page-locale-origin="getPageLocale(language)"
-                                :layouts="layouts"
-                                @onChangeEnable="onChangeEnable"
-                            />
-                        </template>
-                    </multilanguage-tab>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col cols="12">
-                    <hr>
-                </b-col>
-            </b-row>
-            <form-buttons
-                @onSave="onSave"
-                @onCancel="$emit('onGoToList')"
-            />
+                                <template slot="first">
+                                    <option
+                                        value=""
+                                        disabled
+                                    >
+                                        {{ $t('Has not parent page', { locale }) }}
+                                    </option>
+                                </template>
+                                <option
+                                    v-for="pageParent in pagesParent"
+                                    :key="pageParent.id"
+                                    :value="pageParent.id"
+                                >
+                                    {{ $t(getDefaultLocale(pageParent).title, { locale }) }}
+                                </option>
+                            </b-form-select>
+                        </b-form-group>
+                    </b-col>
+                    <b-col cols="12">
+                        <multilanguage-tab
+                            ref="multilanguageTab"
+                            :languages-default="languagesAvailable"
+                            :show-enable-icons="true"
+                            :default-active="locale"
+                        >
+                            <template slot-scope="{ language }">
+                                <locale-form
+                                    :ref="`localeForm${language.iso}`"
+                                    :language="language"
+                                    :page-locale-origin="getPageLocale(language)"
+                                    :layouts="layouts"
+                                    @onChangeEnable="onChangeEnable"
+                                />
+                            </template>
+                        </multilanguage-tab>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col cols="12">
+                        <hr>
+                    </b-col>
+                </b-row>
+                <form-buttons
+                    @onSave="onSave"
+                    @onCancel="$emit('onGoToList')"
+                />
+            </b-card>
         </div>
     </transition>
 </template>
@@ -104,7 +100,7 @@
                 type: Object,
                 required: true
             },
-            pagesParent: {
+            pagesParentOrigin: {
                 type: Array,
                 required: false,
                 default: Array
@@ -116,7 +112,7 @@
             return {
                 languagesAvailable: JSON.parse(this.data).langsAvailable,
                 layouts: JSON.parse(this.data).layouts,
-                parent: this.clone(this.pageOrigin.page_id)
+                page_id: this.pageOrigin.page_id === null ? '' : this.clone(this.pageOrigin.page_id)
             }
         },
         computed: {
@@ -165,7 +161,7 @@
             async processForm () {
                 let page = {
                     id: this.pageOrigin.id,
-                    page_id: this.parent,
+                    page_id: this.page_id,
                     locales: []
                 }
 
@@ -236,6 +232,9 @@
             for ( let languageAvailable of this.languagesAvailable ) {
                 languageAvailable.enable = this.pageOrigin.locales.some(locale => locale.lang === languageAvailable.iso && locale.deleted_at === null)
             }
+        },
+        mounted () {
+            this.pagesParent = this.clone(this.pagesParentOrigin)
         }
     }
 </script>

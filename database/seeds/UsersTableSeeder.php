@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
             Role::create(['name' => $role]);
         }
 
-        factory(User::class, 5)->create()->each(function ($user) {
+        factory(User::class, 50)->create()->each(function ($user) {
             $user->assignRole('public');
         });
 

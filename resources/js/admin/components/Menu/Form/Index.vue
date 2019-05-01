@@ -65,6 +65,7 @@
             label-cancel="Remove"
             @onSave="onSave"
             @onCancel="onDestroy"
+            class="mt-2"
         />
     </div>
 </template>

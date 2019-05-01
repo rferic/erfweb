@@ -6,7 +6,7 @@
 
 // Custom
 .dropdown-menu {
-    margin-left: -100px;
+    margin-left: -100px !important;
     max-width: 250px;
 
     .dropdown-item {
@@ -23,6 +23,6 @@
     }
 
     @include media-breakpoint-down(sm) {
-        margin-left: -130px;
+        margin-left: -130px !important;
     }
 }

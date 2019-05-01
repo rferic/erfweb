@@ -79,7 +79,7 @@
             <div v-else>
                 <b-button
                     @click.prevent="onChangeStatusMessage('readed')"
-                    variant="outline-info"
+                    variant="primary"
                     block
                     sm
                 >
@@ -90,7 +90,7 @@
         <div
             v-if="enableResponses"
             class="count-total-messages"
-            :class="{ 'text-right' : messageOrigin.author_id === author.id }"
+            :class="{ 'text-right' : messageOrigin.author.id === author.id }"
         >
             <i>{{ `${this.$parent.totalMessages} ${$t('respuestas', { locale })}` }} </i>
         </div>

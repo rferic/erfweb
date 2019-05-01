@@ -20,7 +20,7 @@
                     >
                         <div class="row"
                              :disabled="content.deleted_at !== null">
-                            <b-col cols="9" sm="6">
+                            <b-col lg="9" sm="6">
                                 <b-badge
                                     v-if="content.deleted_at === null"
                                     variant="success"
@@ -37,7 +37,7 @@
                                     <i v-if="content.class_html !== ''" class="ml-2">class="{{ content.class_html }}"</i>
                                 </component>
                             </b-col>
-                            <b-col cols="3" sm="6" class="text-right">
+                            <b-col lg="3" sm="6" class="text-right">
                                 <b-button
                                     v-if="content.deleted_at === null"
                                     variant="primary"
@@ -89,7 +89,7 @@
             />
             <div slot="modal-footer" class="w-100">
                 <b-row>
-                    <b-col cols="6">
+                    <b-col lg="6">
                         <b-button
                             variant="danger"
                             sm
@@ -99,7 +99,7 @@
                             {{ $t('Cancel', { locale }) }}
                         </b-button>
                     </b-col>
-                    <b-col cols="6" class="text-right">
+                    <b-col lg="6" class="text-right">
                         <b-button
                             variant="success"
                             sm

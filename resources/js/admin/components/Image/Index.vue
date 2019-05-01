@@ -25,8 +25,9 @@
                 @onCopy="onCopy"
             />
         </b-modal>
-        <b-row class="mb-4">
-            <b-col cols="4" xs="6">
+        <b-card>
+            <b-row class="mb-4">
+            <b-col lg="4" sm="6">
                 <b-form-input
                     v-model="filter"
                     name="filter"
@@ -34,7 +35,7 @@
                     :placeholder="$t('Filter by title', { locale })"
                 />
             </b-col>
-            <b-col cols="8" xs="12" class="text-right">
+            <b-col lg="8" sm="12" class="text-right">
                 <b-button
                     variant="success"
                     @click="onAdd"
@@ -44,36 +45,37 @@
                 </b-button>
             </b-col>
         </b-row>
-        <b-row v-if="hasImages" class="no-gutters">
-            <b-col
-                v-for="(image, index) in imagesFiltered"
-                :key="index"
-                cols="3"
-                xs="6"
-                class="images"
-            >
-                <img :src="getCalculatedSrcFromAdmin(image)" :title="image.title" />
-                <div class="overlay">
-                    {{ image.title }}
-                    <b-button
-                        variant="outline-primary"
-                        size="sm"
-                        class="ml-2"
-                        @click="onEdit(index, image)"
-                    >
-                        <i class="fa fa-eye" />
-                    </b-button>
-                    <b-button
-                        variant="outline-primary"
-                        size="sm"
-                        class="ml-2"
-                        @click="onCopy(getCalculatedSrcFromAdmin(image))"
-                    >
-                        <i class="fa fa-link" />
-                    </b-button>
-                </div>
-            </b-col>
-        </b-row>
+            <b-row v-if="hasImages" class="no-gutters">
+                <b-col
+                    v-for="(image, index) in imagesFiltered"
+                    :key="index"
+                    lg="3"
+                    sm="6"
+                    class="images"
+                >
+                    <img :src="getCalculatedSrcFromAdmin(image)" :title="image.title" />
+                    <div class="overlay">
+                        {{ image.title }}
+                        <b-button
+                            variant="outline-primary"
+                            size="sm"
+                            class="ml-2"
+                            @click="onEdit(index, image)"
+                        >
+                            <i class="fa fa-eye" />
+                        </b-button>
+                        <b-button
+                            variant="outline-primary"
+                            size="sm"
+                            class="ml-2"
+                            @click="onCopy(getCalculatedSrcFromAdmin(image))"
+                        >
+                            <i class="fa fa-link" />
+                        </b-button>
+                    </div>
+                </b-col>
+            </b-row>
+        </b-card>
         <b-alert
             :show="!hasImages"
             variant="warning"

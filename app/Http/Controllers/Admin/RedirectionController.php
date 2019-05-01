@@ -17,7 +17,8 @@ class RedirectionController extends Controller
 
     public function index ()
     {
-        $title = __('Redirections');
+        $title = __('Redirections management');
+        $description = __('Be careful!');
         $component = 'index-redirection';
         $data = [
             'menus' => Redirection::get()->all()
@@ -28,7 +29,7 @@ class RedirectionController extends Controller
             'createRedirection' => route('admin.redirections.create')
         ];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function get ( Request $request )

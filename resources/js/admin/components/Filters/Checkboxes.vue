@@ -1,12 +1,11 @@
 <template>
-    <b-card class="filters">
+    <div class="filters">
         <h5
             v-if="hasTitle"
             class="text-center"
         >
             {{ title }}
         </h5>
-        <hr>
         <b-nav-form
             v-for="checkbox in checkboxes"
             :key="checkbox.key"
@@ -25,7 +24,7 @@
                 </b-form-checkbox>
             </div>
         </b-nav-form>
-    </b-card>
+    </div>
 </template>
 
 <script>

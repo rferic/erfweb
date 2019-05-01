@@ -26,7 +26,7 @@
                 @onSave="onSave"
             />
             <b-row>
-                <b-col cols="3" xs="6">
+                <b-col lg="3" sm="6">
                     <b-form-group :label="`Vue ${$t('component', { locale: locale })}: *`">
                         <b-form-input
                             v-model="app.vue_component"
@@ -47,7 +47,7 @@
                         </div>
                     </b-form-group>
                 </b-col>
-                <b-col cols="3" xs="6">
+                <b-col lg="3" sm="6">
                     <b-form-group :label="`${$t('Version', { locale: locale })}: *`">
                         <b-form-input
                             v-model="app.version"
@@ -68,7 +68,7 @@
                         </div>
                     </b-form-group>
                 </b-col>
-                <b-col cols="3" xs="12">
+                <b-col lg="3" sm="12">
                     <b-form-group :label="`${$t('Type', { locale: locale })}: *`">
                         <b-form-select
                             name="type"
@@ -96,7 +96,7 @@
                         </b-form-select>
                     </b-form-group>
                 </b-col>
-                <b-col cols="3" xs="12">
+                <b-col lg="3" sm="12">
                     <b-form-group :label="`${$t('Status', { locale: locale })}: *`">
                         <b-form-select
                             name="status"

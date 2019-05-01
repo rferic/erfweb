@@ -8,35 +8,37 @@
             position="top right"
         />
         <b-row v-if="viewList">
-            <b-col
-                cols="2"
-                xs="12">
-                <filter-app
-                    :data="data"
-                    @onChangeFilters="onChangeFilters"
-                />
+            <b-col lg="3" sm="12">
+                <b-card>
+                    <filter-app
+                        :data="data"
+                        @onChangeFilters="onChangeFilters"
+                    />
+                </b-card>
             </b-col>
-            <b-col
-                cols="10"
-                xs="12">
-                <list-app
-                    ref="listApps"
-                    :data="data"
-                    :filters="filters"
-                    @onGoToApp="goToApp"
-                    @onGoToCreateApp="goToCreateApp"
-                />
+            <b-col lg="9" sm="12">
+                <b-card>
+                    <list-app
+                        ref="listApps"
+                        :data="data"
+                        :filters="filters"
+                        @onGoToApp="goToApp"
+                        @onGoToCreateApp="goToCreateApp"
+                    />
+                </b-card>
             </b-col>
         </b-row>
-        <b-row v-if="viewForm">
-            <index-form-app
-                class="col-12"
-                :data="data"
-                :app-origin="currentApp"
-                @onGoToList="goToList"
-                @onSaveApp="onSaveApp"
-            />
-        </b-row>
+        <b-card v-if="viewForm">
+            <b-row>
+                <index-form-app
+                    class="col-12"
+                    :data="data"
+                    :app-origin="currentApp"
+                    @onGoToList="goToList"
+                    @onSaveApp="onSaveApp"
+                />
+            </b-row>
+        </b-card>
     </div>
 </template>
 

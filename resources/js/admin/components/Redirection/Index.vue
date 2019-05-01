@@ -13,100 +13,104 @@
         >
             <form-redirection ref="redirectionForm" @onCreate="onCreate" @onClose="onCloseForm" />
         </b-modal>
-        <b-row>
-            <b-col cols="3" xs="6">
-                <b-nav vertical>
-                    <input-text-filter
-                        v-model="filters.slug_origin"
-                        :placeholder="$t('Search for origin slug...', { locale })"
-                        v-debounce:300ms="onChangeOriginFilter"
-                    />
-                </b-nav>
-            </b-col>
-            <b-col cols="3" xs="6">
-                <b-nav vertical>
-                    <input-text-filter
-                        v-model="filters.slug_destine"
-                        :placeholder="$t('Search for destine slug...', { locale })"
-                        v-debounce:300ms="onChangeDestineFilter"
-                    />
-                </b-nav>
-            </b-col>
-            <b-col cols="3" xs="6">
-                <b-nav vertical>
-                    <select-filter
-                        :title="$t('Select a redirection code', { locale })"
-                        :options-origin="codes"
-                        :value-origin="filters.code"
-                        :translate-label="false"
-                        v-model="filters.code"
-                        @onChangeFilter="onChangeCodeFilter"
-                    />
-                </b-nav>
-            </b-col>
-            <b-col cols="3" xs="6" class="text-right">
-                <b-button
-                    variant="success"
-                    size="sm"
-                    @click="onOpenForm"
-                >
-                    <i class="fa fa-plus" />
-                    {{ $t('Create redirection', { locale }) }}
-                </b-button>
-            </b-col>
-            <b-col cols="12">
-                <div v-if="hasRedirections || isBusy" class="mt-2">
-                    <b-table
-                        id="redirections"
-                        ref="table"
-                        responsive
-                        small
-                        hover
-                        striped
-                        :fields="columns"
-                        :items="redirections"
-                        :busy="isBusy"
+        <b-card>
+            <b-row>
+                <b-col lg="3" sm="6">
+                    <b-nav vertical>
+                        <input-text-filter
+                            v-model="filters.slug_origin"
+                            :placeholder="$t('Search for origin slug...', { locale })"
+                            v-debounce:300ms="onChangeOriginFilter"
+                        />
+                    </b-nav>
+                </b-col>
+                <b-col lg="3" sm="6">
+                    <b-nav vertical>
+                        <input-text-filter
+                            v-model="filters.slug_destine"
+                            :placeholder="$t('Search for destine slug...', { locale })"
+                            v-debounce:300ms="onChangeDestineFilter"
+                        />
+                    </b-nav>
+                </b-col>
+                <b-col lg="3" sm="6">
+                    <b-nav vertical>
+                        <select-filter
+                            :title="$t('Select a redirection code', { locale })"
+                            :options-origin="codes"
+                            :value-origin="filters.code"
+                            :translate-label="false"
+                            v-model="filters.code"
+                            @onChangeFilter="onChangeCodeFilter"
+                        />
+                    </b-nav>
+                </b-col>
+                <b-col lg="3" sm="6" class="text-right">
+                    <b-button
+                        variant="success"
+                        size="sm"
+                        @click="onOpenForm"
                     >
-                        <div
-                            slot="table-busy"
-                            class="text-center text-primary my-2"
+                        <i class="fa fa-plus" />
+                        {{ $t('Create redirection', { locale }) }}
+                    </b-button>
+                </b-col>
+                <b-col cols="12">
+                    <div v-if="hasRedirections || isBusy" class="mt-2">
+                        <b-table
+                            id="redirections"
+                            ref="table"
+                            responsive
+                            :fields="columns"
+                            :items="redirections"
+                            :busy="isBusy"
+                            table-class="table align-items-center table-flush light"
+                            thead-class="thead-light"
+                            tbody-classes="list"
                         >
-                            <b-spinner class="align-middle"></b-spinner>
-                            <strong>{{ $t('Loading', { locale }) }}...</strong>
-                        </div>
-                        <template
-                            slot="actions"
-                            slot-scope="data"
-                        >
-                            <a
-                                href="#"
-                                @click.prevent="onDestroy(data.item)"
+                            <div
+                                slot="table-busy"
+                                class="text-center text-primary my-2"
                             >
-                                <i class="fa fa-trash text-danger" />
-                            </a>
-                        </template>
-                    </b-table>
-                </div>
-                <div
-                    v-if="hasRedirections"
-                    class="text-right"
-                >
-                    <em>{{ redirections.length }} / {{ totalRedirections }}</em>
-                </div>
-                <b-button
-                    v-if="hasNextPage"
-                    block
-                    variant="primary"
-                    @click="loadNextPage"
-                >
-                    {{ $t('View more', { locale: this.locale }) }}
-                </b-button>
-                <b-alert :show="!hasRedirections" variant="warning">
-                    <i class="fa fa-warning" />
-                    {{ $t('Redirections not found', { locale }) }}
-                </b-alert>
-            </b-col>
-        </b-row>
+                                <b-spinner class="align-middle"></b-spinner>
+                                <strong>{{ $t('Loading', { locale }) }}...</strong>
+                            </div>
+                            <template
+                                slot="actions"
+                                slot-scope="data"
+                            >
+                                <a
+                                    href="#"
+                                    @click.prevent="onDestroy(data.item)"
+                                >
+                                    <i class="fa fa-trash text-danger" />
+                                </a>
+                            </template>
+                        </b-table>
+                    </div>
+                    <div
+                        v-if="hasRedirections"
+                        class="text-right"
+                    >
+                        <em>{{ redirections.length }} / {{ totalRedirections }}</em>
+                    </div>
+                    <div id="viewMore">
+                        <b-button
+                            v-if="hasNextPage"
+                            block
+                            variant="primary"
+                            @click="loadNextPage"
+                        >
+                            {{ $t('View more', { locale: this.locale }) }}
+                        </b-button>
+                    </div>
+                    <b-alert :show="!hasRedirections" variant="warning">
+                        <i class="fa fa-warning" />
+                        {{ $t('Redirections not found', { locale }) }}
+                    </b-alert>
+                </b-col>
+            </b-row>
+        </b-card>
     </div>
 </template>
 
@@ -255,6 +259,10 @@
                 })
 
                 this.isBusy = false
+                this.$scrollTo(`#viewMore`, 1000, {
+                    easing: 'ease-in',
+                    offset: 1000
+                })
             },
             // Getters
             async getRedirections ({ page, perPage, url, filters }) {

@@ -9,7 +9,6 @@
             </div>
         </div>
         <form
-            id="logout-form"
             ref="logoutForm"
             :action="routesGlobal.logout"
             method="POST"

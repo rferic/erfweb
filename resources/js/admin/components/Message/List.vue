@@ -10,7 +10,6 @@
                     {{ $t('Loading...', locale) }}
                 </div>
             </template>
-            <div class="dropdown-divider" />
             <b-alert
                 :show="!hasMessages"
                 variant="warning"
@@ -76,16 +75,17 @@
                     </div>
                     <div class="clearfix" />
                 </div>
+                <div class="dropdown-divider" />
                 <b-table
                     id="messages"
                     ref="table"
                     responsive
-                    small
-                    hover
-                    striped
                     :fields="columns"
                     :items="messagesWithCheckedAttr"
                     :busy="isBusy"
+                    table-class="table align-items-center table-flush light"
+                    thead-class="thead-light"
+                    tbody-classes="list"
                 >
                     <div
                         slot="table-busy"
@@ -104,28 +104,36 @@
                         slot="status"
                         slot-scope="data"
                     >
-                        <i
-                            class="fa fa-eye"
-                            :class="`text-${getDataStatusSelected(data.item.status).class}`"
-                        />
+                        <badge class="badge-dot mr-4" :type="getDataStatusSelected(data.item.status).class">
+                            <i :class="`bg-${getDataStatusSelected(data.item.status).class}`"></i>
+                            <span class="status">{{ getDataStatusSelected(data.item.status).key }}</span>
+                        </badge>
                     </template>
                     <template
                         slot="author"
                         slot-scope="data"
                     >
-                        {{ data.item.author.name }}
+                        <div class="avatar-group">
+                            <a
+                                :href="`${routes.baseUser}/${data.item.author.id}`"
+                                class="avatar avatar-sm rounded-circle"
+                                data-toggle="tooltip"
+                                :data-original-title="data.item.author.name"
+                                target="_blank"
+                            >
+                                <img alt="Image placeholder" :src="`/${ data.item.author.avatar }`">
+                            </a>
+                            <a :href="`${routes.baseUser}/${data.item.author.id}`" target="_blank">{{ data.item.author.name }}</a>
+                        </div>
                     </template>
                     <template
                         slot="tag"
                         slot-scope="data"
                     >
-                        <b-badge :variant="getDataTagSelected(data.item.tag).class">
-                            <i
-                                class="fa"
-                                :class="getDataTagSelected(data.item.tag).icon"
-                            />
-                            {{ $t(data.item.tag, { locale }) }}
-                        </b-badge>
+                        <badge class="badge-dot mr-4" :type="getDataTagSelected(data.item.tag).class">
+                            <i :class="`bg-${getDataTagSelected(data.item.tag).class}`"></i>
+                            <span class="status">{{ getDataTagSelected(data.item.tag).key }}</span>
+                        </badge>
                     </template>
                     <template
                         slot="created_at"
@@ -143,7 +151,7 @@
                             class="mr-2"
                             @click.prevent="$emit('onGoToMessage', data.item)"
                         >
-                            <i class="fa fa-eye text-secondary" />
+                            <i class="fa fa-eye text-primary" />
                         </a>
                         <a
                             href="#"
@@ -167,14 +175,16 @@
             >
                 <em>{{ messages.length }} / {{ totalMessages }}</em>
             </div>
-            <b-button
-                v-if="hasNextPage"
-                block
-                variant="primary"
-                @click="loadNextPage"
-            >
-                {{ $t('View more', { locale: this.locale }) }}
-            </b-button>
+            <div id="viewMore">
+                <b-button
+                    v-if="hasNextPage"
+                    block
+                    variant="primary"
+                    @click="loadNextPage"
+                >
+                    {{ $t('View more', { locale: this.locale }) }}
+                </b-button>
+            </div>
         </v-wait>
     </transition>
 </template>
@@ -416,6 +426,10 @@
                 })
 
                 this.isBusy = false
+                this.$scrollTo(`#viewMore`, 1000, {
+                    easing: 'ease-in',
+                    offset: 1000
+                })
             },
             async loadPage ({ page, perPage, url }) {
                 this.filters.receivers = [ 'admin' ]

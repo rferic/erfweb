@@ -23,8 +23,9 @@ class DashboardController extends Controller
     public function index ()
     {
         $title = __('Dashboard');
+        $description = __('See how the web is going. We hope everything goes perfectly!');
         $component = 'index-dashboard';
 
-        return view('admin/default', compact('title', 'component'));
+        return view('admin/default', compact('title', 'description', 'component'));
     }
 }

@@ -27,12 +27,13 @@ class PageController extends Controller
     public function index ()
     {
         $vieOptions = $this->getIndexViewOptions();
-        $title = __('Pages');
+        $title = __('Pages management');
+        $description = __('CRUD for pages. Be creative!');
         $component = $vieOptions['component'];
         $data = $vieOptions['data'];
         $routes = $vieOptions['routes'];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function get ( Request $request )
@@ -53,24 +54,25 @@ class PageController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'nullable|integer',
+            'page_id' => 'nullable|integer',
             'locales' => 'nullable|array'
         ]);
 
         if ( !$validator->fails() ) {
             $pageLocales = $request->input('locales');
-            $page_id = $request->input('id');
-            $page_parent_id = $request->input('page_parent_id');
+            $id = $request->input('id');
+            $page_id = $request->input('page_id');
 
-            if ( is_null($page_id) ) {
-                $page_id = Page::create([
-                    'page_parent_id' => $page_parent_id,
+            if ( is_null($id) ) {
+                $id = Page::create([
+                    'page_id' => $page_id,
                     'user_id' => Auth::id()
                 ])->id;
             }
 
             foreach ( $pageLocales AS $pageLocale ) {
                 if (is_null($pageLocale['id']) && is_null($pageLocale['deleted_at'])) {
-                    $page_locale_id = $this->createPageLocale($page_id, $pageLocale)->id;
+                    $page_locale_id = $this->createPageLocale($id, $pageLocale)->id;
                 } else {
                     $page_locale_id = $pageLocale['id'];
                     if (!is_null($pageLocale['id']) && is_null($pageLocale['deleted_at'])) {
@@ -241,7 +243,7 @@ class PageController extends Controller
             ],
             'routes' => [
                 'getPages' => route('admin.pages.get'),
-                'getAllParents' => route('admin.pages.getAllParents'),
+                'getAllPagesParent' => route('admin.pages.getAllParents'),
                 'storePage' => route('admin.pages.store'),
                 'getContents' => route('admin.contents.get'),
                 'getMenus' => route('admin.menus.get'),

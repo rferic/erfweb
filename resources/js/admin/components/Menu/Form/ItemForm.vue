@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-row>
-            <b-col cols="6" xs="12">
+            <b-col lg="6" sm="12">
                 <b-form-group :label="`${$t('Text', { locale: locale })}: *`">
                     <b-form-input
                         v-model="item.label"
@@ -22,7 +22,7 @@
                     </div>
                 </b-form-group>
             </b-col>
-            <b-col cols="6" xs="12">
+            <b-col lg="6" sm="12">
                 <b-form-group :label="`${$t('Type', { locale: locale })}: *`">
                     <b-form-select
                         name="type"
@@ -45,7 +45,7 @@
             </b-col>
         </b-row>
         <b-row>
-            <b-col v-if="item.type === 'external'" cols="12">
+            <b-col v-if="item.type === 'external'" lg="12">
                 <b-form-group :label="`${$t('URL', { locale: locale })}: *`">
                     <b-form-input
                         v-model="item.url_external"
@@ -66,7 +66,7 @@
                     </div>
                 </b-form-group>
             </b-col>
-            <b-col v-if="item.type === 'internal'" cols="12">
+            <b-col v-if="item.type === 'internal'" lg="12">
                 <b-form-group :label="`${$t('Page', { locale: locale })}: *`">
                     <b-form-select
                         name="page_locale_id"

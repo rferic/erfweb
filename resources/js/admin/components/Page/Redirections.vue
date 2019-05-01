@@ -18,10 +18,7 @@
                     <b-col cols="12">
                         <hr>
                     </b-col>
-                    <b-col
-                        cols="12"
-                        class="mb-2"
-                    >
+                    <b-col lg="12" class="mb-2">
                         <b-form-select
                             name="slug"
                             v-model="urlRedirection.slug_destine"

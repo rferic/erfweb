@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <b-col cols="6" xs="12">
+        <b-col lg="6" sm="12">
             <b-form-group :label="`${$t('Title', { locale: locale })}: *`">
                 <b-form-input
                     v-model="appLocale.title"

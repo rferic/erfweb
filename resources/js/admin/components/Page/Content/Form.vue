@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-row>
-            <b-col cols="4" xs="6">
+            <b-col lg="4" sm="6">
                 <b-form-group :label="`${$t('Key', { locale: locale })}: *`">
                     <b-form-input
                         v-model="content.key"
@@ -22,7 +22,7 @@
                     </div>
                 </b-form-group>
             </b-col>
-            <b-col cols="4" xs="6">
+            <b-col lg="4" sm="6">
                 <b-form-group :label="`${$t('ID HTML', { locale: locale })}: *`">
                     <b-form-input
                         v-model="content.id_html"
@@ -43,7 +43,7 @@
                     </div>
                 </b-form-group>
             </b-col>
-            <b-col cols="4" xs="12">
+            <b-col lg="4" sm="12">
                 <b-form-group :label="`${$t('Class HTML', { locale: locale })}:`">
                     <b-form-input
                         v-model="content.class_html"
@@ -63,14 +63,14 @@
             </b-col>
         </b-row>
         <b-row class="mt-2">
-            <b-col cols="6" xs="12">
+            <b-col lg="6" sm="12">
                 <label>{{ $t('CSS', { locale }) }}:</label>
                 <codemirror
                     v-model="content.header_inject"
                     :options="getCodemirrorConfig('css')"
                 />
             </b-col>
-            <b-col cols="6" xs="12">
+            <b-col lg="6" sm="12">
                 <label>{{ $t('JS', { locale }) }}:</label>
                 <codemirror
                     v-model="content.footer_inject"
@@ -82,7 +82,7 @@
             <b-col cols="12">
                 <hr>
             </b-col>
-            <b-col cols="6">
+            <b-col lg="6">
                 <b-button
                     variant="danger"
                     sm
@@ -92,7 +92,7 @@
                     {{ $t('Cancel', { locale }) }}
                 </b-button>
             </b-col>
-            <b-col cols="6" class="text-right">
+            <b-col lg="6" class="text-right">
                 <b-button
                     variant="success"
                     sm

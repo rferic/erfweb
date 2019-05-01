@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <b-col xs="12">
+        <b-col cols="12">
             <vue2-dropzone
                 ref="dropzone"
                 id="dropzone"
@@ -10,7 +10,7 @@
                 v-on:vdropzone-error="onErrorDropzone"
             />
         </b-col>
-        <b-col xs="12">
+        <b-col sm="12">
             <b-row v-if="hasImages">
                 <draggable
                     v-model="images"
@@ -21,14 +21,14 @@
                         <b-col
                             v-for="(image, index) in images"
                             :key="`image-${index}`"
-                            cols="12"
+                            lg="12"
                             class="images mb-2"
                         >
                             <b-row>
-                                <b-col cols="6" xs="12">
+                                <b-col lg="6" sm="12">
                                     <img :src="getCalculatedSrcFromAdmin(image)" />
                                 </b-col>
-                                <b-col cols="6" xs="12">
+                                <b-col lg="6" sm="12">
                                     <b-form-group :label="`${$t('Title', { locale: locale })}: *`">
                                         <b-form-input
                                             v-model="image.title"

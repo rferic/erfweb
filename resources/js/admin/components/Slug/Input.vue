@@ -18,6 +18,7 @@
                 type="text"
                 v-validate
                 data-vv-rules="required|slug_is_free"
+                class="pl-2 pr-2"
                 :class="{ 'is-invalid' : errors.has(`slug`) }"
                 :disabled="slug.isComputed"
                 v-debounce:300ms="onChange"

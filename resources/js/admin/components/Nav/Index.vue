@@ -1,5 +1,5 @@
 <template>
-    <base-nav class="   navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
+    <base-nav class="navbar-top navbar-dark" id="navbar-main-mobile" :show-toggle-button="false" expand>
         <ul class="navbar-nav align-items-center d-none d-md-flex">
             <nav-message-notify
                 :title="titleNavMessages"

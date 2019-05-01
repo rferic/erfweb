@@ -33,7 +33,8 @@ class ProfileController extends Controller
 
     public function index ()
     {
-        $title = __('Profile');
+        $title = __('This is your profile');
+        $description = __('This is you, do you want to change something?');
         $component = 'index-profile';
         $user = Auth::user();
         $data = [
@@ -50,7 +51,7 @@ class ProfileController extends Controller
             'removeImage' => route('admin.imagesTemporal.remove')
         ];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function getData ()

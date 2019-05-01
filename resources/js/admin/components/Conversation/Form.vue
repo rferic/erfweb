@@ -30,7 +30,7 @@
             />
         </b-form-group>
         <b-row>
-            <b-col cols="6">
+            <b-col lg="6">
                 <b-button
                     v-if="enableButtonCancel"
                     variant="danger"
@@ -44,7 +44,7 @@
                     <span v-if="buttonCancelHasLabel">{{ buttonCancel.label }}</span>
                 </b-button>
             </b-col>
-            <b-col cols="6">
+            <b-col lg="6">
                 <b-button
                     variant="primary"
                     class="pull-right"

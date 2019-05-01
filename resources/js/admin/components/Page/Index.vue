@@ -9,23 +9,30 @@
         />
         <b-row v-if="viewList">
             <b-col
-                cols="2"
-                xs="12">
-                <filter-page
-                    :data="data"
-                    @onChangeFilters="onChangeFilters"
-                />
+                lg="3"
+                md="12">
+                <b-card>
+                    <filter-page
+                        :data="data"
+                        @onChangeFilters="onChangeFilters"
+                    />
+                </b-card>
             </b-col>
             <b-col
-                cols="10"
-                xs="12">
-                <list-page
-                    ref="listPages"
-                    :data="data"
-                    :filters="filters"
-                    @onGoToPage="goToPage"
-                    @onGoToCreatePage="goToCreatePage"
-                />
+                lg="9"
+                md="12">
+                <b-card>
+                    <list-page
+                        ref="listPages"
+                        :data="data"
+                        :filters="filters"
+                        :pages-parent-origin="pagesParent"
+                        :page-paginator-default="pagePaginatorDefault"
+                        @onGoToPage="goToPage"
+                        @onGoToCreatePage="goToCreatePage"
+                        @onChangePagePaginator="onChangePagePaginator"
+                    />
+                </b-card>
             </b-col>
         </b-row>
         <b-row v-if="viewForm">
@@ -33,7 +40,7 @@
                 class="col-12"
                 :data="data"
                 :page-origin="currentPage"
-                :pages-parent="pagesParent"
+                :pages-parent-origin="pagesParent"
                 @onGoToList="goToList"
                 @onSavePage="onSavePage"
             />
@@ -44,6 +51,7 @@
 <script>
     import filterPageStructure from './../../structures/filterPage'
     import cloneMixin from './../../mixins/clone'
+    import pageMixin from './../../mixins/page'
     import FilterPage from './Filter'
     import ListPage from './List'
     import FormPage from './Form'
@@ -54,18 +62,18 @@
         props: {
             data: {
                 type: String,
-                required: true
+                required: true,
             }
         },
         components: { FilterPage, ListPage, FormPage },
-        mixins: [ cloneMixin ],
+        mixins: [ cloneMixin, pageMixin ],
         data () {
             return {
                 filters: this.clone(filterPageStructure),
                 currentPage: null,
                 isLoaded: false,
                 languagesAvailable: JSON.parse(this.data).langsAvailable,
-                pagesParent: []
+                pagePaginatorDefault: 1
             }
         },
         computed: {
@@ -83,7 +91,6 @@
                 return this.pagesParent.length > 0
             }
         },
-        mixins: [ cloneMixin ],
         methods: {
             // Events
             onChangeFilters ( filters ) {
@@ -111,10 +118,10 @@
             goToList () {
                 this.currentPage = null
             },
-            // Getters
-            async getAllPagesParent () {
-                this.pagesParent = await this.getAllPagesParentRequest()
+            onChangePagePaginator ( pagePaginator ) {
+              this.pagePaginatorDefault = pagePaginator
             },
+            // Getters
             getNewPage () {
                 let languages = []
 
@@ -127,6 +134,7 @@
 
                 return {
                     id: null,
+                    page_id: '',
                     locales: [],
                     languages
                 }

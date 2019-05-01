@@ -4,6 +4,7 @@ const pageMixin = {
     data () {
         return {
             pages: [],
+            pagesParent: [],
             totalPages: 0,
             urlNextPage: null,
             orderBy: {
@@ -94,9 +95,12 @@ const pageMixin = {
 
             return filters
         },
+        async getAllPagesParent () {
+            this.pagesParent = await this.getAllPagesParentRequest()
+        },
         // API Request
         async getPagesRequest ({ page, perPage, url, filters, orderBy }) {
-            if ( typeof page === typeof page ) {
+            if ( typeof page === typeof null ) {
                 page = null
             }
 

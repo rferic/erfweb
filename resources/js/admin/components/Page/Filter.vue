@@ -3,7 +3,7 @@
         <div>
             <b-nav vertical>
                 <div class="dropdown-divider" />
-                <input-text-filter @onChangeFilter="onChangeTextFilter" />
+                <input-text-filter @onChangeFilter="onChangeTextFilter" class="mb-2" />
                 <div class="dropdown-divider" />
                 <checkboxes-filter
                     v-if="hasLangFilter"
@@ -11,19 +11,24 @@
                     :options="filters.langs"
                     :translate-label="true"
                     @onChangeFilter="onChangeLangsFilter"
+                    class="mb-2"
                 />
+                <div class="dropdown-divider" />
                 <checkboxes-filter
                     v-if="hasMenuFilter"
                     :title="$t('Menus', { locale })"
                     :options="filters.menus"
                     :translate-label="true"
                     @onChangeFilter="onChangeMenusFilter"
+                    class="mb-2"
                 />
+                <div class="dropdown-divider" />
                 <checkboxes-filter
                     :title="$t('Status', { locale })"
                     :options="filters.status"
                     :translate-label="true"
                     @onChangeFilter="onChangeStatusFilter"
+                    class="mb-2"
                 />
             </b-nav>
         </div>

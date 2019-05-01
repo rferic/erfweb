@@ -24,7 +24,8 @@ class MenuController extends Controller
 
     public function index ()
     {
-        $title = __('Menus');
+        $title = __('Menus management');
+        $description = __('CRUD for all menus');
         $component = 'index-menu';
         $data = [
             'menus' => Menu::with('items')->get()->all(),
@@ -36,7 +37,7 @@ class MenuController extends Controller
             'getPageLocales' => route('admin.pageLocales.get')
         ];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function get ()

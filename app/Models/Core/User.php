@@ -44,6 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
             if ($user->forceDeleting && !Application::runningInConsole()) {
                 $user->comments()->forceDelete();
                 $user->messages()->forceDelete();
+                $user->messagesReceived()->forceDelete();
                 $user->apps()->detach();
             }
         });

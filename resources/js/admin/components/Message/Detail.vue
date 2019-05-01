@@ -1,7 +1,7 @@
 <template>
     <transition name="bounceRight">
-        <div>
-            <b-row>
+        <div class="mb-2">
+            <b-row class="mb-2">
                 <b-col cols="12">
                     <b-button
                         variant="primary"
@@ -11,58 +11,54 @@
                         <i class="fa fa-chevron-left" />
                         {{ $t('Return to list', { locale }) }}
                     </b-button>
-                    <hr />
                 </b-col>
             </b-row>
             <b-row v-if="author !== null">
-                <b-col
-                    cols="4"
-                    xs="12"
-                    class="pull-right"
-                >
-                    <b-card>
-                        <div class="avatar avatar-100">
-                            <img :src="`/${author.avatar}`" />
+                <b-col lg="4" md="12" class="order-xl-2 mt-2">
+                    <b-card class="card-profile shadow">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5 order-lg-4 pb-5">
+                                <div class="card-profile-image">
+                                    <img :src="`/${author.avatar}`" class="rounded-circle">
+                                </div>
+                            </div>
                         </div>
-                        <hr>
-                        <p class="text-sm-center mt-2 mb-1">{{ author.name }}</p>
-                        <p class="text-sm-center mt-2 mb-1">
-                            <i>{{ author.email }}</i>
-                        </p>
-                        <p class="text-sm-center mt-2 mb-1">
-                            <i>{{ author.created_at | datetimeFilter }}</i>
-                        </p>
-                        <ul
-                            v-if="counters !== null"
-                            class="list-group list-group-flush mt-4"
-                        >
-                            <li
-                                v-for="tag in tagsList"
-                                :key="tag.key"
-                                class="list-group-item"
-                            >
-                                <span :class="`text-${tag.class}`">
-                                    <i
-                                        v-if="typeof tag.icon !== typeof undefined"Fthis
-                                        class="fa ml-2"
-                                        :class="`${tag.icon} text-${tag.class}`"
-                                    />
-                                    {{ $t(tag.key, { locale }) | capitalizeFilter }}
-                                </span>
-                                <span
-                                    class="badge pull-right"
-                                    :class="`badge-${tag.class}`"
-                                >
-                                    {{ counters.tags[tag.key] }}
-                                </span>
-                            </li>
-                        </ul>
+                        <div class="card-body text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                            <div class="text-center">
+                                <h3>
+                                    {{ author.name }}
+                                </h3>
+                                <div class="h5 font-weight-300">
+                                    <i class="ni ni-email-83" /> {{ author.email }}
+                                </div>
+
+                                <b-row v-if="counters !== null" class="row">
+                                    <b-col cols="12">
+                                        <div class="card-profile-stats d-flex justify-content-center">
+                                            <div
+                                                v-for="tag in tagsList"
+                                                :key="tag.key"
+                                            >
+                                                <span class="heading" :class="`text-${tag.class}`">
+                                                    {{ counters.tags[tag.key] }}
+                                                </span>
+                                                        <span class="description" :class="`text-${tag.class}`">
+                                                    <i
+                                                        v-if="typeof tag.icon !== typeof undefined"
+                                                        class="fa ml-2"
+                                                        :class="`${tag.icon} text-${tag.class}`"
+                                                    />
+                                                    {{ $t(tag.key, { locale }) | capitalizeFilter }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </b-col>
+                                </b-row>
+                            </div>
+                        </div>
                     </b-card>
                 </b-col>
-                <b-col
-                    cols="8"
-                    xs="12"
-                >
+                <b-col lg="8" md="12" class="order-xl-1 mt-2">
                     <index-conversation
                         :data="data"
                         :message-origin="messageOrigin"

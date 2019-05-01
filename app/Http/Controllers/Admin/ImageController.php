@@ -23,7 +23,8 @@ class ImageController extends Controller
 
     public function index ()
     {
-        $title = __('Images');
+        $title = __('Images gallery');
+        $description = __('CRUD for global images');
         $component = 'index-image';
         $data = [
             'images' => Image::all()
@@ -34,7 +35,7 @@ class ImageController extends Controller
             'uploadImage' => route('admin.imagesTemporal.upload')
         ];
 
-        return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
+        return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));
     }
 
     public function create ( Request $request )
