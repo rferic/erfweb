@@ -4,9 +4,44 @@
             group="notify"
             position="top right"
         />
+        <BlockUI v-if="isVisibleBlockui" :message="messageBlockui">
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        </BlockUI>
+        <b-modal
+            ref="modalAttachApp"
+            scrollable
+            hide-footer
+            size="xl"
+            :title="$t('Attach app', { locale })"
+        >
+            <div v-if="hasAppsToAttach">
+                <b-row>
+                    <b-col v-for="appToAttach in appsToAttach" :key="appToAttach.id" lg="4" md="6" sm="12">
+                        <b-card
+                            class="card-profile card-app shadow mb-2"
+                            :style="{ backgroundImage: `url(${getDefaultAppImageSrc(appToAttach)})` }"
+                        >
+                            <div class="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                                <div class="text-center">
+                                    <div class="overlay">
+                                        <p>{{ getDefaultAppLocale(appToAttach).title }}</p>
+                                        <div class="overlay-buttons">
+                                            <base-button type="primary" icon="fa fa-link" size="sm" @click="onAttach(appToAttach)" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </b-card>
+                    </b-col>
+                </b-row>
+            </div>
+            <b-alert :show="!hasAppsToAttach" variant="warning">
+                {{ $t('Apps to attach not found', { locale }) }}
+            </b-alert>
+        </b-modal>
         <b-row>
             <b-col lg="4" md="12" class="order-xl-2 mt-2">
-                <b-card class="card-profile shadow">
+                <b-card class="card-profile shadow mb-2">
                     <div class="row justify-content-center">
                         <div class="col-lg-5 order-lg-4 pb-5">
                             <div class="card-profile-image">
@@ -26,13 +61,44 @@
                                 <b-col cols="12">
                                     <div class="card-profile-stats d-flex justify-content-center">
                                         <div v-for="(role, index) in roles" :key="index">
-                                            <component :is="role.value ? 'span' : 'del'" class="header">
+                                            <b-badge :variant="role.value ? 'success' : 'danger'">
                                                 {{ role.key }}
-                                            </component>
+                                            </b-badge>
                                         </div>
                                     </div>
                                 </b-col>
                             </b-row>
+                        </div>
+                    </div>
+                </b-card>
+
+                <b-card v-if="hasAppsToAttach" class="card-profile shadow mb-2">
+                    <div class="card-body text-center border-0 pt-0 pb-0 pl-0 pr-0">
+                        <b-button variant="success" @click="onOpenModal">
+                            <i class="fa fa-link" />
+                            {{ $t('Attach app', { locale }) }}
+                        </b-button>
+                    </div>
+                </b-card>
+
+                <b-card
+                    v-if="hasApps"
+                    v-for="app in apps"
+                    :key="app.id"
+                    class="card-profile card-app shadow mb-2"
+                    :class="{'card-app-enable': app.pivot.active, 'card-app-disable': !app.pivot.active}"
+                    :style="{ backgroundImage: `url(${getDefaultAppImageSrc(app)})` }"
+                >
+                    <div class="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                        <div class="text-center">
+                            <div class="overlay">
+                                <p>{{ getDefaultAppLocale(app).title }}</p>
+                                <div class="overlay-buttons">
+                                    <base-button v-if="app.pivot.active" type="danger" icon="fa fa-ban" size="sm" @click="onDisableAttach(app)" />
+                                    <base-button v-else type="primary" icon="fa fa-undo" size="sm" @click="onEnableAttach(app)" />
+                                    <base-button type="danger" icon="fa fa-unlink" size="sm" @click="onDetach(app)" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </b-card>
@@ -248,6 +314,7 @@
     import { mapState, mapActions } from 'vuex'
     import cloneMixin from '../../../includes/mixins/clone'
     import userMixin from '../../mixins/user'
+    import imageMixin from '../../mixins/image'
     import { Validator } from 'vee-validate'
     import passwordIsStrongRule from '../../../includes/validators/passwordIsStrongRule'
     import vue2Dropzone from 'vue2-dropzone'
@@ -260,7 +327,7 @@
                 required: true
             }
         },
-        mixins: [ cloneMixin, userMixin ],
+        mixins: [ cloneMixin, userMixin, imageMixin ],
         components: { vue2Dropzone },
         data () {
             return {
@@ -285,7 +352,9 @@
                 },
                 temporalImageDropzone: null,
                 imageIsTemporal: false,
-                errorImageShow: false
+                errorImageShow: false,
+                apps: JSON.parse(this.data).apps,
+                appsToAttach: []
             }
         },
         computed: {
@@ -293,17 +362,29 @@
             ...mapState({
                 auth: state => state.auth.user
             }),
+            ...mapState({
+                isVisibleBlockui: state => state.blockui.isVisible,
+                messageBlockui: state => state.blockui.message
+            }),
             userDataOrigin () {
                 return JSON.parse(this.data)
             },
             userIsCurrentAuth () {
                 return this.auth.id === this.user.id
+            },
+            hasApps () {
+                return this.apps.length > 0
+            },
+            hasAppsToAttach () {
+                return this.appsToAttach.length > 0
             }
         },
         methods: {
             ...mapActions({
-                setAuth : 'auth/set'
+                setAuth : 'auth/set',
+                toogleBlockui : 'blockui/toggleIsVisible'
             }),
+            // Events
             async onSelectAvatar (avatar) {
                 await this.removeTemporalImage()
                 this.user.avatar = avatar
@@ -343,6 +424,75 @@
                 this.user.avatar = null
                 this.temporalImageDropzone = null
             },
+            onOpenModal () {
+                this.$refs.modalAttachApp.show()
+            },
+            async onAttach ( app ) {
+                this.$refs.modalAttachApp.hide()
+                this.toogleBlockui(true)
+                const { apps } = await this.attachAppRequest({ app })
+                this.apps = apps
+                await this.getAppsToAttach()
+                this.toogleBlockui(false)
+                this.$notify({
+                    group: 'notify',
+                    title: this.$t('Attach app', { locale: this.locale }),
+                    text: this.$t('App has been attached to this user', { locale: this.locale }),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+            },
+            async onDetach ( app ) {
+                this.toogleBlockui(true)
+                const { apps } = await this.detachAppRequest({ app })
+                this.apps = apps
+                await this.getAppsToAttach()
+                this.toogleBlockui(false)
+                this.$notify({
+                    group: 'notify',
+                    title: this.$t('Detach app', { locale: this.locale }),
+                    text: this.$t('App has been detached to this user', { locale: this.locale }),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+            },
+            async onEnableAttach ( app ) {
+                this.toogleBlockui(true)
+                const { apps } = await this.enableAttachAppRequest({ app })
+                this.apps = apps
+                await this.getAppsToAttach()
+                this.toogleBlockui(false)
+                this.$notify({
+                    group: 'notify',
+                    title: this.$t('Enable attach app', { locale: this.locale }),
+                    text: this.$t('Has been enable attach app to this user', { locale: this.locale }),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+            },
+            async onDisableAttach ( app ) {
+                this.toogleBlockui(true)
+                const { apps } = await this.disableAttachAppRequest({ app })
+                this.apps = apps
+                await this.getAppsToAttach()
+                this.toogleBlockui(false)
+                this.$notify({
+                    group: 'notify',
+                    title: this.$t('Enable attach app', { locale: this.locale }),
+                    text: this.$t('Has been disable attach app to this user', { locale: this.locale }),
+                    type: 'success',
+                    config: {
+                        closeOnClick: true
+                    }
+                })
+            },
+            // Actions
             async validateEmail () {
                 const { result } = await this.checkIfEmailIsFreeRequest()
 
@@ -456,11 +606,35 @@
                     }
                 }
             },
+            clearPasswords () {
+                setTimeout(() => { this.password = '' }, 1000)
+            },
+            // Getters
             getAvatarIsImage () {
                 return !(this.user.avatar !== null && this.userDataOrigin.avatars.includes(this.user.avatar))
             },
-            clearPasswords () {
-                setTimeout(() => { this.password = '' }, 1000)
+            getDefaultAppLocale ( app ) {
+                let defaultLocale = null
+
+                for ( const locale of app.locales ) {
+                    if ( defaultLocale === null || locale.lang === this.locale ) {
+                        defaultLocale = locale
+                    }
+                }
+
+                return defaultLocale
+            },
+            getDefaultAppImageSrc ( app ) {
+                if ( app.images.length > 0 ) {
+                    let src = app.images[0].src
+
+                    return this.getIsExternal(src) ? src : `${app.imagePath}/${src}`
+                }
+
+                return null
+            },
+            async getAppsToAttach () {
+                this.appsToAttach =  await this.getAppsToAttachRequest({})
             }
         },
         created () {
@@ -468,6 +642,7 @@
 
             this.user = data.user
             this.avatarIsImage = this.getAvatarIsImage()
+            this.getAppsToAttach()
             this.toggleImage = this.avatarIsImage
             this.dropzoneOptions.url = this.routes.uploadImage
 
@@ -496,5 +671,37 @@
     .avatar.selected:hover,
     .avatar.selectable.selected {
         box-shadow: 0px 0px 8px #474b67;
+    }
+
+    .card-app {
+        background-size: cover;
+        border: 0;
+        min-height: 150px;
+    }
+
+    .card-app .card-body {
+        padding: 0;
+    }
+
+    .card-app .card-body .overlay {
+        padding: 1rem;
+        opacity: .5;
+    }
+
+    .card-app .card-body .overlay:hover {
+        opacity: 1;
+    }
+
+    .card-app-enable .card-body .overlay {
+        background: rgba(45, 206, 137, .8);
+    }
+
+    .card-app-disable .card-body .overlay {
+        background: rgba(245, 54, 92, .8);
+    }
+
+    .card-app .card-body .overlay .overlay-buttons {
+        position: absolute;
+        bottom: 1rem;
     }
 </style>

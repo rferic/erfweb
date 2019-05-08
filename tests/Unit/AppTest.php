@@ -74,7 +74,7 @@ class AppTest extends TestCase
 
     public function testHasPathImage ()
     {
-        $this->assertIsString($this->appTest->imagePath());
+        $this->assertIsString($this->appTest->imagePath);
     }
 
     public function testDestroy ()

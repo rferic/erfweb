@@ -20,7 +20,7 @@ class AppImage extends Model
 
         static::deleted (function ($appImage) {
             if ( $appImage->forceDeleting ) {
-                ImageHelper::destroyImage($appImage->app->imagePath(), $appImage->src);
+                ImageHelper::destroyImage($appImage->app->imagePath, $appImage->src);
             }
         });
     }

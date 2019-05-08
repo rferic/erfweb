@@ -14,6 +14,7 @@ class App extends Model
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $fillable = [ 'status', 'version', 'vue_component', 'type', 'status' ];
+    protected $appends = [ 'imagePath' ];
 
     protected static function boot ()
     {
@@ -21,7 +22,7 @@ class App extends Model
 
         static::deleting (function ($app) {
             if ( $app->forceDeleting ) {
-                ImageHelper::destroyDirectory($app->imagePath());
+                ImageHelper::destroyDirectory($app->imagePath);
 
                 $app->images()->forceDelete();
                 $app->locales()->forceDelete();
@@ -45,12 +46,12 @@ class App extends Model
         return $this->belongsToMany(User::class)->withTimestamps()->withPivot('active');
     }
 
-    public function getCreatedAtAttribute($date){
-        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d/m/Y');
-    }
-
-    public function imagePath ()
+    public function getImagePathAttribute ()
     {
         return 'apps/' . $this->id;
+    }
+
+    public function getCreatedAtAttribute ( $date ) {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d/m/Y');
     }
 }

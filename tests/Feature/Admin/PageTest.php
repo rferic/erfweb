@@ -119,7 +119,7 @@ class PageTest extends TestCase
             ->actingAs($this->user)
             ->post(route('admin.pages.getAllParents'))
             ->assertSuccessful()
-            ->assertExactJson(Page::whereNull('page_id')->get()->toArray());
+            ->assertExactJson(Page::whereNull('page_id')->with('locales')->get()->toArray());
     }
 
     public function testPostRestorePage ()
@@ -255,6 +255,7 @@ class PageTest extends TestCase
             'page_id' => $this->faker->boolean ? '' : Page::all()->random()->id,
             'locales' => $pageLocales
         ];
+
         // Testing create a new page
         $this
             ->actingAs($this->user)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Helpers\PasswordHelper;
 use App\Http\Helpers\RoleHelper;
 use App\Http\Helpers\UserHelper;
+use App\Models\Core\App;
 use App\Models\Core\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -56,14 +57,20 @@ class UserController extends Controller
             'user' => $user,
             'userRoles' => UserHelper::getRolesAssignToUser($user),
             'roles' => RoleHelper::getRoles(),
-            'avatars' => UserHelper::getAvatars()
+            'avatars' => UserHelper::getAvatars(),
+            'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()
         ];
         $routes = [
             'emailIsFree' => route('admin.users.emailIsFree', $user->id),
             'getUserData' => route('admin.users.getData', $user->id),
             'userUpdate' => route('admin.users.update', $user->id),
             'uploadImage' => route('admin.imagesTemporal.upload'),
-            'removeImage' => route('admin.imagesTemporal.remove')
+            'removeImage' => route('admin.imagesTemporal.remove'),
+            'getAppsToAttach' => route('admin.users.getAppsToAttach', $user->id),
+            'attachApp' => route('admin.users.attachApp', $user->id),
+            'detachApp' => route('admin.users.detachApp', $user->id),
+            'disableAttachApp' => route('admin.users.disableAttachApp', $user->id),
+            'enableAttachApp' => route('admin.users.enableAttachApp', $user->id)
         ];
 
         return view('admin/default', compact( 'data', 'title', 'component', 'routes' ));
@@ -86,6 +93,94 @@ class UserController extends Controller
             'avatar' => asset($user->avatar),
             'roles' => $user->getRoleNames()
         ]);
+    }
+
+    public function getAppsToAttach ( User $user, Request $request )
+    {
+        $query = App::with(['locales', 'images'])->where('type', '!=', 'public');
+
+        if ( !is_null($request->input('text')) ) {
+            $text = $request->input('text');
+            $query->where(function ($query) use ($text) {
+                return $query
+                    ->orWhere('vue_component', 'LIKE', '%' . $text . '%')
+                    ->orWhere('version', 'LIKE', '%' . $text . '%')
+                    ->orWhereHas('locales', function ($query) use ($text) {
+                        return $query->where('title', 'LIKE', '%' . $text . '%');
+                    });
+            });
+        }
+
+        $apps = $query->whereDoesntHave('users', function ($query) use ($user) {
+            return $query->where('id', $user->id);
+        })->get();
+
+        return Response::json($apps);
+    }
+
+    public function attachApp ( User $user, Request $request )
+    {
+        $validator = Validator::make($request->all(), [ 'app_id' => 'required|exists:apps,id' ]);
+
+        if ( !$validator->fails() ) {
+            $app = App::find($request->input('app_id'));
+            $user->apps()->attach([ $app->id => [
+                'active' => $app->type === 'protected' || $user->hasRole('admin') ? true : false
+            ]]);
+            return Response::json([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+        } else {
+            abort(400);
+        }
+    }
+
+    public function detachApp ( User $user, Request $request )
+    {
+        $validator = Validator::make($request->all(), [ 'app_id' => 'required|exists:apps,id' ]);
+
+        if ( !$validator->fails() ) {
+            $user->apps()->detach($request->input('app_id'));
+            return Response::json([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+        } else {
+            abort(400);
+        }
+    }
+
+    public function disableAttachApp ( User $user, Request $request )
+    {
+        $validator = Validator::make($request->all(), [ 'app_id' => 'required|exists:apps,id' ]);
+
+        if ( !$validator->fails() ) {
+            $app = App::find($request->input('app_id'));
+            $user->apps()->updateExistingPivot($app, [ 'active' => false ]);
+            return Response::json([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+        } else {
+            abort(400);
+        }
+    }
+
+    public function enableAttachApp ( User $user, Request $request )
+    {
+        $validator = Validator::make($request->all(), [ 'app_id' => 'required|exists:apps,id' ]);
+
+        if ( !$validator->fails() ) {
+            $app = App::find($request->input('app_id'));
+            $user->apps()->updateExistingPivot($app, [ 'active' => true ]);
+            return Response::json([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+        } else {
+            abort(400);
+        }
     }
 
     public function emailIsFree ( User $user, Request $request )

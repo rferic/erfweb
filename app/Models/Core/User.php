@@ -62,7 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function apps ()
     {
-        return $this->belongsToMany(App::class)->withTimestamps();
+        return $this->belongsToMany(App::class)->withTimestamps()->withPivot('active');
     }
 
     public function comments ()

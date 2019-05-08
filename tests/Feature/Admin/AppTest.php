@@ -254,7 +254,7 @@ class AppTest extends TestCase
         $this->assertNull(App::find($app->id));
         $this->assertCount(0, AppLocale::where('app_id', $app->if)->get());
         $this->assertCount(0, AppImage::where('app_id', $app->if)->get());
-        $this->assertDirectoryNotExists($app->imagePath());
+        $this->assertDirectoryNotExists($app->imagePath);
     }
 
     /**
@@ -352,11 +352,11 @@ class AppControllerTest extends AppController
     public function clearImages ( App $app )
     {
         foreach ( $app->images AS $image ) {
-            ImageHelper::destroyImage($app->imagePath(), $image->src);
+            ImageHelper::destroyImage($app->imagePath, $image->src);
         }
 
-        if ( COUNT(Storage::disk(ImageHelper::$disk)->files($app->imagePath())) <= 0 ) {
-            ImageHelper::destroyDirectory($app->imagePath());
+        if ( COUNT(Storage::disk(ImageHelper::$disk)->files($app->imagePath)) <= 0 ) {
+            ImageHelper::destroyDirectory($app->imagePath);
         }
     }
 }

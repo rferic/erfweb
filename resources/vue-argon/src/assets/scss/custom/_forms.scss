@@ -17,7 +17,7 @@ select.form-control:-webkit-autofill:hover,
 select.form-control:-webkit-autofill:focus {
     border: 1px solid white;
     -webkit-text-fill-color: #acb5bd;
-    -webkit-box-shadow: 0 0 0px 30px white inset;
+    @include box-shadow(0 0 0px 30px white inset);
 }
 
 .was-validated .form-control:invalid,

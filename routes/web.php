@@ -41,6 +41,7 @@ Route::group(
         Route::post('/admin-menu', 'Admin\AdminMenuController@get')->name('admin.adminMenu');
         // Admin Dashboard
         Route::get('/', 'Admin\DashboardController@index')->name('admin.dashboard');
+        Route::post('/get-statistics', 'Admin\DashboardController@getStatistics')->name('admin.dashboard.getStatistics');
         // Admin Profile
         Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
         Route::post('/profile/get-data', 'Admin\ProfileController@getData')->name('admin.profile.getData');
@@ -112,6 +113,11 @@ Route::group(
         Route::post('/users/{user}/email-is-free', 'Admin\UserController@emailIsFree')->name('admin.users.emailIsFree');
         Route::post('/users/{user}/disable', 'Admin\UserController@disable')->name('admin.users.disable');
         Route::post('/users/{user}/enable', 'Admin\UserController@enable')->name('admin.users.enable');
+        Route::post('/users/{user}/get-apps-to-attach', 'Admin\UserController@getAppsToAttach')->name('admin.users.getAppsToAttach');
+        Route::post('/users/{user}/attach-app', 'Admin\UserController@attachApp')->name('admin.users.attachApp');
+        Route::post('/users/{user}/detach-app', 'Admin\UserController@detachApp')->name('admin.users.detachApp');
+        Route::post('/users/{user}/disable-attach-app', 'Admin\UserController@disableAttachApp')->name('admin.users.disableAttachApp');
+        Route::post('/users/{user}/enable-attach-app', 'Admin\UserController@enableAttachApp')->name('admin.users.enableAttachApp');
         Route::delete('/users/{user}/destroy', 'Admin\UserController@destroy')->name('admin.users.destroy');
     }
 );

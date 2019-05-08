@@ -28,6 +28,29 @@ const userMixin = {
             })
             return data
         },
+        async getAppsToAttachRequest ({ text }) {
+            const params = typeof text !== typeof undefined ? { text } : {}
+
+            const { data } = await this.axios.post(this.routes.getAppsToAttach, params)
+
+            return data
+        },
+        async attachAppRequest ({ app }) {
+            const { data } = await this.axios.post(`${this.routes.attachApp}`, { app_id: app.id })
+            return data
+        },
+        async detachAppRequest ({ app }) {
+            const { data } = await this.axios.post(`${this.routes.detachApp}`, { app_id: app.id })
+            return data
+        },
+        async enableAttachAppRequest ({ app }) {
+            const { data } = await this.axios.post(`${this.routes.enableAttachApp}`, { app_id: app.id })
+            return data
+        },
+        async disableAttachAppRequest ({ app }) {
+            const { data } = await this.axios.post(`${this.routes.disableAttachApp}`, { app_id: app.id })
+            return data
+        },
         async disableUserRequest ( user ) {
             const { data } = await this.axios.post(`${this.routes.basePath}/${user.id}/disable`, {})
             return data

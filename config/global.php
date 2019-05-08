@@ -7,7 +7,7 @@
  */
 
 return [
-    'pathAvatars' => 'assets/images/avatars/svg',
+    'pathAvatars' => 'images/avatars/svg',
     'langsAvailables' => [
         [
             'name' => 'english',

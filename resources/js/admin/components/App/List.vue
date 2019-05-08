@@ -173,7 +173,7 @@
                             class="mr-2"
                             @click.prevent="$emit('onGoToApp', data.item)"
                         >
-                            <i class="fa fa-pencil text-secondary" />
+                            <i class="fa fa-pencil text-primary" />
                         </a>
                         <a
                             href="#"

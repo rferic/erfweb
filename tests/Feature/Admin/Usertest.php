@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\ImageTemporalController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Helpers\RoleHelper;
 use App\Http\Helpers\UserHelper;
+use App\Models\Core\App;
+use App\Models\Core\AppLocale;
 use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,7 +25,7 @@ class Usertest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    public $admin, $roles = [];
+    public $admin, $roles = [], $numAppsPriv, $wordSearchApp;
 
     protected function setUp ():void
     {
@@ -49,6 +51,29 @@ class Usertest extends TestCase
                     $user->assignRole($role['key']);
                 }
             }
+        });
+
+        $this->numAppsPriv = $this->faker->numberBetween(1, 20);
+        $this->wordSearchApp = $this->faker->word;
+        factory(App::class, $this->numAppsPriv)->create([
+            'vue_component' => $this->wordSearchApp,
+            'type' => 'private'
+        ])->each(function ($app) {
+            factory(AppLocale::class, 2)->create([
+                'app_id' => $app,
+                'title' => $this->wordSearchApp,
+                'lang' => $this->faker->word
+            ]);
+        });
+        factory(App::class, $this->faker->numberBetween(1, 20))->create([
+            'vue_component' => $this->wordSearchApp,
+            'type' => 'public'
+        ])->each(function ($app) {
+            factory(AppLocale::class, 2)->create([
+                'app_id' => $app,
+                'title' => $this->wordSearchApp,
+                'lang' => $this->faker->word
+            ]);
         });
     }
 
@@ -146,8 +171,187 @@ class Usertest extends TestCase
                 'email' => $user->email,
                 'name' => $user->name,
                 'avatar' => asset($user->avatar),
-                'roles' => $user->getRoleNames()
+                'roles' => $user->getRoleNames()->toArray()
             ]);
+    }
+
+    public function testPostGetAppsToAttach ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.getAppsToAttach', $user->id))
+            ->assertSuccessful()
+            ->assertJsonCount($this->numAppsPriv);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.getAppsToAttach', $user->id), [ 'text' => $this->wordSearchApp ])
+            ->assertSuccessful()
+            ->assertJsonCount($this->numAppsPriv);
+
+        $app = App::where('type', '!=', 'public')
+            ->whereDoesntHave('users', function ($query) use ($user) {
+                $query->where('id', $user->id);
+            })->get()->random();
+
+        $user->apps()->attach([ $app->id ]);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.getAppsToAttach', $user->id), [ 'text' => $this->wordSearchApp ])
+            ->assertSuccessful()
+            ->assertJsonCount($this->numAppsPriv - 1);
+    }
+
+    public function testPostAttachAppBadRequest ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.attachApp', $user->id))
+            ->assertStatus(400);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.attachApp', $user->id), [ 'app_id' => $this->faker->word ])
+            ->assertStatus(400);
+    }
+
+    public function testPostAttachAppSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+        $app = App::all()->random();
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.attachApp', $user->id), [ 'app_id' => $app->id ])
+            ->assertSuccessful()
+            ->assertJson([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+
+        $this->assertTrue($user->apps()->where('id', $app->id)->exists());
+    }
+
+    public function testPostDetachAppBadRequest ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.detachApp', $user->id))
+            ->assertStatus(400);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.detachApp', $user->id), [ 'app_id' => $this->faker->word ])
+            ->assertStatus(400);
+    }
+
+    public function testPostDetachAppSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+        $app = App::all()->random();
+        $user->apps()->attach([ $app->id ]);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.detachApp', $user->id), [ 'app_id' => $app->id ])
+            ->assertSuccessful()
+            ->assertExactJson([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+
+        $this->assertFalse($user->apps()->where('id', $app->id)->exists());
+    }
+
+    public function testPostEnableAttachAppBadRequest ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.enableAttachApp', $user->id))
+            ->assertStatus(400);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.enableAttachApp', $user->id), [ 'app_id' => $this->faker->word ])
+            ->assertStatus(400);
+    }
+
+    public function testPostEnableAttachAppSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+        $app = App::all()->random();
+        $user->apps()->attach([ $app->id => [ 'active' => false ] ]);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.enableAttachApp', $user->id), [ 'app_id' => $app->id ])
+            ->assertSuccessful()
+            ->assertExactJson([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+
+        $this->assertTrue($user->apps()->where('id', $app->id)->where('active', true)->exists());
+    }
+
+    public function testPostDisableAttachAppBadRequest ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.disableAttachApp', $user->id))
+            ->assertStatus(400);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.disableAttachApp', $user->id), [ 'app_id' => $this->faker->word ])
+            ->assertStatus(400);
+    }
+
+    public function testPostDisableAttachAppSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::all()->random();
+        $app = App::all()->random();
+        $user->apps()->attach([ $app->id => [ 'active' => true ] ]);
+
+        $this
+            ->actingAs($this->admin)
+            ->post(route('admin.users.disableAttachApp', $user->id), [ 'app_id' => $app->id ])
+            ->assertSuccessful()
+            ->assertExactJson([
+                'result' => true,
+                'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()->toArray()
+            ]);
+
+        $this->assertTrue($user->apps()->where('id', $app->id)->where('active', false)->exists());
     }
 
     public function testPostUpdateWrongParamsRequest ()

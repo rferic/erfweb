@@ -11,7 +11,7 @@ class Page extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [ 'user_id' ];
+    protected $fillable = [ 'user_id', 'page_id' ];
 
     protected static function boot ()
     {

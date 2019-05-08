@@ -255,7 +255,7 @@ class AppController extends Controller
             }
 
             if ( !$findImage ) {
-                ImageHelper::destroyImage( $app->imagePath(), $image->src);
+                ImageHelper::destroyImage( $app->imagePath, $image->src);
                 $image->forceDelete();
             }
         }
@@ -266,9 +266,9 @@ class AppController extends Controller
         if ( $image->src !== $imageData['src'] ) {
             $imageInfo = pathinfo($imageData['src']);
             $origin = ImageHelper::$pathTemporal . '/' . $imageInfo['basename'];
-            $destination = $image->app->imagePath() . '/' . $imageInfo['basename'];
+            $destination = $image->app->imagePath . '/' . $imageInfo['basename'];
             ImageHelper::move($origin, $destination);
-            ImageHelper::destroyImage($image->app->imagePath(), $image->src);
+            ImageHelper::destroyImage($image->app->imagePath, $image->src);
         }
 
         $image->title = $imageData['title'];
@@ -282,7 +282,7 @@ class AppController extends Controller
     {
         $imageInfo = pathinfo($imageData['src']);
         $origin = ImageHelper::$pathTemporal . '/' . $imageInfo['basename'];
-        $destination = $app->imagePath() . '/' . $imageInfo['basename'];
+        $destination = $app->imagePath . '/' . $imageInfo['basename'];
 
         $src = ImageHelper::move($origin, $destination);
 
