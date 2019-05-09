@@ -7,6 +7,10 @@ use App\Http\Helpers\MessageHelper;
 use App\Http\Helpers\RoleHelper;
 use App\Models\Core\App;
 use App\Models\Core\Message;
+use App\Models\Core\Page;
+use App\Models\Core\PageLocale;
+use App\Models\Core\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class DashboardController extends Controller
@@ -29,8 +33,11 @@ class DashboardController extends Controller
         $routes = [
             'getStatistics' => route('admin.dashboard.getStatistics')
         ];
+        $data = [
+            'langsAvailable' => config('global.langsAvailables')
+        ];
 
-        return view('admin/default', compact('title', 'description', 'component', 'routes'));
+        return view('admin/default', compact('title', 'description', 'component', 'routes', 'data'));
     }
 
     public function getStatistics ()
@@ -43,11 +50,12 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function getStatisticsMessages ()
+    public function getStatisticsMessages ()
     {
         $statistics = [
             'status' => [],
-            'tags' => []
+            'tags' => [],
+            'total' => Message::all()->count()
         ];
         $statusList = MessageHelper::getStatusList();
         $tagsList = MessageHelper::getTagsList();
@@ -59,7 +67,7 @@ class DashboardController extends Controller
 
             foreach ( $status AS $item2 ) {
                 if ( $item['key'] === $item2->status ) {
-                    $item['count'] = $item->count;
+                    $item['count'] = $item2->count;
                     break;
                 }
             }
@@ -72,7 +80,7 @@ class DashboardController extends Controller
 
             foreach ( $tags AS $item2 ) {
                 if ( $item['key'] === $item2->status ) {
-                    $item['count'] = $item->count;
+                    $item['count'] = $item2->count;
                     break;
                 }
             }
@@ -83,13 +91,14 @@ class DashboardController extends Controller
         return $statistics;
     }
 
-    private function getStatisticsUsers ()
+    public function getStatisticsUsers ()
     {
         $statistics = [];
         $roles = RoleHelper::getRoles();
 
         foreach ( $roles AS $role ) {
             $statistics[$role] = [
+                'total' => User::role($role)->withTrashed()->get()->count(),
                 'enable' => User::role($role)->get()->count(),
                 'disable' => User::onlyTrashed()->role($role)->get()->count()
             ];
@@ -98,9 +107,10 @@ class DashboardController extends Controller
         return $statistics;
     }
 
-    private function getStatisticsApps ()
+    public function getStatisticsApps ()
     {
         $statistics = [
+            'total' => App::all()->count(),
             'types' => [],
             'status' => []
         ];
@@ -113,6 +123,7 @@ class DashboardController extends Controller
             $item = [
                 'key' => $type['key'],
                 'color' => $type['color'],
+                'class' => $type['class'],
                 'count' => 0
             ];
 
@@ -130,24 +141,29 @@ class DashboardController extends Controller
             $item = [
                 'key' => $statusItem['key'],
                 'color' => $statusItem['color'],
+                'class' => $statusItem['class'],
                 'count' => 0
             ];
 
             foreach ( $statusResults AS $result ) {
-                if ( $statusItem['key'] === $result->type ) {
+                if ( $statusItem['key'] === $result->status ) {
                     $item['count'] = $result->count;
                     break;
                 }
             }
 
-            $statistics['types'][$statusItem['key']] = $item;
+            $statistics['status'][$statusItem['key']] = $item;
         }
 
         return $statistics;
     }
 
-    private function getStatisticsPages ()
+    public function getStatisticsPages ()
     {
-        return Page::groupBy('layout')->select('layout', DB::raw('count(layout) AS count'))->get()->toArray;
+        return [
+            'total' => Page::all()->count(),
+            'langs' => PageLocale::groupBy('lang')->select('lang', DB::raw('count(lang) AS count'))->get()->toArray(),
+            'layouts' => PageLocale::groupBy('layout')->select('layout', DB::raw('count(layout) AS count'))->get()->toArray(),
+        ];
     }
 }
