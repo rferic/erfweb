@@ -25,7 +25,7 @@
                         v-debounce:300ms="onChangeTextFilter"
                     />
                 </b-col>
-                <b-col v-if="filters.role === 'public'" lg="4" sm="12">
+                <b-col v-if="filters.role === 'user'" lg="4" sm="12">
                     <label class="custom-toggle">
                         <input
                             type="checkbox"
@@ -82,10 +82,10 @@
                             <a :href="getUrlToEditUser(data.item)" target="_blank" class="mr-2">
                                 <i class="fa fa-pencil text-primary" />
                             </a>
-                            <a v-if="data.item.deleted_at === null && filters.role === 'public'" href="#" @click="onDisable(data.item)" class="mr-2">
+                            <a v-if="data.item.deleted_at === null && filters.role === 'user'" href="#" @click="onDisable(data.item)" class="mr-2">
                                 <i class="fa fa-ban text-danger" />
                             </a>
-                            <a v-else-if="filters.role === 'public'" href="#" @click="onEnable(data.item)" class="mr-2">
+                            <a v-else-if="filters.role === 'user'" href="#" @click="onEnable(data.item)" class="mr-2">
                                 <i class="fa fa-undo text-success" />
                             </a>
                             <a href="#" @click.prevent="onOpenConfirmDestroy(data.item)">

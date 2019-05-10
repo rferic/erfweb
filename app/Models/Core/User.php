@@ -5,7 +5,7 @@ namespace App\Models\Core;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
+use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Support\Facades\App as Application;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\App as Application;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
-    use HasRoles;
+    use LaratrustUserTrait;
     use SoftDeletes;
 
     protected $guard_name = 'web';

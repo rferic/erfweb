@@ -15,7 +15,6 @@ use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ContentTest extends TestCase
@@ -30,11 +29,9 @@ class ContentTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'admin']);
-
-        $this->user = factory(User::class)->create()->assignRole('admin');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         $this->page = factory(Page::class)->create();
         $this->pageLocale = factory(PageLocale::class)->create([
             'lang' => $this->faker->languageCode

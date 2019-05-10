@@ -9,7 +9,7 @@
                     <stats-card
                         :title="$t('Enable users', { locale })"
                         type="gradient-info"
-                        :sub-title="`${statistics.users.public.enable}/${statistics.users.public.total}`"
+                        :sub-title="`${statistics.users.user.enable}/${statistics.users.user.total}`"
                         npm
                         icon="fa fa-users"
                         class="mb-4 mb-xl-0"
@@ -44,6 +44,40 @@
                         icon="fa fa-envelope"
                         class="mb-4 mb-xl-0"
                     />
+                </b-col>
+            </b-row>
+            <b-row class="mt-2">
+                <b-col v-if="messagesTimeLineChart !== null" lg="6" sm="12">
+                    <b-card>
+                        <div slot="header" class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">{{ $t('Messages received last three months', { locale }) }}</h3>
+                            </div>
+                        </div>
+                        <b-card-text>
+                            <line-chart
+                                :height="350"
+                                ref="bigChart"
+                                :chart-data="messagesTimeLineChart"
+                            />
+                        </b-card-text>
+                    </b-card>
+                </b-col>
+                <b-col v-if="usersTimeLineChart !== null" lg="6" sm="12">
+                    <b-card>
+                        <div slot="header" class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">{{ $t('Users created last three months', { locale }) }}</h3>
+                            </div>
+                        </div>
+                        <b-card-text>
+                            <line-chart
+                                :height="350"
+                                ref="bigChart"
+                                :chart-data="usersTimeLineChart"
+                            />
+                        </b-card-text>
+                    </b-card>
                 </b-col>
             </b-row>
             <b-row class="mt-2">
@@ -200,6 +234,7 @@
 
 <script>
     import { mapState, mapActions } from 'vuex'
+    import LineChart from './../Charts/LineChart'
 
     export default {
         name: 'IndexDashboard',
@@ -209,10 +244,13 @@
                 required: true,
             }
         },
+        components: { LineChart },
         data () {
             return {
                 statistics: null,
                 languagesAvailable: JSON.parse(this.data).langsAvailable,
+                messagesTimeLineChart: null,
+                usersTimeLineChart: null
             }
         },
         computed: {
@@ -344,7 +382,72 @@
             // Getters
             async getStatistics () {
                 this.statistics = await this.getStatisticsRequest()
+                this.getMessagesTimeLineChart()
+                this.getUsersTimeLineChart()
                 setTimeout(() => this.getStatistics(), 120000)
+            },
+
+            getMessagesTimeLineChart () {
+                let chartData = {
+                    datasets: [{
+                        label: this.$t('Messages', { locale: this.locale }),
+                        data: [ 0, 0, 0 ]
+                    }],
+                    labels: [
+                        Vue.moment().subtract(2, 'month').format('MMMM'),
+                        Vue.moment().subtract(1, 'month').format('MMMM'),
+                        Vue.moment().format('MMMM')
+                    ]
+                }
+
+                if ( this.hasStatisticsLoaded ) {
+                    try {
+                        for ( const message of this.statistics.messages.lastThreeMonths ) {
+                            const month = Vue.moment(message.created_at).month()
+
+                            if ( month === Vue.moment().subtract(2, 'month').month() ) {
+                                chartData.datasets[0].data[0]++
+                            } else if ( month === Vue.moment().subtract(1, 'month').month() ) {
+                                chartData.datasets[0].data[1]++
+                            } else if ( month === Vue.moment().month() ) {
+                                chartData.datasets[0].data[2]++
+                            }
+                        }
+                    } catch (e) {}
+                }
+
+                this.messagesTimeLineChart = chartData
+            },
+            getUsersTimeLineChart () {
+                let chartData = {
+                    datasets: [{
+                        label: this.$t('Users', { locale: this.locale }),
+                        data: [ 0, 0, 0 ]
+                    }],
+                    labels: [
+                        Vue.moment().subtract(2, 'month').format('MMMM'),
+                        Vue.moment().subtract(1, 'month').format('MMMM'),
+                        Vue.moment().format('MMMM')
+                    ]
+                }
+
+                if ( this.hasStatisticsLoaded ) {
+                    try {
+                        for ( const user of this.statistics.users.user.lastThreeMonths ) {
+                            const month = Vue.moment(user.created_at).month()
+
+                            if ( month === Vue.moment().subtract(2, 'month').month() ) {
+                                chartData.datasets[0].data[0]++
+                            } else if ( month === Vue.moment().subtract(1, 'month').month() ) {
+                                chartData.datasets[0].data[1]++
+                            } else if ( month === Vue.moment().month() ) {
+                                chartData.datasets[0].data[2]++
+                            }
+                        }
+                    } catch (e) {}
+                }
+
+                this.usersTimeLineChart = chartData
             },
             // API Request
             async getStatisticsRequest () {

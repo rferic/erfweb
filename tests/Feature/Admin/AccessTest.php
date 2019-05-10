@@ -12,7 +12,6 @@ use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class AccessTest extends TestCase
@@ -21,20 +20,18 @@ class AccessTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    protected $user, $admin, $adminNotVerified;
+    protected $user, $superadmin, $admin, $adminNotVerified;
 
     protected function setUp ():void
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'public']);
-
-        $this->user = factory(User::class)->create()->assignRole('public');
-        $this->admin = factory(User::class)->create()->assignRole('admin');
-        $this->adminNotVerified = factory(User::class)->create([ 'email_verified_at' => null ])->assignRole('admin');
+        $this->user = factory(User::class)->create()->attachRole('user');
+        $this->superadmin = factory(User::class)->create()->attachRole('superadministrator');
+        $this->admin = factory(User::class)->create()->attachRole('administrator');
+        $this->adminNotVerified = factory(User::class)->create([ 'email_verified_at' => null ])->attachRole('superadministrator');
     }
 
     public function testAccessUserNotLogged ()
@@ -71,6 +68,12 @@ class AccessTest extends TestCase
     public function testAccessAdminVerifiedLogged ()
     {
         $this->withExceptionHandling();
+
+        $this
+            ->actingAs($this->superadmin)
+            ->get(route('admin.dashboard'))
+            ->assertSuccessful()
+            ->assertStatus(200);
 
         $this
             ->actingAs($this->admin)

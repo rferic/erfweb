@@ -7,7 +7,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 use App\Models\Core\User;
 
 class LoginTest extends TestCase
@@ -22,31 +21,28 @@ class LoginTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'public']);
+        $this->seedRoles();
 
         $this->password = $this->faker->password;
 
-        $this->admin = factory(User::class)->create()->assignRole('admin');
-        $this->user = factory(User::class)->create([ 'password' => Hash::make($this->password) ])->assignRole('public');
+        $this->admin = factory(User::class)->create()->attachRole('superadministrator');
+        $this->user = factory(User::class)->create([ 'password' => Hash::make($this->password) ])->attachRole('user');
     }
 
     public function testPermissionsUsers ()
     {
         $this->withExceptionHandling();
 
-        $this->assertTrue(!$this->user->hasRole('admin'));
-        $this->assertTrue($this->user->hasRole('public'));
+        $this->assertFalse($this->user->hasRole('superadministrator'));
+        $this->assertTrue($this->user->hasRole('user'));
     }
 
     public function testPermissionsAdmin ()
     {
         $this->withExceptionHandling();
 
-        $this->assertTrue($this->admin->hasRole('admin'));
-        $this->assertTrue(!$this->admin->hasRole('public'));
+        $this->assertTrue($this->admin->hasRole('superadministrator'));
+        $this->assertFalse($this->admin->hasRole('user'));
     }
 
     public function testRedirectIfLogged ()

@@ -63,7 +63,7 @@ class ProfileController extends Controller
             'email' => $profile->email,
             'name' => $profile->name,
             'avatar' => asset($profile->avatar),
-            'roles' => $profile->getRoleNames()
+            'roles' => $profile->roles
         ]);
     }
 }

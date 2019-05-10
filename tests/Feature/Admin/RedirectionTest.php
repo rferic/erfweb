@@ -13,7 +13,6 @@ use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class RedirectionTest extends TestCase
@@ -30,13 +29,11 @@ class RedirectionTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'admin']);
-
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         $this->code = $this->faker->numberBetween(1, 400);
         $this->numRedirections = $this->faker->numberBetween(1, 10);
-        $this->user = factory(User::class)->create()->assignRole('admin');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
         factory(Redirection::class, $this->numRedirections)->create();
     }

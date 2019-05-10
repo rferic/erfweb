@@ -16,7 +16,6 @@ use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class MenuItemTest extends TestCase
@@ -31,12 +30,10 @@ class MenuItemTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'admin']);
-
-        $this->user = factory(User::class)->create()->assignRole('admin');
-        $this->author = factory(User::class)->create()->assignRole('admin');
+        $this->user = factory(User::class)->create()->attachRole('administrator');
+        $this->author = factory(User::class)->create()->attachRole('administrator');
         $this->menu = factory(Menu::class)->create([ 'user_id' => $this->author->id ]);
 
         factory(Page::class)->create();

@@ -15,7 +15,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -30,21 +29,16 @@ class DashboardTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
         Notification::fake();
 
-        $this->roles =  RoleHelper::getRoles();
+        $this->seedRoles();
 
-        foreach ( $this->roles AS $role ) {
-            Role::create(['name' => $role]);
-        }
-
-        $this->user = factory(User::class)->create()->assignRole('admin');
+        $this->roles = RoleHelper::getRoles();
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         factory(User::class, $this->faker->numberBetween(1, 20))->create()->each(function ($user) {
             foreach ( $this->roles AS $role ) {
                 if ( $this->faker->boolean ) {
-                    $user->assignRole($role);
+                    $user->attachRole($role);
                 }
             }
         });
@@ -107,7 +101,7 @@ class DashboardTest extends TestCase
             ->actingAs($this->user)
             ->post(route('admin.dashboard.getStatistics'))
             ->assertSuccessful()
-            ->assertExactJson($testController->getExpectedResult());
+            ->assertJson($testController->getExpectedResult());
     }
 }
 

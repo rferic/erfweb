@@ -16,7 +16,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class Usertest extends TestCase
@@ -31,7 +30,7 @@ class Usertest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
         foreach ( RoleHelper::getRoles() AS $role ) {
             array_push($this->roles, [
@@ -40,16 +39,20 @@ class Usertest extends TestCase
             ]);
         }
 
-        foreach ( $this->roles AS $role ) {
-            Role::create(['name' => $role['key']]);
-        }
+        $this->admin = factory(User::class)->create()->attachRole('superadministrator');
 
-        $this->admin = factory(User::class)->create()->assignRole('admin');
         factory(User::class, $this->faker->numberBetween(1, 100))->create()->each(function ($user) {
+            $hasAnyRole = false;
+
             foreach ( $this->roles AS $role ) {
                 if ( $this->faker->boolean ) {
-                    $user->assignRole($role['key']);
+                    $hasAnyRole = true;
+                    $user->attachRole($role['key']);
                 }
+            }
+
+            if ( !$hasAnyRole ) {
+                $user->attachRole('user');
             }
         });
 
@@ -171,7 +174,7 @@ class Usertest extends TestCase
                 'email' => $user->email,
                 'name' => $user->name,
                 'avatar' => asset($user->avatar),
-                'roles' => $user->getRoleNames()->toArray()
+                'roles' => $user->roles->toArray()
             ]);
     }
 

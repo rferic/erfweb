@@ -9,14 +9,12 @@
 namespace Tests\Feature\Admin;
 
 use App\Http\Controllers\Admin\ImageTemporalController;
-use App\Http\Helpers\RoleHelper;
 use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ImageTemporalTest extends TestCase
@@ -31,11 +29,9 @@ class ImageTemporalTest extends TestCase
     {
         parent::setUp();
 
-        foreach ( RoleHelper::getRoles() AS $role ) {
-            Role::create(['name' => $role]);
-        }
+        $this->seedRoles();
 
-        $this->user = factory(User::class)->create()->assignRole('admin');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
     }
 
     public function testPostUploadImageIfNotLogged ()

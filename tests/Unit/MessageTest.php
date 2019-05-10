@@ -10,13 +10,11 @@ namespace Tests\Unit;
 
 use App\Models\Core\Message;
 use App\Models\Core\User;
-use App\Http\Helpers\RoleHelper;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Notification;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class MessageTest extends TestCase
@@ -31,16 +29,12 @@ class MessageTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
         Notification::fake();
 
-        foreach ( RoleHelper::getRoles() AS $role ) {
-            Role::create(['name' => $role]);
-        }
+        $this->seedRoles();
 
-        $this->author = factory(User::class)->create()->assignRole('admin');
-        $this->user = factory(User::class)->create()->assignRole('public');
+        $this->user = factory(User::class)->create()->attachRole('user');
+        $this->author = factory(User::class)->create()->attachRole('administrator');
         $this->message = factory(Message::class)->create([
             'author_id' => $this->author->id,
             'receiver_id' => $this->user->id,

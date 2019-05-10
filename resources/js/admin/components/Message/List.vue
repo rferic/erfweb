@@ -432,7 +432,7 @@
                 })
             },
             async loadPage ({ page, perPage, url }) {
-                this.filters.receivers = [ 'admin' ]
+                this.filters.receivers = [ 'superadministrator',  'administrator' ]
 
                 const data = await this.getMessages({
                     stack: this.stackMessages,

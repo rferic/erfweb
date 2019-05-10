@@ -18,7 +18,7 @@ class AppsTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::role('public')->get();
+        $users = User::whereRoleIs('user')->get();
 
         $apps = factory(App::class, 30)->create()->each(function ($app) {
             $langs = config('global.langsAvailables');

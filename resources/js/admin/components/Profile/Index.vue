@@ -59,8 +59,8 @@
                             </div>
                             <b-row>
                                 <b-col cols="12">
-                                    <div class="card-profile-stats d-flex justify-content-center">
-                                        <div v-for="(role, index) in roles" :key="index">
+                                    <div class="card-profile-stats d-block justify-content-center">
+                                        <div v-for="(role, index) in roles" :key="index" class="d-inline-block mr-0 p-2 text-center">
                                             <b-badge :variant="role.value ? 'success' : 'danger'">
                                                 {{ role.key }}
                                             </b-badge>
@@ -283,7 +283,7 @@
                                             class="form-check-label ">
                                             <toggle-button
                                                 v-model="role.value"
-                                                :disabled="role.key === 'admin' && role.value === true"
+                                                :disabled="role.key === 'superadmnistrator' && role.value === true"
                                             />
                                             {{ role.key }}
                                         </label>
@@ -670,7 +670,7 @@
 
     .avatar.selected:hover,
     .avatar.selectable.selected {
-        box-shadow: 0px 0px 8px #474b67;
+        box-shadow: 0px 0px 8px #2dce89;
     }
 
     .card-app {

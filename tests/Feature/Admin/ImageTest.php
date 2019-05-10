@@ -10,7 +10,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ImageTest extends TestCase
@@ -26,12 +25,10 @@ class ImageTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
-        Role::create(['name' => 'admin']);
+        $this->seedRoles();
 
         $this->numImages = $this->faker->numberBetween(1, 20);
-        $this->user = factory(User::class)->create()->assignRole('admin');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         factory(Image::class, $this->numImages)->create();
     }
 

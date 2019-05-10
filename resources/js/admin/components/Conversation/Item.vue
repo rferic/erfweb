@@ -158,10 +158,10 @@
         computed: {
             ...mapState([ 'locale', 'routes', 'auth' ]),
             authorIsAdmin () {
-                return this.messageOrigin.author.roles.some(role => role.name === 'admin')
+                return this.messageOrigin.author.roles.some(role => role.name === 'superadministrator' || role.name === 'administrator')
             },
             iCanRemove () {
-                return this.enableRemove && (this.auth.user.roles.some(role => role === 'admin') || this.auth.user.id === this.message.author.id)
+                return this.enableRemove && (this.auth.user.roles.some(role => role === 'superadministrator' || role === 'administrator') || this.auth.user.id === this.message.author.id)
             }
         },
         methods: {

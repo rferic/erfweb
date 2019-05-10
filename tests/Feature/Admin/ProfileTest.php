@@ -8,17 +8,11 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Http\Controllers\Admin\ImageTemporalController;
 use App\Http\Helpers\RoleHelper;
-use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -33,14 +27,10 @@ class ProfileTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        foreach ( RoleHelper::getRoles() AS $role ) {
-            Role::create(['name' => $role]);
-        }
-
-        $this->admin = factory(User::class)->create()->assignRole('admin');
-        $this->user = factory(User::class)->create()->assignRole('admin');
+        $this->admin = factory(User::class)->create()->attachRole('superadministrator');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
 
         foreach ( RoleHelper::getRoles() AS $role ) {
             array_push($this->roles, [
@@ -73,7 +63,7 @@ class ProfileTest extends TestCase
                 'email' => $profile->email,
                 'name' => $profile->name,
                 'avatar' => asset($profile->avatar),
-                'roles' => $profile->getRoleNames()
+                'roles' => $profile->roles()
             ]);
     }
 
@@ -100,7 +90,7 @@ class ProfileTest extends TestCase
                 'email' => $this->admin->email,
                 'name' => $this->admin->name,
                 'avatar' => asset($this->admin->avatar),
-                'roles' => $this->admin->getRoleNames()
+                'roles' => $this->admin->roles()
             ]);
     }
 }

@@ -6,7 +6,6 @@ use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,9 +21,7 @@ class RegisterTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
-        Role::create(['name' => 'public']);
+        $this->seedRoles();
     }
 
     public function testDisplayedIfNotLogged ()
@@ -97,6 +94,7 @@ class RegisterTest extends TestCase
     public function testPostSuccess ()
     {
         $this->withExceptionHandling();
+
         Event::fake();
 
         $avatars = UserHelper::getAvatars();
@@ -104,7 +102,7 @@ class RegisterTest extends TestCase
         $userData = [
             'name' => $this->faker->name,
             'email' => $this->faker->safeEmail,
-            'password' => 'Secret123!',
+            'password' => 'Secret1!',
             'terms' => true
         ];
 
@@ -127,8 +125,8 @@ class RegisterTest extends TestCase
         $this->assertAuthenticatedAs($user);
         $this->assertEquals($userData['name'], $user->name);
         $this->assertEquals($userData['email'], $user->email);
-        $this->assertTrue(!$user->hasRole('admin'));
-        $this->assertTrue($user->hasRole('public'));
+        $this->assertFalse($user->hasRole('superadministrator'));
+        $this->assertTrue($user->hasRole('user'));
 
 
         Event::assertDispatched(Registered::class, function ($e) use ($user) {

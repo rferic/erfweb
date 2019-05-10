@@ -76,6 +76,6 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'avatar' => COUNT($avatars) > 0 ? $avatars[$faker->numberBetween(0, COUNT($avatars) - 1)] : null
-        ])->assignRole('public');
+        ])->attachRole('user');
     }
 }

@@ -12,7 +12,6 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Role;
 
 class SlugTest extends TestCase
 {
@@ -27,12 +26,10 @@ class SlugTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'admin']);
-
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         $this->langs = config('global.langsAvailables');
-        $this->user = factory(User::class)->create()->assignRole('admin');
 
         factory(Page::class, $this->faker->numberBetween(1, 10))->create()->each(function ($page) {
             foreach ( $this->langs AS $lang ) {

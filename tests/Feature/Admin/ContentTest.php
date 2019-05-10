@@ -16,7 +16,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ContentTest extends TestCase
@@ -33,14 +32,12 @@ class ContentTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
         Notification::fake();
 
-        Role::create(['name' => 'admin']);
+        $this->seedRoles();
 
         $this->numContents = $this->faker->numberBetween(0, 100);
-        $this->user = factory(User::class)->create()->assignRole('admin');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
         $page = factory(Page::class)->create();
         $this->pageLocale = factory(PageLocale::class)->create([

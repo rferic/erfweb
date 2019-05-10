@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Core\User;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,12 +18,10 @@ class EmailVerificationTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'public']);
-
-        $this->userNotVerified = factory(User::class)->create([ 'email_verified_at' => null ])->assignRole('public');
-        $this->userVerified = factory(User::class)->create([ 'email_verified_at' => now() ])->assignRole('public');
+        $this->userNotVerified = factory(User::class)->create([ 'email_verified_at' => null ])->attachRole('user');
+        $this->userVerified = factory(User::class)->create([ 'email_verified_at' => now() ])->attachRole('user');
     }
 
     public function testNotDisplayedNoticeIfNotLogged ()

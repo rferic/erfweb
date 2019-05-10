@@ -17,7 +17,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -32,11 +31,11 @@ class UserTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
         Notification::fake();
 
-        $this->user = factory(User::class)->create();
+        $this->user = factory(User::class)->create()->attachRole('administrator');
     }
 
     public function testIsMe ()
@@ -50,9 +49,7 @@ class UserTest extends TestCase
     public function testHasApps ()
     {
         $count = $this->faker->numberBetween(1, 100);
-
-        Role::create(['name' => 'public']);
-        $this->user->assignRole('public');
+        $this->user->attachRole('user');
 
         $apps = factory(App::class, $count)->create();
         $this->user->apps()->sync($apps);

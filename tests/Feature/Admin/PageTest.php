@@ -17,7 +17,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Response;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class PageTest extends TestCase
@@ -33,12 +32,10 @@ class PageTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'admin']);
-
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         $this->numPages = $this->faker->numberBetween(1, 10);
-        $this->user = factory(User::class)->create()->assignRole('admin');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
         factory(Page::class, $this->numPages)->create()->each(function ($page) {
             $langs = config('global.langsAvailables');

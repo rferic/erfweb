@@ -241,7 +241,7 @@ class MessageController extends Controller
 
                 if ( isset($filters['receivers']) ) {
                     foreach ($filters['receivers'] as $item) {
-                        if ( $item === 'admin' ) {
+                        if ( $item === 'superadministrator' || $item === 'administrator' ) {
                             $query->orWhereNull('receiver_id');
                         } else {
                             $query->orWhere('receiver_id', $item);

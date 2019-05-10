@@ -10,6 +10,7 @@ use App\Models\Core\Message;
 use App\Models\Core\Page;
 use App\Models\Core\PageLocale;
 use App\Models\Core\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
@@ -55,7 +56,11 @@ class DashboardController extends Controller
         $statistics = [
             'status' => [],
             'tags' => [],
-            'total' => Message::all()->count()
+            'total' => Message::all()->count(),
+            'lastThreeMonths' => Message::whereNull('receiver_id')
+                ->where('created_at', '>', Carbon::now()->subMonths(6))
+                ->get()
+                ->toArray()
         ];
         $statusList = MessageHelper::getStatusList();
         $tagsList = MessageHelper::getTagsList();
@@ -98,9 +103,10 @@ class DashboardController extends Controller
 
         foreach ( $roles AS $role ) {
             $statistics[$role] = [
-                'total' => User::role($role)->withTrashed()->get()->count(),
-                'enable' => User::role($role)->get()->count(),
-                'disable' => User::onlyTrashed()->role($role)->get()->count()
+                'total' => User::whereRoleIs($role)->withTrashed()->get()->count(),
+                'enable' => User::whereRoleIs($role)->get()->count(),
+                'disable' => User::onlyTrashed()->whereRoleIs($role)->get()->count(),
+                'lastThreeMonths' => User::where('created_at', '>', Carbon::now()->subMonths(6))->get()->toArray()
             ];
         }
 

@@ -14,7 +14,7 @@ class CommentsTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::role('public')->get()->first();
+        $user = User::whereRoleIs('user')->get()->first();
 
         factory(Comment::class, 5)->create()->each(function ($comment) use ($user) {
             $user->comments()->save($comment);

@@ -9,13 +9,12 @@
 namespace App\Http\Helpers;
 
 
+use App\Models\Laratrust\Role;
+
 class RoleHelper
 {
     static function getRoles ()
     {
-        return Array(
-            'public',
-            'admin'
-        );
+        return Role::all()->pluck('name')->toArray();
     }
 }

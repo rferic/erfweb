@@ -1,10 +1,13 @@
 <?php
 
 namespace Tests;
+
 use App\Models\Core\User;
+use App\Models\Laratrust\Role;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use App\Exceptions\Handler;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
@@ -34,5 +37,19 @@ abstract class TestCase extends BaseTestCase
     {
         $this->app->instance(ExceptionHandler::class, $this->oldExceptionHandler);
         return $this;
+    }
+
+    protected function seedRoles()
+    {
+        $config = config('laratrust_seeder.role_structure');
+
+        foreach ($config as $key => $modules) {
+            // Create a new role
+            Role::create([
+                'name' => $key,
+                'display_name' => ucwords(str_replace('_', ' ', $key)),
+                'description' => ucwords(str_replace('_', ' ', $key))
+            ]);
+        }
     }
 }

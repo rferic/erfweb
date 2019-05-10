@@ -33,7 +33,7 @@ Route::view('/password/confirm', 'auth/passwords/confirm');
 Route::group(
     [
         'prefix' => 'admin',
-        'middleware' => ['verified', 'role:admin']
+        'middleware' => ['verified', 'role:superadministrator|administrator']
     ],
     function ()
     {

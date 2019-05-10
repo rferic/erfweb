@@ -10,7 +10,6 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Role;
 use App\Models\Core\User;
 
 class ForgotPasswordTest extends TestCase
@@ -25,11 +24,9 @@ class ForgotPasswordTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
+        $this->seedRoles();
 
-        Role::create(['name' => 'public']);
-
-        $this->user = factory(User::class)->create()->assignRole('public');
+        $this->user = factory(User::class)->create()->attachRole('user');
     }
 
     public function testDisplayedIfNotLogged ()

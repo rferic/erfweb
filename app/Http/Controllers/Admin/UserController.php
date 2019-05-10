@@ -91,7 +91,7 @@ class UserController extends Controller
             'email' => $user->email,
             'name' => $user->name,
             'avatar' => asset($user->avatar),
-            'roles' => $user->getRoleNames()
+            'roles' => $user->roles
         ]);
     }
 
@@ -125,7 +125,7 @@ class UserController extends Controller
         if ( !$validator->fails() ) {
             $app = App::find($request->input('app_id'));
             $user->apps()->attach([ $app->id => [
-                'active' => $app->type === 'protected' || $user->hasRole('admin') ? true : false
+                'active' => $app->type === 'protected' || $user->hasRole('superadministrator') || $user->hasRole('administrator') ? true : false
             ]]);
             return Response::json([
                 'result' => true,
@@ -300,7 +300,7 @@ class UserController extends Controller
         if ( isset($filters['role']) && in_array($filters['role'], RoleHelper::getRoles()) ) {
             $usersWithRole = isset($filters['banned']) && $filters['banned']
                 ? User::withTrashed()->role($filters['role'])->get()
-                : User::role($filters['role'])->get();
+                : User::whereRoleIs($filters['role'])->get();
             $query->where(function ($query) use ($usersWithRole) {
                 foreach ( $usersWithRole AS $userWithRole ){
                     $query->orWhere('id', $userWithRole->id);

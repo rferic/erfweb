@@ -38,9 +38,9 @@ class UserHelper
         foreach ( $roles AS $role ) {
             if ( $user->hasRole($role['key']) !== boolval($role['value']) ) {
                 if ( $role['value'] ) {
-                    $user->assignRole($role['key']);
+                    $user->attachRole($role['key']);
                 } else {
-                    $user->removeRole($role['key']);
+                    $user->detachRole($role['key']);
                 }
             }
         }

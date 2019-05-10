@@ -21,7 +21,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
-use Spatie\Permission\Models\Role;
 
 class AppTest extends TestCase
 {
@@ -36,12 +35,10 @@ class AppTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
-        Role::create(['name' => 'admin']);
+        $this->seedRoles();
 
         $this->numApps = $this->faker->numberBetween(0, 100);
-        $this->user = factory(User::class)->create()->assignRole('admin');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
 
         factory(App::class, $this->numApps)->create()->each(function ($app) {

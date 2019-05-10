@@ -17,7 +17,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Notification;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class MessageTest extends TestCase
@@ -33,14 +32,12 @@ class MessageTest extends TestCase
     {
         parent::setUp();
 
-        app()['cache']->forget('spatie.permission.cache');
-
         Notification::fake();
 
-        Role::create(['name' => 'admin']);
+        $this->seedRoles();
 
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
         $this->numMessages = $this->faker->numberBetween(0, 100);
-        $this->user = factory(User::class)->create()->assignRole('admin');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
         factory(Message::class, $this->numMessages)->create();
     }
