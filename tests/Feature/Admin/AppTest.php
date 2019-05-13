@@ -10,6 +10,7 @@ namespace Tests\Feature\Admin;
 
 use App\Http\Controllers\Admin\AppController;
 use App\Http\Helpers\ImageHelper;
+use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\App;
 use App\Models\Core\AppImage;
 use App\Models\Core\AppLocale;
@@ -42,7 +43,7 @@ class AppTest extends TestCase
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
 
         factory(App::class, $this->numApps)->create()->each(function ($app) {
-            $langs = config('global.langsAvailables');
+            $langs = LocalizationHelper::getSupportedFormatted();
 
             foreach ( $langs AS $lang ) {
                 factory(AppLocale::class)->create([
@@ -116,7 +117,7 @@ class AppTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        $langs = config('global.langsAvailables');
+        $langs = LocalizationHelper::getSupportedFormatted();
         $appLocales = [];
         $appImages = [];
         $testController = new AppControllerTest();

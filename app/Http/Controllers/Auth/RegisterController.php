@@ -41,7 +41,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        $this->redirectTo = route('account');
+        $this->redirectTo = localization()->localizeURL('account');
     }
 
     /**

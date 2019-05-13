@@ -38,6 +38,6 @@ class VerificationController extends Controller
         $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
-        $this->redirectTo = route('account');
+        $this->redirectTo = localization()->localizeURL('account');
     }
 }

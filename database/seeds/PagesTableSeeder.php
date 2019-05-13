@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Helpers\LocalizationHelper;
 use Illuminate\Database\Seeder;
 
 use App\Models\Core\PageLocale;
@@ -27,7 +28,7 @@ class PagesTableSeeder extends Seeder
     }
 
     private function setRelations ( $page ) {
-        $langs = config('global.langsAvailables');
+        $langs = LocalizationHelper::getSupportedFormatted();
         $setAnyLang = false;
 
         foreach ( $langs AS $lang ) {

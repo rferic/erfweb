@@ -63,7 +63,7 @@ class ProfileTest extends TestCase
                 'email' => $profile->email,
                 'name' => $profile->name,
                 'avatar' => asset($profile->avatar),
-                'roles' => $profile->roles()
+                'roles' => $profile->roles->toArray()
             ]);
     }
 
@@ -90,7 +90,7 @@ class ProfileTest extends TestCase
                 'email' => $this->admin->email,
                 'name' => $this->admin->name,
                 'avatar' => asset($this->admin->avatar),
-                'roles' => $this->admin->roles()
+                'roles' => $this->admin->roles->toArray()
             ]);
     }
 }

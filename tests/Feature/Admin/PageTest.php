@@ -9,6 +9,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\Menu;
 use App\Models\Core\Page;
 use App\Models\Core\PageLocale;
@@ -38,7 +39,7 @@ class PageTest extends TestCase
         $this->numPages = $this->faker->numberBetween(1, 10);
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
         factory(Page::class, $this->numPages)->create()->each(function ($page) {
-            $langs = config('global.langsAvailables');
+            $langs = LocalizationHelper::getSupportedFormatted();
             $setAnyLang = false;
 
             foreach ( $langs AS $lang ) {
@@ -205,7 +206,7 @@ class PageTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        $langs = config('global.langsAvailables');
+        $langs = LocalizationHelper::getSupportedFormatted();
         $pageLocales = [];
         $allContents = [];
 
@@ -358,7 +359,7 @@ class PageTest extends TestCase
         // filter by lang
         if ( $this->faker->boolean ) {
             $params['filters']['langs'] = [];
-            $langs = config('global.langsAvailables');
+            $langs = LocalizationHelper::getSupportedFormatted();
             $setAnyLang = false;
 
             foreach ( $langs AS $lang ) {

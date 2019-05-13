@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\App;
 use App\Models\Core\AppLocale;
 use App\Models\Core\Page;
@@ -29,7 +30,7 @@ class SlugTest extends TestCase
         $this->seedRoles();
 
         $this->user = factory(User::class)->create()->attachRole('superadministrator');
-        $this->langs = config('global.langsAvailables');
+        $this->langs = LocalizationHelper::getSupportedFormatted();
 
         factory(Page::class, $this->faker->numberBetween(1, 10))->create()->each(function ($page) {
             foreach ( $this->langs AS $lang ) {

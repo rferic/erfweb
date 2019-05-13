@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\PageHelper;
 use App\Models\Core\Content;
 use App\Models\Core\Page;
@@ -238,7 +239,7 @@ class PageController extends Controller
         return [
             'component' => 'index-page',
             'data' => [
-                'langsAvailable' => config('global.langsAvailables'),
+                'langsAvailable' => LocalizationHelper::getSupportedFormatted(),
                 'layouts' => PageHelper::getLayouts()
             ],
             'routes' => [

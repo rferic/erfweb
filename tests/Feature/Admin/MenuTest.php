@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\Menu;
 use App\Models\Core\MenuItem;
 use App\Models\Core\Page;
@@ -74,7 +75,7 @@ class MenuTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        $langs = config('global.langsAvailables');
+        $langs = LocalizationHelper::getSupportedFormatted();
         // Testing create a new menu
         $numItems = $this->faker->numberBetween(1, 10);
         $items = [];

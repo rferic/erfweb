@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\Menu;
 use App\Models\Core\MenuItem;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class MenuController extends Controller
         $component = 'index-menu';
         $data = [
             'menus' => Menu::with('items')->get()->all(),
-            'langsAvailable' => config('global.langsAvailables')
+            'langsAvailable' => LocalizationHelper::getSupportedFormatted()
         ];
         $routes = [
             'getMenus' => route('admin.menus.get'),

@@ -19,8 +19,8 @@ class UsersTableSeeder extends Seeder
         });
 
         factory(User::class, 1)->create([
-            'email' => config('mail.from')['address'],
-            'password' => Hash::make('secret1!')
+            'email' => env('ADMIN_USER_DEFAULT', config('mail.from')['address']),
+            'password' => Hash::make(env('ADMIN_PASSWORD_DEFAULT', 'secret1!'))
         ])->first()->attachRole('superadministrator');
     }
 }

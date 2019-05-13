@@ -29,11 +29,11 @@
         <script>
             const locale = "{{ App::getLocale() }}"
             const routesGlobal = {
-                login: "{{ route('login') }}",
-                forgottenPassword: "{{ route('password.request')  }}",
-                register: "{{ route('register') }}",
-                resetEmail: "{{ route('password.email') }}",
-                resetPassword: "{{ route('password.update') }}"
+                login: "{{ localization()->localizeURL('login') }}",
+                forgottenPassword: "{{ localization()->localizeURL('password.request')  }}",
+                register: "{{ localization()->localizeURL('register') }}",
+                resetEmail: "{{ localization()->localizeURL('password.email') }}",
+                resetPassword: "{{ localization()->localizeURL('password.update') }}"
             }
             const csrfToken = "{{ csrf_token() }}"
             const links = @json(config('global.links'))

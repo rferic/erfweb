@@ -72,19 +72,18 @@
                         <a href="{{ url('/home') }}">Home</a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item" href="{{ localization()->localizeURL('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ localization()->localizeURL('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                         </div>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
+                        <a href="{{ localization()->localizeURL('login') }}">Login</a>
+                        <a href="{{ localization()->localizeURL('register') }}">Register</a>
                     @endauth
                 </div>
             @endif

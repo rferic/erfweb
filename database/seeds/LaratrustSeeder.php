@@ -1,4 +1,6 @@
 <?php
+
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -51,15 +53,18 @@ class LaratrustSeeder extends Seeder
             // Attach all permissions to the role
             $role->permissions()->sync($permissions);
 
-            $this->command->info("Creating '{$key}' user");
+            /*$this->command->info("Creating '{$key}' user");
 
             // Create default user for each role
-            $user = factory(\App\Models\Core\User::class)->create();
-            $user->attachRole($role);
+            $user = factory(\App\Models\Core\User::class)->create([
+                'email' => config('mail.from')['address'],
+                'password' => Hash::make('secret1!')
+            ]);
+            $user->attachRole($role);*/
         }
 
         // Creating user with permissions
-        if (!empty($userPermission)) {
+        /*if (!empty($userPermission)) {
 
             foreach ($userPermission as $key => $modules) {
 
@@ -88,7 +93,7 @@ class LaratrustSeeder extends Seeder
                 // Attach all permissions to the user
                 $user->permissions()->sync($permissions);
             }
-        }
+        }*/
     }
 
     /**

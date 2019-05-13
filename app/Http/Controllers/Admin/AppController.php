@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Helpers\AppHelper;
 use App\Http\Helpers\ImageHelper;
+use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\App;
 use App\Models\Core\AppImage;
 use App\Models\Core\AppLocale;
@@ -170,7 +171,7 @@ class AppController extends Controller
         return [
             'component' => 'index-app',
             'data' => [
-                'langsAvailable' => config('global.langsAvailables'),
+                'langsAvailable' => LocalizationHelper::getSupportedFormatted(),
                 'types' => AppHelper::getTypes(),
                 'status' => AppHelper::getStatus()
             ],

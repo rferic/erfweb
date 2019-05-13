@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Helpers\LocalizationHelper;
 use Illuminate\Database\Seeder;
 
 use App\Models\Core\User;
@@ -21,7 +22,7 @@ class AppsTableSeeder extends Seeder
         $users = User::whereRoleIs('user')->get();
 
         $apps = factory(App::class, 30)->create()->each(function ($app) {
-            $langs = config('global.langsAvailables');
+            $langs = LocalizationHelper::getSupportedFormatted();
 
             foreach ( $langs AS $lang ) {
                 factory(AppLocale::class)->create([

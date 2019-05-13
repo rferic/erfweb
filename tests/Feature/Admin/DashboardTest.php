@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\RoleHelper;
 use App\Models\Core\App;
 use App\Models\Core\AppImage;
@@ -44,7 +45,7 @@ class DashboardTest extends TestCase
         });
 
         factory(Page::class, $this->faker->  numberBetween(1, 20))->create()->each(function ($page) {
-            $langs = config('global.langsAvailables');
+            $langs = LocalizationHelper::getSupportedFormatted();
             $setAnyLang = false;
 
             foreach ( $langs AS $lang ) {
@@ -66,7 +67,7 @@ class DashboardTest extends TestCase
         });
 
         factory(App::class, $this->faker->numberBetween(1, 20))->create()->each(function ($app) {
-            $langs = config('global.langsAvailables');
+            $langs = LocalizationHelper::getSupportedFormatted();
 
             foreach ( $langs AS $lang ) {
                 factory(AppLocale::class)->create([

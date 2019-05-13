@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\AppHelper;
+use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\MessageHelper;
 use App\Http\Helpers\RoleHelper;
 use App\Models\Core\App;
@@ -35,7 +36,7 @@ class DashboardController extends Controller
             'getStatistics' => route('admin.dashboard.getStatistics')
         ];
         $data = [
-            'langsAvailable' => config('global.langsAvailables')
+            'langsAvailable' => LocalizationHelper::getSupportedFormatted()
         ];
 
         return view('admin/default', compact('title', 'description', 'component', 'routes', 'data'));

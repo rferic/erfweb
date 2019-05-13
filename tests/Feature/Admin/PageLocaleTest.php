@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\Page;
 use App\Models\Core\PageLocale;
 use App\Models\Core\User;
@@ -27,7 +28,7 @@ class PageLocaleTest extends TestCase
         $this->user = factory(User::class)->create()->attachRole('superadministrator');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
         factory(Page::class, $this->faker->numberBetween(1, 10))->create()->each(function ($page) {
-            $langs = config('global.langsAvailables');
+            $langs = LocalizationHelper::getSupportedFormatted();
             $setAnyLang = false;
 
             foreach ( $langs AS $lang ) {
@@ -51,7 +52,7 @@ class PageLocaleTest extends TestCase
 
     public function testPostGet()
     {
-        $langs = config('global.langsAvailables');
+        $langs = LocalizationHelper::getSupportedFormatted();
 
         $this->withExceptionHandling();
 
