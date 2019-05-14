@@ -4,7 +4,8 @@
             <b-card>
                 <h3>{{ $t('Menus list', { locale }) }}</h3>
                 <list-menu
-                    :menus="menus"
+                    ref="list"
+                    :menus-origin="menus"
                     :current-menu="currentMenu"
                     @onCreateMenu="onCreateMenu"
                     @onEditMenu="onEditMenu"
@@ -36,7 +37,7 @@
     import { mapState } from 'vuex'
     import ListMenu from './List'
     import IndexFormMenu from './Form/Index'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import { menuStructure } from './../../structures/menu'
     import BCard from "bootstrap-vue/src/components/card/card";
 
@@ -74,10 +75,12 @@
             onSaveMenuSuccess ( menuStored ) {
                 let find = false
 
-                for ( let menu of this.menus ) {
+                for ( let [index, menu] of Object.entries(this.menus) ) {
                     if ( menuStored.id === menu.id ) {
                         find = true
-                        menu = this.clone(menuStored)
+                        this.menus[index] = this.clone(menuStored)
+                    } else if ( menuStored.is_default ) {
+                        this.menus[index].is_default = false
                     }
                 }
 
@@ -85,6 +88,8 @@
                     this.menus.push(this.clone(menuStored))
                     this.currentMenu = this.clone(menuStored)
                 }
+
+                this.$refs.list.setMenuOrigin()
             },
             onDestroyMenuSuccess ( menuDeleted ) {
                 for ( const [index, menu] of this.menus.entries() ) {

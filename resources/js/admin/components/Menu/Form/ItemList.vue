@@ -71,7 +71,7 @@
     import { mapState } from 'vuex'
     import draggable from 'vuedraggable'
     import ItemFormMenu from './ItemForm'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
     import { menuItemStructure } from './../../../structures/menu'
 
     export default {

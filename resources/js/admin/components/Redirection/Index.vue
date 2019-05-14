@@ -118,7 +118,7 @@
     import { mapState } from 'vuex'
     import InputTextFilter from './../Filters/InputText'
     import SelectFilter from './../Filters/Select'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import redirectionMixin from './../../mixins/redirection'
     import paginatorMixin from './../../mixins/paginator'
     import FormRedirection from "./Form";

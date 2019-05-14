@@ -18,6 +18,7 @@ class CreateMenusTable extends Migration
             $table->unsignedInteger('user_id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
             $table->softDeletes();
 

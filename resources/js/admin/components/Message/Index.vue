@@ -36,7 +36,7 @@
 
 <script>
     import filterMessageStructure from './../../structures/filterMessage'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import FilterMessage from './Filter'
     import ListMessage from './List'
     import DetailMessage from './Detail'

@@ -60,17 +60,29 @@ class MenuController extends Controller
             $menu_id = $request->input('id');
             $name = $request->input('name');
             $description = $request->input('description');
+            $is_default = $request->input('is_default');
+
+            if ( $is_default ) {
+                $menuDefault = Menu::whereNotIn('id', [$menu_id])->where('is_default', true)->first();
+
+                if ( !is_null($menuDefault) ) {
+                    $menuDefault->is_default = false;
+                    $menuDefault->save();
+                }
+            }
 
             if ( is_null($menu_id) ) {
                 $menu = Menu::create([
                     'user_id' => Auth::id(),
                     'name' => $name,
-                    'description' => $description
+                    'description' => $description,
+                    'is_default' => $is_default
                 ]);
             } else {
                 $menu = Menu::find($menu_id);
                 $menu->name = $name;
                 $menu->description = $description;
+                $menu->is_default = $is_default;
                 $menu->save();
             }
 

@@ -50,7 +50,7 @@
 
 <script>
     import filterPageStructure from './../../structures/filterPage'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import pageMixin from './../../mixins/page'
     import FilterPage from './Filter'
     import ListPage from './List'

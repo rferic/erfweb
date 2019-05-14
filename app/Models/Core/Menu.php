@@ -12,7 +12,8 @@ class Menu extends Model
     use SoftDeletes;
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    protected $fillable = [ 'user_id', 'name', 'description' ];
+    protected $fillable = [ 'user_id', 'name', 'description', 'is_default' ];
+    protected $casts = [ 'is_default' => 'boolean'];
 
     protected static function boot ()
     {

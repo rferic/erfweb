@@ -48,7 +48,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import messageMixin from '../../mixins/message'
     import ItemConversation from './Item'
 

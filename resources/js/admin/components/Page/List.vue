@@ -208,7 +208,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import paginatorMixin from './../../mixins/paginator'
     import pageMixin from './../../mixins/page'
     import redirectionMixin from './../../mixins/redirection'

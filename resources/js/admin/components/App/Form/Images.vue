@@ -89,7 +89,7 @@
     import { mapState } from 'vuex'
     import draggable from 'vuedraggable'
     import vue2Dropzone from 'vue2-dropzone'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
     import imageMixin from './../../../mixins/image'
     import { appImageStructure } from './../../../structures/app'
 

@@ -47,6 +47,11 @@
                             </b-form-select>
                         </b-form-group>
                     </b-col>
+                    <b-col lg="6" sm="12">
+                        <b-form-checkbox switch v-model="is_home">
+                            {{ $t('Is home', { locale }) }}
+                        </b-form-checkbox>
+                    </b-col>
                     <b-col cols="12">
                         <multilanguage-tab
                             ref="multilanguageTab"
@@ -60,6 +65,7 @@
                                     :language="language"
                                     :page-locale-origin="getPageLocale(language)"
                                     :layouts="layouts"
+                                    :is-home="is_home"
                                     @onChangeEnable="onChangeEnable"
                                 />
                             </template>
@@ -86,7 +92,7 @@
     import LocaleForm from './Locale/Form'
     import FormButtons from '../FormResources/Buttons'
     import pageLocaleStructure from './../../structures/pageLocale'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import pageMixin from './../../mixins/page'
 
     export default {
@@ -112,7 +118,8 @@
             return {
                 languagesAvailable: JSON.parse(this.data).langsAvailable,
                 layouts: JSON.parse(this.data).layouts,
-                page_id: this.pageOrigin.page_id === null ? '' : this.clone(this.pageOrigin.page_id)
+                page_id: this.pageOrigin.page_id === null ? '' : this.clone(this.pageOrigin.page_id),
+                is_home: this.clone(this.pageOrigin.is_home)
             }
         },
         computed: {
@@ -162,6 +169,7 @@
                 let page = {
                     id: this.pageOrigin.id,
                     page_id: this.page_id,
+                    is_home: this.is_home,
                     locales: []
                 }
 

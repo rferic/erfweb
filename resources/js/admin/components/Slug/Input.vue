@@ -49,7 +49,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import slugMixin from './../../mixins/slug'
 
     export default {

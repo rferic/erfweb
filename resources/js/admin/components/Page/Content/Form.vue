@@ -108,7 +108,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
     import { codemirror } from 'vue-codemirror'
     import codemirrorMixin from './../../../mixins/codemirror'
     import contentStructure from './../../../structures/content'

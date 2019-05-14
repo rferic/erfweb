@@ -27,7 +27,7 @@
 <script>
     import { mapState } from 'vuex'
     import filterMessageStructure from './../../structures/filterMessage'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import InputTextFilter from './../Filters/InputText'
     import CheckboxesFilter from './../Filters/Checkboxes'
 

@@ -175,7 +175,7 @@
     import FormAppLocale from './Locale'
     import FormAppImages from './Images'
     import FormButtons from './../../FormResources/Buttons'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
     import { appLocaleStructure } from './../../../structures/app'
 
     export default {

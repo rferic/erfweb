@@ -42,7 +42,7 @@
 <script>
     import { mapState } from 'vuex'
     import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
 
     export default {
         name: 'MultilanguageTab',

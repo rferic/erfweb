@@ -17,6 +17,7 @@ class CreatePagesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('page_id')->nullable();
             $table->unsignedInteger('user_id');
+            $table->boolean('is_home')->default(false);
             $table->timestamps();
             $table->softDeletes();
 

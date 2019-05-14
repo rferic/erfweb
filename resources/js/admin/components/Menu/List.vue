@@ -16,6 +16,7 @@
             @click="$emit('onEditMenu', menu)"
             class="menu-item"
         >
+            <i v-if="menu.is_default" class="fa fa-star" />
             {{ menu.name }}
         </b-list-group-item>
     </b-list-group>
@@ -23,11 +24,12 @@
 
 <script>
     import { mapState } from 'vuex'
+    import cloneMixin from './../../../includes/mixins/clone'
 
     export default {
         name: 'ListMenu',
         props: {
-            menus: {
+            menusOrigin: {
                 type: Array,
                 required: true
             },
@@ -36,8 +38,19 @@
                 required: true
             }
         },
+        mixins: [ cloneMixin ],
         computed: {
             ...mapState([ 'locale' ])
+        },
+        data () {
+            return {
+                menus: this.clone(this.menusOrigin)
+            }
+        },
+        methods: {
+            setMenuOrigin () {
+                this.menus = this.clone(this.menusOrigin)
+            }
         }
     }
 </script>

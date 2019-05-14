@@ -14,7 +14,8 @@ class MenusTableSeeder extends Seeder
      */
     public function run()
     {
+        factory(Menu::class, 1)->create([ 'is_default' => true ]);
         factory(Menu::class, 2)->create();
-        factory(MenuItem::class, 10)->create();
+        factory(MenuItem::class, 30)->create();
     }
 }

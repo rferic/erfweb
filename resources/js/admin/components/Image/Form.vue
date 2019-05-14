@@ -81,7 +81,7 @@
     import { mapState } from 'vuex'
     import vue2Dropzone from 'vue2-dropzone'
     import FormButtons from './../FormResources/Buttons'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import imageMixin from './../../mixins/image'
 
     export default {

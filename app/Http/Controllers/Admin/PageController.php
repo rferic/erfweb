@@ -63,12 +63,18 @@ class PageController extends Controller
             $pageLocales = $request->input('locales');
             $id = $request->input('id');
             $page_id = $request->input('page_id');
+            $is_home = $request->input('is_home');
 
             if ( is_null($id) ) {
                 $id = Page::create([
                     'page_id' => $page_id,
-                    'user_id' => Auth::id()
+                    'user_id' => Auth::id(),
+                    'is_home' => $is_home
                 ])->id;
+            } else {
+                $page = Page::find($id);
+                $page->is_home = $is_home;
+                $page->save();
             }
 
             foreach ( $pageLocales AS $pageLocale ) {

@@ -38,7 +38,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
 
     export default {
         name: 'FormAppLocale',

@@ -3,6 +3,7 @@ export const menuStructure = {
     user_id: null,
     name: '',
     description: '',
+    is_default: false,
     items: []
 }
 

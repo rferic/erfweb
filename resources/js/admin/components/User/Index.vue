@@ -124,7 +124,7 @@
     import { mapState } from 'vuex'
     import InputTextFilter from './../Filters/InputText'
     import SelectFilter from './../Filters/Select'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import paginatorMixin from './../../mixins/paginator'
     import userMixin from './../../mixins/user'
 

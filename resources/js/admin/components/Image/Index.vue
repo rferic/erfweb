@@ -88,7 +88,7 @@
 
 <script>
     import { mapState, mapActions } from 'vuex'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import imageMixin from './../../mixins/image'
     import FormImage from './Form'
 

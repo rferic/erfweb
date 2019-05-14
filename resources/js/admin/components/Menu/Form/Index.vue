@@ -8,7 +8,7 @@
             position="top right"
         />
         <b-row>
-            <b-col cols="12">
+            <b-col lg="6" sm="12">
                 <b-form-group :label="`${$t('Name', { locale: locale })}: *`">
                     <b-form-input
                         v-model="menu.name"
@@ -28,6 +28,11 @@
                         {{ errors.first('name') }}
                     </div>
                 </b-form-group>
+            </b-col>
+            <b-col lg="6" sm="12">
+                <b-form-checkbox switch v-model="menu.is_default">
+                    {{ $t('Is default', { locale }) }}
+                </b-form-checkbox>
             </b-col>
             <b-col cols="12">
                 <b-form-group
@@ -75,7 +80,7 @@
     import MultilanguageTab from './../../Multilanguage/Tab'
     import FormButtons from './../../FormResources/Buttons'
     import ItemListFormMenu from './ItemList'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
 
     export default {
         name: 'IndexFormMenu',

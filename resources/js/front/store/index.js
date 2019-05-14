@@ -2,21 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import auth from './../../store/auth'
-import message from './message'
-import adminMenu from './adminMenu'
-import paginator from './paginator'
-import blockui from './blockui'
 
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 const store =  new Vuex.Store({
     modules: {
-        auth,
-        adminMenu,
-        message,
-        paginator,
-        blockui
+        auth
     },
     state: {
         locale: locale,
@@ -31,12 +23,7 @@ const store =  new Vuex.Store({
         createPersistedState({
             key: 'erfweb',
             paths: [
-                'auth',
-                'message.state',
-                'message.lastPendings',
-                'message.timeLastRequest',
-                'adminMenu',
-                'paginator'
+                'auth'
             ]
         })
     ],

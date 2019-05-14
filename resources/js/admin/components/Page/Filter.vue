@@ -40,7 +40,7 @@
     import filterPageStructure from './../../structures/filterPage'
     import InputTextFilter from './../Filters/InputText'
     import CheckboxesFilter from './../Filters/Checkboxes'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import menuMixin from './../../mixins/menu'
 
     export default {

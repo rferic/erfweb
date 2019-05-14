@@ -26,9 +26,9 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 // CSS
 import 'vue-instant/dist/vue-instant.css'
-const moment = require('moment')
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-
+// Requires
+const moment = require('moment')
 if ( locale !== 'en' ) {
     require(`moment/locale/${locale}`)
 }

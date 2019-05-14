@@ -98,6 +98,7 @@ class MenuTest extends TestCase
             'id' => '',
             'name' => $this->faker->word,
             'description' => $this->faker->paragraph,
+            'is_default' => $this->faker->boolean,
             'items' => $items
         ];
 
@@ -149,6 +150,7 @@ class MenuTest extends TestCase
             'id' => $menu->id,
             'name' => $this->faker->word,
             'description' => $this->faker->paragraph,
+            'is_default' => $this->faker->boolean,
             'items' => $items
         ];
 

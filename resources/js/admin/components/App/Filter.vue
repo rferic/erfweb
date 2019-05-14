@@ -30,7 +30,7 @@
     import filterAppStructure from './../../structures/filterApp'
     import InputTextFilter from './../Filters/InputText'
     import CheckboxesFilter from './../Filters/Checkboxes'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
 
     export default {
         name: 'FilterApp',

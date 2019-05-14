@@ -44,7 +44,7 @@
 
 <script>
     import filterAppStructure from './../../structures/filterApp'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import FilterApp from './Filter'
     import ListApp from './List'
     import IndexFormApp from './Form/Index'

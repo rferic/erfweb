@@ -99,7 +99,7 @@
 
 <script>
     import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import messageMixin from '../../mixins/message'
     import FormConversation from './Form'
     import { mapState, mapActions } from 'vuex'

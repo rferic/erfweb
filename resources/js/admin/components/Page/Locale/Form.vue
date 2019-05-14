@@ -52,6 +52,9 @@
                             :language="language"
                             @onChangeSlug="onChangeSlug"
                         />
+                        <b-alert :show="isHome" variant="primary">
+                            {{ $t('Require a slug if in the future disable home attribute', { locale }) }}
+                        </b-alert>
                     </b-col>
                     <b-col cols="12">
                         <b-form-group
@@ -189,7 +192,7 @@
     import SlugInput from './../../../components/Slug/Input'
     import ContentList from './../Content/List'
     import { codemirror } from 'vue-codemirror'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
     import codemirrorMixin from './../../../mixins/codemirror'
     import InputTag from 'vue-input-tag'
 
@@ -207,6 +210,11 @@
             layouts: {
                 type: Array,
                 required: true
+            },
+            isHome: {
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
         components: { codemirror, SlugInput, ContentList, InputTag },

@@ -9,7 +9,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import cloneMixin from './../../mixins/clone'
+    import cloneMixin from './../../../includes/mixins/clone'
     import capitalizeFilter from '../../../includes/filters/capitalizeFilter'
 
     export default {

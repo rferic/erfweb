@@ -118,7 +118,7 @@
 <script>
     import { mapState } from 'vuex'
     import draggable from 'vuedraggable'
-    import cloneMixin from './../../../mixins/clone'
+    import cloneMixin from './../../../../includes/mixins/clone'
     import contentStructure from './../../../structures/content'
     import ContentForm from './Form'
 
