@@ -1,8 +1,10 @@
 const translations = {
-  'en': {
-  },
-  'es': {
-  }
+    'en': {
+    },
+    'es': {
+    },
+    'ca': {
+    }
 }
 
 export default translations

@@ -65,6 +65,15 @@ class PageController extends Controller
             $page_id = $request->input('page_id');
             $is_home = $request->input('is_home');
 
+            if ( $is_home ) {
+                $pageHome = Page::where('is_home', true)->whereNotIn('id', [ $id ])->first();
+
+                if ( !is_null($pageHome) ) {
+                    $pageHome->is_home = false;
+                    $pageHome->save();
+                }
+            }
+
             if ( is_null($id) ) {
                 $id = Page::create([
                     'page_id' => $page_id,

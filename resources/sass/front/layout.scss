@@ -1,0 +1,41 @@
+// Variables
+$menuItemSpacingLeft: 16px;
+$menuItemBorderLeftCurrent: 4px;
+// Global
+[v-cloak] > * { display:none }
+
+.m-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+// Toolbar
+.toolbar {
+    .icon {
+        font-size: 1.6rem;
+        text-decoration: none;
+    }
+}
+// Menu
+.v-navigation-drawer {
+    .item-menu {
+        > a {
+            padding-left: $menuItemSpacingLeft;
+        }
+
+        &.item-menu-current {
+            border-left: $menuItemBorderLeftCurrent solid get-color(indigo);
+
+            > a {
+                padding-left: $menuItemSpacingLeft - $menuItemBorderLeftCurrent;
+            }
+
+            .item-menu-text {
+                font-weight: bold;
+            }
+        }
+
+        .item-menu-text {
+            font-size: 1.2rem;
+        }
+    }
+}

@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Http\Helpers\PasswordHelper;
@@ -44,7 +48,24 @@ class RegisterController extends Controller
         $this->redirectTo = localization()->localizeURL('account');
     }
 
-    /**
+    public function registerAjax ( Request $request )
+    {
+        if ( !$this->validator($request->all())->fails() ) {
+            event(new Registered($user = $this->create($request->all())));
+            $this->guard()->login($user);
+            $user = Auth::user();
+            $user->roles = UserHelper::getRolesAssignToUser($user);
+
+            return Response::json([
+                'result' => true,
+                'user' => $user
+            ]);
+        }
+
+        return Response::json(['result' => false]);
+    }
+
+        /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data

@@ -16,5 +16,6 @@ export const menuItemStructure = {
     type: '',
     page_locale_id: null,
     url_external: null,
+    icon: null,
     priority: null
 }

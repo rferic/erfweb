@@ -115,6 +115,12 @@
                     >
                         <b-form-checkbox v-model="data.item.checked" />
                     </template>
+                    <template
+                        slot="is_home"
+                        slot-scope="data"
+                    >
+                        <i class="ni" :class="{'ni-check-bold text-success': data.item.is_home, 'ni-fat-remove text-danger': !data.item.is_home}" />
+                    </template>
                     <template slot="page_id" slot-scope="data">
                         <span v-if="data.item.page_id !== null && data.item.parent !== null">
                             {{ data.item.parent.default.title }}
@@ -253,6 +259,10 @@
                         label: 'ID'
                     },
                     {
+                        key: 'is_home',
+                        label: this.$t('Is home', this.locale)
+                    },
+                    {
                         key: 'slug',
                         label: this.$t('Slug', this.locale)
                     },
@@ -274,7 +284,7 @@
                     },
                     {
                         key: 'author',
-                        label: this.$t('Languages', this.locale)
+                        label: this.$t('Author', this.locale)
                     },
                     {
                         key: 'status',
@@ -612,6 +622,7 @@
                         description: localeDefault !== null ? localeDefault.description : '',
                         layout: localeDefault !== null ? localeDefault.layout : '',
                         author: page.author,
+                        is_home: page.is_home,
                         deleted_at: page.deleted_at,
                         locales: page.locales,
                         contents: page.contents,

@@ -93,7 +93,7 @@
                         <label>{{ $t('SEO Keywords', { locale } ) }}:</label>
                         <input-tag v-model="keywords" class="input-tags input-tags-primary" />
                     </b-col>
-                    <b-col lg="6">
+                    <b-col lg="6" class="mt-2">
                         <b-form-group :label="`${$t('Layout', { locale: locale })}: *`">
                             <b-form-select
                                 name="layout"
@@ -118,26 +118,6 @@
                                     :value="layout.key"
                                 >
                                     {{ $t(layout.title, { locale }) }}
-                                </option>
-                            </b-form-select>
-                        </b-form-group>
-                    </b-col>
-                    <b-col lg="6">
-                        <b-form-group :label="`${$t('Container width', { locale: locale })}: *`">
-                            <b-form-select
-                                name="width"
-                                v-model="options.width"
-                                v-validate
-                                data-vv-rules="required"
-                                :class="{ 'is-invalid' : errors.has(`width`) }"
-                                @input="refreshOptionsPageLocale"
-                            >
-                                <option
-                                    v-for="(item, index) in currentLayout.options.width"
-                                    :key="index"
-                                    :value="item"
-                                >
-                                    {{ $t(item, { locale }) }}
                                 </option>
                             </b-form-select>
                         </b-form-group>
@@ -224,7 +204,6 @@
                 pageLocale: this.clone(this.pageLocaleOrigin),
                 enable: this.pageLocaleOrigin.id !== null,
                 options: {
-                    width: null,
                     inject: {}
                 },
                 currentLayout: null,
@@ -265,10 +244,6 @@
                     const optionsDefault = JSON.parse(this.pageLocale.options)
                     this.refreshCurrentLayout()
 
-                    this.options.width = optionsDefault !== null && typeof optionsDefault.width !== undefined
-                        ? optionsDefault.width
-                        : this.clone(this.currentLayout.options.width[0])
-
                     for ( const language of this.currentLayout.options.inject ) {
                         this.options.inject[language] = optionsDefault !== null && typeof optionsDefault.inject[language] !== undefined
                             ? optionsDefault.inject[language]
@@ -277,7 +252,6 @@
                 }
             },
             refreshOptionsPageLocale () {
-                console.log(1)
                 this.pageLocale.options = JSON.stringify(this.clone(this.options))
             },
             refreshCurrentLayout () {

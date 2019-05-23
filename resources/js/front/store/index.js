@@ -11,19 +11,28 @@ const store =  new Vuex.Store({
         auth
     },
     state: {
-        locale: locale,
+        locale,
+        localesSupported,
         csrfToken: typeof csrfToken !== typeof undefined ? csrfToken : null,
         routes: typeof routes !== typeof undefined ? routes : {},
         routesGlobal: typeof routesGlobal !== typeof undefined ? routesGlobal : {}
     },
     getters: {},
-    mutations: {},
-    actions: {},
+    mutations: {
+        REFRESH_CSRF_TOKEN: (state, csrfToken) => {
+            state.csrfToken = csrfToken
+        }
+    },
+    actions: {
+        refreshCsrfToken ({ commit }, csrfToken) {
+            commit('REFRESH_CSRF_TOKEN', csrfToken)
+        },
+    },
     plugins: [
         createPersistedState({
             key: 'erfweb',
             paths: [
-                'auth'
+                'auth/user'
             ]
         })
     ],

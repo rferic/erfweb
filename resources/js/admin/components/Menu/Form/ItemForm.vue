@@ -22,7 +22,7 @@
                     </div>
                 </b-form-group>
             </b-col>
-            <b-col lg="6" sm="12">
+            <b-col lg="3" sm="12">
                 <b-form-group :label="`${$t('Type', { locale: locale })}: *`">
                     <b-form-select
                         name="type"
@@ -42,6 +42,22 @@
                         {{ errors.first('type') }}
                     </div>
                 </b-form-group>
+            </b-col>
+            <b-col lg="3" sm="12">
+                <b-form-group :label="`${$t('Icon', { locale: locale })}:`">
+                    <b-form-input
+                        v-model="item.icon"
+                        name="icon"
+                        type="text"
+                    />
+                </b-form-group>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col lg="12">
+                <b-alert variant="secondary" show>
+                    {{ $t('Select a icon from ', { locale }) }} <a href="https://materialdesignicons.com/" target="_blank">https://materialdesignicons.com/</a>
+                </b-alert>
             </b-col>
         </b-row>
         <b-row>
@@ -138,9 +154,6 @@
         },
         computed: {
             ...mapState([ 'locale', 'routes' ]),
-            hasPageLocales () {
-                return this.pageLocales.length > 0
-            },
             pageLocalesOptions () {
                 let options = []
 

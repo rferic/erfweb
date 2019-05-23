@@ -117,6 +117,7 @@ class MenuController extends Controller
                 'type' => $params['type'],
                 'page_locale_id' => $params['page_locale_id'],
                 'url_external' => $params['url_external'],
+                'icon' => $params['icon'],
                 'priority' => $params['priority']
             ]);
         } else {
@@ -126,6 +127,7 @@ class MenuController extends Controller
             $item->type = $params['type'];
             $item->page_locale_id = $params['page_locale_id'];
             $item->url_external = $params['url_external'];
+            $item->icon = $params['icon'];
             $item->priority = $params['priority'];
             $item->save();
         }

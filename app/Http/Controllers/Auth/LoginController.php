@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\UserHelper;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -37,5 +41,28 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->redirectTo = localization()->localizeURL('account');
+    }
+
+    public function loginAjax ( Request $request )
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|exists:users,email',
+            'password' => 'required'
+        ]);
+
+        if ( !$validator->fails() ) {
+            if (Auth::attempt($request->only('email', 'password'))) {
+                $user = Auth::user();
+                $user->roles = UserHelper::getRolesAssignToUser($user);
+
+                return Response::json([
+                    'result' => true,
+                    'user' => $user,
+                    'csrfToken' => csrf_token()
+                ]);
+            }
+        }
+
+        return Response::json(['result' => false]);
     }
 }

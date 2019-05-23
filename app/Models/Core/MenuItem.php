@@ -17,6 +17,7 @@ class MenuItem extends Model
         'type',
         'page_locale_id',
         'url_external',
+        'icon',
         'priority'
     ];
     protected $happens = ['page'];

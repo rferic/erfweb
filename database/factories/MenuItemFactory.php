@@ -14,6 +14,7 @@ $factory->define(App\Models\Core\MenuItem::class, function (Faker $faker) {
         'lang' => $pageLocale->lang,
         'type' => $random ? 'internal' : 'external',
         'page_locale_id' => $random ? $pageLocale->id : null,
-        'url_external' => $random ? null : 'http://www.url.com'
+        'url_external' => $random ? null : 'http://www.url.com',
+        'icon' => $faker->boolean ? 'home' : null
     ];
 });

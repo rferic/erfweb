@@ -20,6 +20,7 @@ class CreateMenuItemsTable extends Migration
             $table->string('lang');
             $table->string('label');
             $table->enum('type', ['internal', 'external']);
+            $table->string('icon')->nullable();
             $table->unsignedInteger('page_locale_id')->nullable();
             $table->string('url_external')->nullable();
             $table->unsignedInteger('priority');

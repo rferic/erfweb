@@ -9,6 +9,8 @@
 namespace App\Http\Helpers;
 
 
+use Arcanedev\Localization\Facades\Localization;
+
 class PageHelper
 {
     static function getLayouts ()
@@ -18,7 +20,6 @@ class PageHelper
                 'key' => 'default',
                 'title' => 'Default',
                 'options' => [
-                    'width' => [ 'fullwidth', 'container'],
                     'menu' => true,
                     'footer' => true,
                     'inject' => [
@@ -31,7 +32,6 @@ class PageHelper
                 'key' => 'home',
                 'title' => 'Home',
                 'options' => [
-                    'width' => [ 'fullwidth', 'container'],
                     'menu' => true,
                     'footer' => true,
                     'inject' => [
@@ -44,7 +44,6 @@ class PageHelper
                 'key' => 'landing',
                 'title' => 'Landing',
                 'options' => [
-                    'width' => [ 'fullwidth' ],
                     'menu' => false,
                     'footer' => true,
                     'inject' => [
@@ -54,5 +53,14 @@ class PageHelper
                 ]
             ]
         ];
+    }
+
+    static function getSlugTranslate ( $url, $lang ) {
+        $slug = str_replace(
+            Localization::localizeURL(route('home'), $lang['code']),
+            '',
+            Localization::localizeURL(route($url), $lang['code'])
+        );
+        return str_replace('/', '', $slug);
     }
 }

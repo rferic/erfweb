@@ -2,6 +2,7 @@
 
 namespace App\Models\Core;
 
+use Arcanedev\Localization\Facades\Localization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,6 +25,7 @@ class PageLocale extends Model
         'seo_description',
         'seo_keywords'
     ];
+    protected $appends = [ 'url' ];
 
     protected static function boot ()
     {
@@ -70,5 +72,10 @@ class PageLocale extends Model
     public function menuItems ()
     {
         return $this->hasMany(MenuItem::class);
+    }
+
+    public function getUrlAttribute ()
+    {
+        return Localization::localizeURL($this->slug);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Helpers\LocalizationHelper;
 use Illuminate\Database\Seeder;
 
 use App\Models\Core\Menu;
@@ -14,8 +15,16 @@ class MenusTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Menu::class, 1)->create([ 'is_default' => true ]);
-        factory(Menu::class, 2)->create();
-        factory(MenuItem::class, 30)->create();
+        $langs = LocalizationHelper::getSupportedFormatted();
+
+        factory(Menu::class, 1)->create([
+            'name' => __('Default'),
+            'description' => __('Global menu'),
+            'is_default' => true
+        ]);
+
+        foreach ( $langs AS $lang ) {
+            factory(MenuItem::class, 5)->create([ 'lang' => $lang['iso'] ]);
+        }
     }
 }

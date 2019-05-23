@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
 
         factory(User::class, 1)->create([
             'email' => env('ADMIN_USER_DEFAULT', config('mail.from')['address']),
-            'password' => Hash::make(env('ADMIN_PASSWORD_DEFAULT', 'secret1!'))
+            'password' => Hash::make(env('ADMIN_PASSWORD_DEFAULT', 'Secret1!'))
         ])->first()->attachRole('superadministrator');
     }
 }

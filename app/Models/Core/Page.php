@@ -12,6 +12,7 @@ class Page extends Model
     use SoftDeletes;
 
     protected $fillable = [ 'user_id', 'page_id', 'is_home' ];
+    protected $casts = [ 'is_home' => 'boolean'];
 
     protected static function boot ()
     {

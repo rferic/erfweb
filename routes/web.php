@@ -110,10 +110,12 @@ Route::localizedGroup(function () {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('login', 'Auth\LoginController@login');
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+    Route::post('login-ajax', 'Auth\LoginController@loginAjax')->name('login-ajax');
 
     // Registration Routes...
     Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
     Route::post('register', 'Auth\RegisterController@register');
+    Route::post('register-ajax', 'Auth\RegisterController@registerAjax')->name('register-ajax');
 
     // Password Reset Routes...
     Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -123,14 +125,23 @@ Route::localizedGroup(function () {
 
     Auth::routes(['verify' => true]);
     Route::view('/password/confirm', 'auth/passwords/confirm');
+
     // Front
     Route::get('/', 'Front\PageController@home')->name('home');
+    Route::post('/email-is-free', 'Front\UserController@getEmailIsFree')->name('email-is-free');
     Route::get('/{slug}', 'Front\PageController@index')->name('index');
 
+    // Ajax request
+    Route::post('/send-message', 'Front\MessageController@store')->name('send-message');
+
+    // Static routes
+    Route::transGet('routes.who-i-am', 'Front\PageController@whoIAm')->name('who-i-am');
     Route::transGet('routes.account', function () {
         return view('front/welcome');
     })->middleware('verified')->name('account');
-
+    Route::transGet('routes.technologies', function () {
+        return view('front/welcome');
+    })->name('technologies');
     Route::transGet('routes.policy', function () {
         return view('front/welcome');
     })->name('policy');
