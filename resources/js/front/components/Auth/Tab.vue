@@ -1,7 +1,13 @@
 <template>
     <v-tabs v-model="currentTab" light centered slider-color="grey darken-4" @change="changeCurrentTab" >
-        <v-tab href="#login">{{ $vuetify.t('Login') }}</v-tab>
-        <v-tab href="#register">{{ $vuetify.t('Register') }}</v-tab>
+        <v-tab href="#login">
+            <v-icon light small class="pr-1">mdi-account-arrow-right</v-icon>
+            {{ $vuetify.t('Login') }}
+        </v-tab>
+        <v-tab href="#register">
+            <v-icon light small class="pr-1">mdi-account-plus</v-icon>
+            {{ $vuetify.t('Register') }}
+        </v-tab>
 
         <v-tab-item value="login">
             <auth-login @onLogged="$emit('onLogged')" @onErrorLogged="$emit('onErrorLogged')" />

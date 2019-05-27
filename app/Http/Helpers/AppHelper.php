@@ -24,6 +24,7 @@ class AppHelper
             )
         );
     }
+
     static function getStatus ()
     {
         return Array(
@@ -43,5 +44,32 @@ class AppHelper
                 'class' => 'danger'
             )
         );
+    }
+
+    static function existsKeyInStatus ( $key )
+    {
+        $exists = false;
+
+        foreach ( AppHelper::getStatus() AS $item ) {
+            if ( $item['key'] === $key ) {
+                $exists = true;
+                break;
+            }
+        }
+
+        return $exists;
+    }
+
+    static function existsKeyInTypes ( $key )
+    {
+        $exists = false;
+
+        foreach ( AppHelper::getTypes() AS $item ) {
+            if ( $item['key'] === $key ) {
+                $exists = true;
+            }
+        }
+
+        return $exists;
     }
 }

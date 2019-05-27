@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -132,5 +133,71 @@ class RegisterTest extends TestCase
         Event::assertDispatched(Registered::class, function ($e) use ($user) {
             return $e->user->id === $user->id;
         });
+    }
+
+    public function testPostRegisterAjaxBadRequest ()
+    {
+        $this->withExceptionHandling();
+
+        $password = $this->faker->password;
+        $user = factory(User::class)->create([ 'password' => $this->faker->password ]);
+
+        $this
+            ->post(route('register-ajax'), [])
+            ->assertSuccessful()
+            ->assertJson([ 'result' => false ]);
+
+        $this
+            ->post(route('register-ajax'), [
+                'email' => $user->email,
+                'password' => $password,
+                'password_confirmation' => $password,
+                'terms' => true
+            ])
+            ->assertSuccessful()
+            ->assertJson([ 'result' => false ]);
+
+        $this
+            ->post(route('register-ajax'), [
+                'email' => $this->faker->safeEmail,
+                'password' => $password,
+                'password_confirmation' => $password,
+                'terms' => false
+            ])
+            ->assertSuccessful()
+            ->assertJson([ 'result' => false ]);
+    }
+
+    public function testPostRegisterAjaxSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $password = 'Secret1!';
+
+        $params = [
+            'name' => $this->faker->word,
+            'email' => $this->faker->safeEmail,
+            'password' => $password,
+            'password_confirmation' => $password,
+            'terms' => true
+        ];
+
+        $response = $this
+            ->post(route('register-ajax'), $params)
+            ->assertSuccessful()
+            ->assertJsonStructure([ 'result', 'user', 'csrfToken' ])
+            ->assertJsonFragment([
+                'result' => true,
+                'csrfToken' => csrf_token()
+            ]);
+
+        $response = json_decode(json_encode($response))->baseResponse->original;
+        $user = User::where('email', $params['email'])->first();
+        $user->roles = UserHelper::getRolesAssignToUser($user);
+
+        $this->assertEquals($user->id, $response->user->id);
+        $this->assertEquals($user->name, $response->user->name);
+        $this->assertEquals($user->email, $response->user->email);
+        $this->assertEquals($user->roles, UserHelper::getRolesAssignToUser($user));
     }
 }

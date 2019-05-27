@@ -42,17 +42,12 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-    import Parallax from './../components/Parallax'
     import SkillsGrid from './../components/Skills/Grid'
     import HistoryTimeline from './../components/Timeline/History'
     import ShortContact from './../components/Contact/Short'
 
     export default {
         name: 'WhoIAmLayout',
-        components: { Parallax, SkillsGrid, HistoryTimeline, ShortContact },
-        computed: {
-            ...mapState(['routesGlobal'])
-        }
+        components: { SkillsGrid, HistoryTimeline, ShortContact }
     }
 </script>

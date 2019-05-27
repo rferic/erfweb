@@ -45,7 +45,7 @@
                     {{ $vuetify.t('Logout') }}
                 </v-btn>
                 <v-btn v-if="!isLogged" flat tag="a" @click="openLogin">
-                    <v-icon light small class="pr-1">mdi-account</v-icon>
+                    <v-icon light small class="pr-1">mdi-account-arrow-right</v-icon>
                     {{ $vuetify.t('Login') }}
                 </v-btn>
                 <v-btn v-if="!isLogged" flat tag="a" @click="openRegister">

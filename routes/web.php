@@ -128,11 +128,12 @@ Route::localizedGroup(function () {
 
     // Front
     Route::get('/', 'Front\PageController@home')->name('home');
-    Route::post('/email-is-free', 'Front\UserController@getEmailIsFree')->name('email-is-free');
     Route::get('/{slug}', 'Front\PageController@index')->name('index');
 
     // Ajax request
+    Route::post('/email-is-free', 'Front\UserController@getEmailIsFree')->name('email-is-free');
     Route::post('/send-message', 'Front\MessageController@store')->name('send-message');
+    Route::post('/get-apps', 'Front\AppController@get')->name('get-apps');
 
     // Static routes
     Route::transGet('routes.who-i-am', 'Front\PageController@whoIAm')->name('who-i-am');

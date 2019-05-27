@@ -58,16 +58,16 @@
                         </v-layout>
                     </v-container>
                 </v-content>
-                <auth-index />
                 <index-footer />
             </v-app>
+            <auth-index />
         </div>
         <script>
             const locale = "{{ App::getLocale() }}"
             const csrfToken = "{{ csrf_token() }}"
             const routesGlobal = {
                 account: "{{ localization()->localizeURL(route('account')) }}",
-                technologies: "{{ localization()->localizeURL(route('technologies')) }}",
+                whoIAm: "{{ localization()->localizeURL(route('who-i-am')) }}",
                 logout: "{{ route('logout') }}",
                 login: "{{ route('login') }}",
                 loginAjax: "{{ route('login-ajax') }}",
@@ -75,6 +75,7 @@
                 registerAjax: "{{ route('register-ajax') }}",
                 emailIsFree: "{{ route('email-is-free') }}",
                 sendMessage: "{{ route('send-message') }}",
+                getApps: "{{ route('get-apps') }}",
                 translates: @json($pageTranslates)
             }
             const localesSupported = @json($localesSupported);

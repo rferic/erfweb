@@ -58,7 +58,8 @@ class RegisterController extends Controller
 
             return Response::json([
                 'result' => true,
-                'user' => $user
+                'user' => $user,
+                'csrfToken' => csrf_token()
             ]);
         }
 

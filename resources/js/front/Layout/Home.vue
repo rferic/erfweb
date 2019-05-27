@@ -21,13 +21,25 @@
                         <img src="/images/tools/vue.png" alt="Vue.js" width="50">
                     </a>
                 </div>
-                <v-btn class="grey darken-4 mt-5" dark large :href="routesGlobal.technologies">
-                    {{ $vuetify.t('View all tools') }}
+                <v-btn class="grey darken-4 mt-5" dark large :href="routesGlobal.whoIAm">
+                    {{ $vuetify.t('Who I am?') }}
+                    <v-icon class="ml-2">mdi-face-profile</v-icon>
                 </v-btn>
             </template>
         </parallax>
 
         <section class="mt-5">
+            <v-content class="pt-3">
+                <app-grid :max-items="8" class-columns-sizes="xs6 sm6 md3 lg3" />
+                <v-layout row wrap>
+                    <v-flex xs10 sm10 md6 lg6 offset-xs1 offset-sm1 offset-md3 offset-lg3>
+                        <h2 class="title font-weight-thin text-xs-center mt-5 mb-4">
+                            <strong class="mt-2">{{ $vuetify.t('You want to tell me something?') }}</strong>
+                        </h2>
+                        <short-contact />
+                    </v-flex>
+                </v-layout>
+            </v-content>
         </section>
     </div>
 </template>
@@ -35,10 +47,12 @@
 <script>
     import { mapState } from 'vuex'
     import Parallax from './../components/Parallax'
+    import AppGrid from './../components/App/Grid'
+    import ShortContact from './../components/Contact/Short'
 
     export default {
         name: 'HomeLayout',
-        components: { Parallax },
+        components: { Parallax, AppGrid, ShortContact },
         computed: {
             ...mapState(['routesGlobal'])
         }

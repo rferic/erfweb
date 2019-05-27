@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Helpers\UserHelper;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -126,5 +127,43 @@ class LoginTest extends TestCase
             ->assertRedirect('/');
 
         $this->assertGuest();
+    }
+
+    public function testPostLoginAjaxBadRequest ()
+    {
+        $this->withExceptionHandling();
+
+        $this
+            ->post(route('login-ajax'), [])
+            ->assertSuccessful()
+            ->assertJson([ 'result' => false ]);
+
+        $this
+            ->post(route('login-ajax'), [
+                'email' => $this->faker->freeEmail,
+                'password' => $this->faker->password
+            ])
+            ->assertSuccessful()
+            ->assertJson([ 'result' => false ]);
+    }
+
+    public function testPostLoginAjaxSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::find($this->user->id);
+        $user->roles = UserHelper::getRolesAssignToUser($user);
+
+        $this
+            ->post(route('login-ajax'), [
+                'email' => $this->user->email,
+                'password' => $this->password
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'result' => true,
+                'user' => $user->toArray(),
+                'csrfToken' => csrf_token()
+            ]);
     }
 }
