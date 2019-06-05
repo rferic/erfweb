@@ -1,5 +1,5 @@
 <template>
-    <v-footer dark height="auto" color="grey darken-4" app class="pl-4 pr-4">
+    <v-footer dark height="auto" color="grey darken-4" class="pl-4 pr-4">
         <v-card flat tile class="grey darken-4 white--text text-xs-center flex">
             <v-card-text class="pb-0">
                 <v-btn flat icon color="white" class="mr-0" tag="a" href="https://github.com/rferic/" target="_blank">

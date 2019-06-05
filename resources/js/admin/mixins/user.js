@@ -30,9 +30,7 @@ const userMixin = {
         },
         async getAppsToAttachRequest ({ text }) {
             const params = typeof text !== typeof undefined ? { text } : {}
-
             const { data } = await this.axios.post(this.routes.getAppsToAttach, params)
-
             return data
         },
         async attachAppRequest ({ app }) {

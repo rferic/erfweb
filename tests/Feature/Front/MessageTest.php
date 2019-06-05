@@ -34,7 +34,7 @@ class MessageTest extends TestCase
 
         $this
             ->post(route('send-message'))
-            ->assertStatus(400);
+            ->assertStatus(302);
     }
 
     public function testPostStoreBadRequest ()
@@ -43,7 +43,7 @@ class MessageTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->post(route('send-message'), [])
+            ->post(route('send-message'))
             ->assertSuccessful()
             ->assertJsonStructure([ 'result', 'errors' ])
             ->assertJsonFragment([ 'result' => false ]);

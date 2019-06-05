@@ -26,7 +26,7 @@
                 @onSave="onSave"
             />
             <b-row>
-                <b-col lg="3" sm="6">
+                <b-col lg="2" sm="6">
                     <b-form-group :label="`Vue ${$t('component', { locale: locale })}: *`">
                         <b-form-input
                             v-model="app.vue_component"
@@ -47,7 +47,7 @@
                         </div>
                     </b-form-group>
                 </b-col>
-                <b-col lg="3" sm="6">
+                <b-col lg="2" sm="6">
                     <b-form-group :label="`${$t('Version', { locale: locale })}: *`">
                         <b-form-input
                             v-model="app.version"
@@ -66,6 +66,26 @@
                             />
                             {{ errors.first('version') }}
                         </div>
+                    </b-form-group>
+                </b-col>
+                <b-col lg="2" sm="12">
+                    <b-form-group :label="`${$t('Page', { locale: locale })}: *`">
+                        <b-form-select
+                            name="page"
+                            v-model="app.page_id"
+                            v-validate
+                            data-vv-rules="required"
+                            :class="{ 'is-invalid' : errors.has(`page`) }"
+                        >
+                            <option
+                                v-for="page in pagesAvailable"
+                                v-if="page.locales.length > 0"
+                                :key="page.id"
+                                :value="page.id"
+                            >
+                                {{ getPageLocale(page).title }}
+                            </option>
+                        </b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col lg="3" sm="12">
@@ -188,6 +208,11 @@
             appOrigin: {
                 type: Object,
                 required: true
+            },
+            pages: {
+                type: Array,
+                required: false,
+                default: Array
             }
         },
         data () {
@@ -208,6 +233,9 @@
             }),
             isNew () {
                 return this.app.id === null
+            },
+            pagesAvailable () {
+                return this.pages.filter(page => page.app === null || page.app.id === this.app.id)
             }
         },
         methods: {
@@ -288,6 +316,17 @@
                 this.$refs.multilanguageTab.changeLanguageTab(firstNotValid === null ? defaultLanguageSelected : firstNotValid)
 
                 return { isValid: firstNotValid === null, firstNotValid }
+            },
+            getPageLocale ( page ) {
+                let locale = null
+
+                for ( const item of page.locales ) {
+                    if ( locale === null || item.lang === this.locale ) {
+                        locale = item
+                    }
+                }
+
+                return locale
             },
             // API Request
             async storeAppRequest ( app ) {

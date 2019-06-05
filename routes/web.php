@@ -15,7 +15,7 @@
 Route::group(
     [
         'prefix' => 'admin',
-        'middleware' => ['verified', 'role:superadministrator|administrator']
+        'middleware' => ['verified', 'role:superadministrator|administrator', 'refresh.locale']
     ],
     function ()
     {
@@ -53,9 +53,10 @@ Route::group(
         // Admin Pages
         Route::get('/pages', 'Admin\PageController@index')->name('admin.pages');
         Route::post('/pages', 'Admin\PageController@get')->name('admin.pages.get');
+        Route::post('/pages/get-all-parents', 'Admin\PageController@getAllParents')->name('admin.pages.getAllParents');
+        Route::post('/pages/get-by-type', 'Admin\PageController@getByType')->name('admin.pages.getByType');
         Route::post('/pages/store', 'Admin\PageController@store')->name('admin.pages.store');
         Route::post('/pages/{page}/restore', 'Admin\PageController@restore')->name('admin.pages.restore');
-        Route::post('/pages/get-all-parents', 'Admin\PageController@getAllParents')->name('admin.pages.getAllParents');
         Route::delete('/pages/{page}/remove', 'Admin\PageController@remove')->name('admin.pages.remove');
         Route::delete('/pages/{page}/destroy', 'Admin\PageController@destroy')->name('admin.pages.destroy');
         // Admin Page Locales
@@ -126,24 +127,34 @@ Route::localizedGroup(function () {
     Auth::routes(['verify' => true]);
     Route::view('/password/confirm', 'auth/passwords/confirm');
 
-    // Front
+    // Home
     Route::get('/', 'Front\PageController@home')->name('home');
-    Route::get('/{slug}', 'Front\PageController@index')->name('index');
-
     // Ajax request
-    Route::post('/email-is-free', 'Front\UserController@getEmailIsFree')->name('email-is-free');
-    Route::post('/send-message', 'Front\MessageController@store')->name('send-message');
-    Route::post('/get-apps', 'Front\AppController@get')->name('get-apps');
+    // User controller
+    Route::post('/request/email-is-free', 'Front\UserController@getEmailIsFree')->name('email-is-free');
+    Route::post('/request/update-base-user', 'Front\UserController@updateBase')->middleware('verified')->name('update-base-user');
+    Route::post('/request/update-password-user', 'Front\UserController@updatePassword')->middleware('verified')->name('update-password-user');
+    Route::post('/request/attach-user-app', 'Front\UserController@attachApp')->middleware('verified')->name('attach-user-app');
+    // Message controller
+    Route::post('/request/send-message', 'Front\MessageController@store')->middleware('auth')->name('send-message');
+    // App controller
+    Route::post('/request/get-apps', 'Front\AppController@get')->name('get-apps');
+    Route::post('/request/get-my-apps', 'Front\AppController@getMine')->middleware('auth')->name('get-my-apps');
+    // ImageTemporal controller
+    Route::post('/request/upload-image-temporal', 'Front\ImageTemporalController@upload')->middleware('verified')->name('upload-image-temporal');
+    Route::delete('/request/delete-image-temporal', 'Front\ImageTemporalController@delete')->middleware('verified')->name('delete-image-temporal');
 
     // Static routes
     Route::transGet('routes.who-i-am', 'Front\PageController@whoIAm')->name('who-i-am');
-    Route::transGet('routes.account', function () {
-        return view('front/welcome');
-    })->middleware('verified')->name('account');
+    Route::get('apps', 'Front\PageController@apps')->name('apps');
+    Route::get('apps/{slug}', 'Front\PageController@app')->name('app');
+    Route::transGet('routes.account', 'Front\PageController@account')->middleware(['auth', 'verified'])->name('account');
     Route::transGet('routes.technologies', function () {
         return view('front/welcome');
     })->name('technologies');
     Route::transGet('routes.policy', function () {
         return view('front/welcome');
     })->name('policy');
+    // Dynamic routes
+    Route::get('/{slug}', 'Front\PageController@index')->name('index');
 });

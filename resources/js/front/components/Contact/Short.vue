@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form>
+        <v-form>
             <v-text-field
                 name="subject"
                 type="text"
@@ -26,7 +26,7 @@
                     <v-icon small class="ml-2">mdi-send</v-icon>
                 </v-btn>
             </div>
-        </form>
+        </v-form>
         <v-snackbar v-model="snackbar.show" :color="snackbar.color" :multi-line="true" bottom right>
             {{ $vuetify.t(snackbar.message) }}
         </v-snackbar>

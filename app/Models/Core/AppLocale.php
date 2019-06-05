@@ -21,10 +21,8 @@ class AppLocale extends Model
 
         static::deleted (function ($app_locale) {
             if (!App::runningInConsole()) {
-                $app = $app_locale->page();
-
-                if (AppModel::where('app_id', $app_locale->app_id)->get()->count() < 1) {
-                    $app->forceDelete();
+                if ( AppLocale::where('app_id', $app_locale->app_id)->get()->count() < 1 ) {
+                    AppModel::find($app_locale->app_id)->forceDelete();
                 }
             }
         });

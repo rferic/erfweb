@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\UserHelper;
+use Arcanedev\Localization\Facades\Localization;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +41,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->redirectTo = localization()->localizeURL('account');
+        $this->redirectTo = Localization::localizeURL(route('account'));
     }
 
     public function loginAjax ( Request $request )

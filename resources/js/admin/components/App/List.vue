@@ -411,6 +411,7 @@
                         title: localeDefault !== null ? localeDefault.title : '',
                         description: localeDefault !== null ? localeDefault.description : '',
                         version: app.version,
+                        page_id: app.page_id,
                         type: app.type,
                         status: app.status,
                         vue_component: app.vue_component,

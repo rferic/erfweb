@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\UserHelper;
 use App\Models\Core\User;
 use App\Http\Controllers\Controller;
+use Arcanedev\Localization\Facades\Localization;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Http\Helpers\PasswordHelper;
 use Faker\Factory as Faker;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -45,7 +48,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        $this->redirectTo = localization()->localizeURL('account');
+        $this->redirectTo = Localization::localizeURL(route('account'));
     }
 
     public function registerAjax ( Request $request )
@@ -78,7 +81,12 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => PasswordHelper::validate(),
-            'terms' => 'required'
+            'terms' => 'required',
+            'lang' => [
+                'required',
+                'string',
+                Rule::in(LocalizationHelper::getSupportedRegional())
+            ]
         ]);
     }
 
@@ -97,7 +105,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'avatar' => COUNT($avatars) > 0 ? $avatars[$faker->numberBetween(0, COUNT($avatars) - 1)] : null
+            'avatar' => COUNT($avatars) > 0 ? $avatars[$faker->numberBetween(0, COUNT($avatars) - 1)] : null,
+            'lang' => $data['lang']
         ])->attachRole('user');
     }
 }

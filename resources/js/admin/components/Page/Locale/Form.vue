@@ -241,11 +241,14 @@
                         ? JSON.parse(this.pageLocale.seo_keywords)
                         : this.pageLocale.seo_keywords
 
-                    const optionsDefault = JSON.parse(this.pageLocale.options)
+                    const optionsDefault = typeof JSON.parse(this.pageLocale.options).inject !== typeof undefined
+                        ? JSON.parse(this.pageLocale.options)
+                        : { inject: {} }
+
                     this.refreshCurrentLayout()
 
                     for ( const language of this.currentLayout.options.inject ) {
-                        this.options.inject[language] = optionsDefault !== null && typeof optionsDefault.inject[language] !== undefined
+                        this.options.inject[language] = optionsDefault !== null && typeof optionsDefault.inject !== undefined && typeof optionsDefault.inject[language] !== undefined
                             ? optionsDefault.inject[language]
                             : ''
                     }

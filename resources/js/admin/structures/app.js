@@ -4,6 +4,7 @@ export const appStructure = {
     types: null,
     version: '',
     vue_component: '',
+    page_id: null,
     locales: [],
     images: []
 }

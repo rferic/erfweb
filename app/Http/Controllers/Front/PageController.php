@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Http\Helpers\AuthHelper;
+use App\Http\Helpers\ImageHelper;
 use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\PageHelper;
+use App\Http\Helpers\UserHelper;
 use App\Models\Core\MenuItem;
 use App\Models\Core\PageLocale;
 use App\Models\Core\Redirection;
 use Arcanedev\Localization\Facades\Localization;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,8 +35,16 @@ class PageController extends Controller
 
     public function whoIAm ()
     {
+        $slug = 'who-i-am';
+        // Check has redirection
+        $redirection = Redirection::where('slug_origin', $slug)->first();
+
+        if ( !is_null($redirection) ) {
+            return redirect($redirection->slug_destine);
+        }
+
         $pageLocale = PageLocale::where('lang', Localization::getCurrentLocaleRegional())
-            ->where('slug', PageHelper::getSlugTranslate('who-i-am', Localization::getCurrentLocaleRegional()))
+            ->where('slug', PageHelper::getSlugTranslate($slug))
             ->with(['contents'])
             ->first();
 
@@ -43,6 +53,74 @@ class PageController extends Controller
         }
 
         return $this->printPage($pageLocale);
+    }
+
+    public function account ()
+    {
+        $slug = 'account';
+        // Check has redirection
+        $redirection = Redirection::where('slug_origin', $slug)->first();
+
+        if ( !is_null($redirection) ) {
+            return redirect($redirection->slug_destine);
+        }
+
+        $pageLocale = PageLocale::where('lang', Localization::getCurrentLocaleRegional())
+            ->where('slug', PageHelper::getSlugTranslate($slug))
+            ->with(['contents'])
+            ->first();
+
+        $params = [
+            'routes' => [
+                'updateBaseUser' => route('update-base-user'),
+                'updatePasswordUser' => route('update-password-user'),
+                'uploadImageTemporal' => route('upload-image-temporal'),
+                'deleteImageTemporal' => route('delete-image-temporal')
+            ],
+            'requireLogged' => true,
+            'pageData' => [
+                'avatars' => UserHelper::getAvatars(),
+                'imageMetadata' => ImageHelper::getMetadata(Auth::user()->avatar)
+            ]
+        ];
+
+        if ( is_null($pageLocale) ) {
+            abort(404);
+        }
+
+        return $this->printPage($pageLocale, $params);
+    }
+
+    public function apps ()
+    {
+        $slug = 'apps';
+        // Check has redirection
+        $redirection = Redirection::where('slug_origin', $slug)->first();
+
+        if ( !is_null($redirection) ) {
+            return redirect($redirection->slug_destine);
+        }
+
+        $pageLocale = PageLocale::where('lang', Localization::getCurrentLocaleRegional())
+            ->where('slug', PageHelper::getSlugTranslate($slug))
+            ->with(['contents'])
+            ->first();
+
+        $params = [
+            'routes' => [],
+            'requireLogged' => false,
+            'pageData' => []
+        ];
+
+        if ( is_null($pageLocale) ) {
+            abort(404);
+        }
+
+        return $this->printPage($pageLocale, $params);
+    }
+
+    public function app ( $slug )
+    {
     }
     // Method print dynamic pages
     public function index ( $slug )
@@ -55,6 +133,9 @@ class PageController extends Controller
         }
         // Check page locale
         $pageLocale= PageLocale::where('lang', Localization::getCurrentLocaleRegional())
+            ->whereHas('page', function ( $query ) {
+                $query->where('type', 'html');
+            })
             ->where('slug', $slug)
             ->with(['contents'])
             ->first();
@@ -66,13 +147,32 @@ class PageController extends Controller
         return $this->printPage($pageLocale);
     }
 
-    private function printPage ( PageLocale $page ) {
+    private function printPage ( PageLocale $page, $params = [] ) {
         $menu = $this->getMenu();
-        $auth = $this->getAuth();
-        $localesSupported = LocalizationHelper::getSupportedFormatted();
+        $auth = AuthHelper::getAuth();
+        $homeRoute = Localization::localizeURL(route('home'));
         $pageTranslates = $this->getTranslates($page);
+        $routes = isset($params['routes']) ? $params['routes'] : [];
+        $requireLogged = isset($params['requireLogged']) ? $params['requireLogged'] : false;
+        $pageData = isset($params['pageData']) ? $params['pageData'] : [];
+        $isAdmin = Auth::check() ? Auth::user()->isAdmin() : false;
+        $myApps = Auth::check() ? Auth::user()->apps : [];
 
-        return view('front/' . $page->layout, compact('menu', 'page', 'auth', 'localesSupported', 'pageTranslates'));
+        return view(
+            'front/' . $page->layout,
+            compact(
+                'menu',
+                'page',
+                'auth',
+                'pageTranslates',
+                'routes',
+                'requireLogged',
+                'pageData',
+                'homeRoute',
+                'isAdmin',
+                'myApps'
+            )
+        );
     }
 
     private function getMenu ()
@@ -83,19 +183,6 @@ class PageController extends Controller
         ->where('lang', Localization::getCurrentLocaleRegional())
         ->with('pageLocale')
         ->orderBy('priority')->get()->toArray();
-    }
-
-    private function getAuth ()
-    {
-        $auth = null;
-        $user = Auth::user();
-
-        if ( !is_null($user) ) {
-            $auth = $user->toArray();
-            $auth['roles'] = $user->roles->pluck('name')->toArray();
-        }
-
-        return $auth;
     }
 
     private function getTranslates ( PageLocale $page )

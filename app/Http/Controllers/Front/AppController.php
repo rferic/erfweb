@@ -6,6 +6,7 @@ use App\Http\Helpers\AppHelper;
 use App\Models\Core\App;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -51,9 +52,14 @@ class AppController extends Controller
         }
     }
 
+    public function getMine ()
+    {
+        return Response::json(Auth::user()->apps);
+    }
+
     protected function getApps ( Request $request )
     {
-        $query = App::query()->with(['locales', 'users', 'images']);
+        $query = App::query()->with(['locale', 'imagesLocalization']);
         // Filter status
         if ( !is_null($request->input('status')) && COUNT($request->input('status')) > 0 ) {
             $status = $request->input('status');

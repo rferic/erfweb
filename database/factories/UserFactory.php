@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\UserHelper;
 use Faker\Generator as Faker;
 
@@ -19,12 +20,14 @@ $factory->define(App\Models\Core\User::class, function (Faker $faker) {
     static $password;
 
     $avatars = UserHelper::getAvatars();
+    $langs = LocalizationHelper::getSupportedFormatted();
 
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'avatar' => COUNT($avatars) > 0 ? $avatars[$faker->numberBetween(0, COUNT($avatars) - 1)] : null,
+        'lang' => $langs[$faker->numberBetween(0, COUNT($langs) - 1)]['iso'],
         'remember_token' => str_random(10),
         'email_verified_at' => $faker->dateTime('now', null)
     ];

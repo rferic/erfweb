@@ -6,7 +6,7 @@
                 <br>
                 {{ $vuetify.t('and I created this website to put into practice what I learned in the world of programming') }}
             </h2>
-            <v-content class="pt-3">
+            <v-content class="pt-3 pb-3">
                 <v-layout row wrap>
                     <v-flex xs10 sm10 md6 lg6 offset-xs1 offset-sm1 offset-md3 offset-lg3>
                         <h2 class="title font-weight-thin text-xs-center mb-4">
@@ -28,6 +28,8 @@
                         </v-card>
                     </v-flex>
                 </v-layout>
+            </v-content>
+            <v-content class="pt-3 pb-3">
                 <v-layout row wrap>
                     <v-flex xs10 sm10 md6 lg6 offset-xs1 offset-sm1 offset-md3 offset-lg3>
                         <h2 class="title font-weight-thin text-xs-center mt-5 mb-4">

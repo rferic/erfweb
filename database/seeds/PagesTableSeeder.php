@@ -18,7 +18,7 @@ class PagesTableSeeder extends Seeder
     public function run()
     {
         // Set home
-        factory(Page::class, 1)->create([ 'page_id' => null, 'is_home' => true ])->each(function ($page) {
+        factory(Page::class)->create([ 'page_id' => null, 'is_home' => true ])->each(function ($page) {
             $langs = LocalizationHelper::getSupportedFormatted();
 
             foreach ( $langs AS $lang ) {
@@ -48,15 +48,14 @@ class PagesTableSeeder extends Seeder
             }
         });
         // Set account page
-        factory(Page::class, 1)->create([ 'page_id' => null, 'is_home' => false ])->each(function ($page) {
+        factory(Page::class)->create([ 'page_id' => null, 'is_home' => false ])->each(function ($page) {
             $langs = LocalizationHelper::getSupportedFormatted();
 
             foreach ( $langs AS $lang ) {
-                App::setLocale($lang['code']);
                 $pageLocale = factory(PageLocale::class)->create([
                     'lang' => $lang['iso'],
                     'page_id' => $page->id,
-                    'slug' => PageHelper::getSlugTranslate('account', $lang),
+                    'slug' => PageHelper::getSlugTranslate('account', $lang['code']),
                     'title' => __('Account'),
                     'description' => __('Account user'),
                     'layout' => 'default',
@@ -66,20 +65,27 @@ class PagesTableSeeder extends Seeder
                     'seo_keywords' => '[]'
                 ]);
 
-                factory(Content::class, 3)->create([
-                    'page_locale_id' => $pageLocale->id
+                factory(Content::class, 1)->create([
+                    'page_locale_id' => $pageLocale->id,
+                    'key' => 'account-layout',
+                    'id_html' => 'account-layout',
+                    'class_html' => 'flex',
+                    'text' => '<account-layout />',
+                    'header_inject' => '',
+                    'footer_inject' => '',
+                    'priority' => 0
                 ]);
             }
         });
         // Set Who I Am
-        factory(Page::class, 1)->create([ 'page_id' => null, 'is_home' => false ])->each(function ($page) {
+        factory(Page::class)->create([ 'page_id' => null, 'is_home' => false ])->each(function ($page) {
             $langs = LocalizationHelper::getSupportedFormatted();
 
             foreach ( $langs AS $lang ) {
                 $pageLocale = factory(PageLocale::class)->create([
                     'lang' => $lang['iso'],
                     'page_id' => $page->id,
-                    'slug' => PageHelper::getSlugTranslate('who-i-am', $lang),
+                    'slug' => PageHelper::getSlugTranslate('who-i-am', $lang['code']),
                     'title' => __('Who I am'),
                     'description' => __('Who I am'),
                     'layout' => 'default',
@@ -101,8 +107,38 @@ class PagesTableSeeder extends Seeder
                 ]);
             }
         });
+        // Set Apps
+        factory(Page::class)->create([ 'page_id' => null, 'is_home' => false ])->each(function ($page) {
+            $langs = LocalizationHelper::getSupportedFormatted();
+
+            foreach ( $langs AS $lang ) {
+                $pageLocale = factory(PageLocale::class)->create([
+                    'lang' => $lang['iso'],
+                    'page_id' => $page->id,
+                    'slug' => PageHelper::getSlugTranslate('apps', $lang['code']),
+                    'title' => __('Applications'),
+                    'description' => __('Applications'),
+                    'layout' => 'default',
+                    'options' => '{}',
+                    'seo_title' => __('Applications'),
+                    'seo_description' => __('Applications'),
+                    'seo_keywords' => '[]'
+                ]);
+
+                factory(Content::class, 1)->create([
+                    'page_locale_id' => $pageLocale->id,
+                    'key' => 'apps',
+                    'id_html' => 'apps',
+                    'class_html' => 'flex',
+                    'text' => '<apps />',
+                    'header_inject' => '',
+                    'footer_inject' => '',
+                    'priority' => 0
+                ]);
+            }
+        });
         // Set resources page
-        factory(Page::class, 1)->create([ 'page_id' => null, 'is_home' => false ])->each(function ($page) {
+        factory(Page::class)->create([ 'page_id' => null, 'is_home' => false ])->each(function ($page) {
             $langs = LocalizationHelper::getSupportedFormatted();
 
             foreach ( $langs AS $lang ) {
@@ -110,7 +146,7 @@ class PagesTableSeeder extends Seeder
                 $pageLocale = factory(PageLocale::class)->create([
                     'lang' => $lang['iso'],
                     'page_id' => $page->id,
-                    'slug' => PageHelper::getSlugTranslate('technologies', $lang),
+                    'slug' => PageHelper::getSlugTranslate('technologies', $lang['code']),
                     'title' => __('Technologies'),
                     'description' => __('Technologies'),
                     'layout' => 'default',

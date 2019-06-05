@@ -33,8 +33,8 @@ class MenuTest extends TestCase
 
         $this->seedRoles();
 
-        $this->user = factory(User::class)->create()->attachRole('administrator');
-        $this->author = factory(User::class)->create()->attachRole('administrator');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
+        $this->author = factory(User::class)->create()->attachRole('superadministrator');
         $this->menu = factory(Menu::class)->create([ 'user_id' => $this->author->id ]);
     }
 

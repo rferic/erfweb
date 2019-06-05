@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ImageTemporalController extends Controller
 {
-    static public $disk = 'public';
-    static public $temporalPath = '_tmp';
-
     public function __construct ()
     {
         $this->middleware('auth');
@@ -58,8 +55,8 @@ class ImageTemporalController extends Controller
 
         $image = str_replace('storage/', '', $request->input('image'));
 
-        if ( Storage::disk(self::$disk)->exists($image) ) {
-            Storage::disk(self::$disk)->delete($image);
+        if ( Storage::disk(ImageHelper::$disk)->exists($image) ) {
+            Storage::disk(ImageHelper::$disk)->delete($image);
             return Response::json( [ 'result' => true ], 200 );
         } else {
             abort(404);

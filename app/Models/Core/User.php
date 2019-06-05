@@ -2,6 +2,7 @@
 
 namespace App\Models\Core;
 
+use App\Http\Helpers\LocalizationHelper;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,8 +25,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar',
+        'name', 'email', 'password', 'avatar', 'lang',
     ];
+
+    protected $appends = [ 'language' ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -55,6 +58,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->id === auth()->id();
     }
 
+    public function isAdmin ()
+    {
+        return $this->hasRole('superadministrator') || $this->hasRole('administrator');
+    }
+
     public function isBanned ()
     {
         return $this->trashed();
@@ -62,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function apps ()
     {
-        return $this->belongsToMany(App::class)->withTimestamps()->withPivot('active');
+        return $this->belongsToMany(App::class)->using(AppUser::class)->withTimestamps()->withPivot('active');
     }
 
     public function comments ()
@@ -75,18 +83,59 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Message::class, 'author_id');
     }
 
+    public function getLanguageAttribute ()
+    {
+        $localesSupported = LocalizationHelper::getSupportedFormatted();
+
+        foreach ( $localesSupported AS $localeSupported ) {
+            if ( $localeSupported['iso'] === $this->lang ) {
+                return $localeSupported;
+            }
+        }
+
+        return null;
+    }
+
     public function messagesReceived ()
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
-    public function MessageReceivedNotification ()
+    public function locale ()
     {
-        $this->notify(new Notification);
+        $localesSupported = LocalizationHelper::getSupportedFormatted();
+
+        foreach ( $localesSupported AS $localeSupported ) {
+            if ( $localeSupported['iso'] === $this->lang ) {
+                return $localeSupported['code'];
+            }
+        }
+
+        return null;
     }
 
-    public function MessageDeletedNotification ()
+    public function MessageReceived ()
     {
-        $this->notify(new Notification);
+        $this->notify(new Notification)->locale($this->locale());
+    }
+
+    public function MessageDeleted ()
+    {
+        $this->notify(new Notification)->locale($this->locale());
+    }
+
+    public function AppUserRegistered ()
+    {
+        $this->notify(new Notification)->locale($this->locale());
+    }
+
+    public function AppUserAccepted ()
+    {
+        $this->notify(new Notification)->locale($this->locale());
+    }
+
+    public function AppUserBanned ()
+    {
+        $this->notify(new Notification)->locale($this->locale());
     }
 }

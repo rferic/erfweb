@@ -15,6 +15,7 @@ class CreateAppsTable extends Migration
     {
         Schema::create('apps', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('page_id')->unique()->nullable();
             $table->string('version');
             $table->string('vue_component');
             $table->string('type');
@@ -23,6 +24,7 @@ class CreateAppsTable extends Migration
             $table->softDeletes();
             
             $table->index('id');
+            $table->foreign('page_id')->references('id')->on('pages');
         });
 
         Schema::create('app_locales', function (Blueprint $table) {
@@ -51,6 +53,7 @@ class CreateAppsTable extends Migration
         });
 
         Schema::create('app_user', function (Blueprint $table) {
+            $table->primary(['app_id', 'user_id']);
             $table->unsignedInteger('app_id');
             $table->unsignedInteger('user_id');
             $table->boolean('active')->default(false);

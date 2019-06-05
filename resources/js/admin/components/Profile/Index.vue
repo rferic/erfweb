@@ -84,7 +84,7 @@
                 <b-card
                     v-if="hasApps"
                     v-for="app in apps"
-                    :key="app.id"
+                    :key="`app-${app.id}`"
                     class="card-profile card-app shadow mb-2"
                     :class="{'card-app-enable': app.pivot.active, 'card-app-disable': !app.pivot.active}"
                     :style="{ backgroundImage: `url(${getDefaultAppImageSrc(app)})` }"
@@ -116,7 +116,7 @@
                                         lg="6"
                                         md="6"
                                         sm="12">
-                                        <b-form-group :label="`${$t('Password', { locale: locale })}: *`">
+                                        <b-form-group :label="`${$t('Email', { locale: locale })}: *`">
                                             <b-form-input
                                                 v-model="user.email"
                                                 name="email"
@@ -210,6 +210,26 @@
                                             </div>
                                         </b-form-group>
                                     </b-col>
+                                    <b-col
+                                        lg="6"
+                                        md="6"
+                                        sm="12"
+                                    >
+                                        <b-form-group :label="$t('Language', { locale: locale })">
+                                            <b-form-select
+                                                v-model="user.lang"
+                                                class="form-control"
+                                            >
+                                                <option
+                                                    v-for="localeSupported in localesSupported"
+                                                    :key="localeSupported.iso"
+                                                    :value="localeSupported.iso"
+                                                >
+                                                    {{ $t(localeSupported.name, { locale }) }}
+                                                </option>
+                                            </b-form-select>
+                                        </b-form-group>
+                                    </b-col>
                                     <b-col lg="12" class="mb-4">
                                         <toggle-button v-model="toggleImage" />
                                         <label>{{ $t('Custom image', { locale}) }}</label>
@@ -277,7 +297,7 @@
                                     <div
                                         class="checkbox"
                                         v-for="(role, index) in roles"
-                                        :key="index">
+                                        :key="`role-${index}`">
                                         <label
                                             :for="role.key"
                                             class="form-check-label ">
@@ -337,6 +357,7 @@
                 password: '',
                 passwordConfirm: '',
                 avatarIsImage: true,
+                localesSupported: localesSupported,
                 toggleImage: true,
                 dropzoneOptions: {
                     method: 'post',
@@ -578,6 +599,7 @@
                     email: this.user.email,
                     name: this.user.name,
                     avatar: this.user.avatar,
+                    lang: this.user.lang,
                     roles: this.roles
                 }
 

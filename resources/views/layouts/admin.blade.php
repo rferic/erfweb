@@ -26,6 +26,7 @@
         </div>
         <script>
             const locale = "{{ App::getLocale() }}"
+            const localesSupported = @json(\App\Http\Helpers\LocalizationHelper::getSupportedFormatted());
             const csrfToken = "{{ csrf_token() }}"
             const routesGlobal = {
                 current: "{{ Request::url() }}",

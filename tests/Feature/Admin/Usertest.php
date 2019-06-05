@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Http\Controllers\Admin\ImageTemporalController;
+use App\Http\Helpers\ImageHelper;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\RoleHelper;
 use App\Http\Helpers\UserHelper;
 use App\Models\Core\App;
@@ -14,6 +15,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -29,6 +31,8 @@ class Usertest extends TestCase
     protected function setUp ():void
     {
         parent::setUp();
+
+        Notification::fake();
 
         $this->seedRoles();
 
@@ -88,8 +92,9 @@ class Usertest extends TestCase
 
         $this
             ->actingAs($this->admin)
-            ->post(route('admin.users.emailIsFree', $user->id ), [])
-            ->assertStatus(400);
+            ->post(route('admin.users.emailIsFree', $user->id ))
+            ->assertSuccessful()
+            ->assertExactJson(['result' => false]);
     }
 
     public function testEmailIsFree ()
@@ -182,6 +187,8 @@ class Usertest extends TestCase
     {
         $this->withExceptionHandling();
 
+        Notification::fake();
+
         $user = User::all()->random();
 
         $this
@@ -214,6 +221,8 @@ class Usertest extends TestCase
     {
         $this->withExceptionHandling();
 
+        Notification::fake();
+
         $user = User::all()->random();
 
         $this
@@ -230,6 +239,8 @@ class Usertest extends TestCase
     public function testPostAttachAppSuccessful ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         $user = User::all()->random();
         $app = App::all()->random();
@@ -250,6 +261,8 @@ class Usertest extends TestCase
     {
         $this->withExceptionHandling();
 
+        Notification::fake();
+
         $user = User::all()->random();
 
         $this
@@ -266,6 +279,8 @@ class Usertest extends TestCase
     public function testPostDetachAppSuccessful ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         $user = User::all()->random();
         $app = App::all()->random();
@@ -304,6 +319,8 @@ class Usertest extends TestCase
     {
         $this->withExceptionHandling();
 
+        Notification::fake();
+
         $user = User::all()->random();
         $app = App::all()->random();
         $user->apps()->attach([ $app->id => [ 'active' => false ] ]);
@@ -340,6 +357,8 @@ class Usertest extends TestCase
     public function testPostDisableAttachAppSuccessful ()
     {
         $this->withExceptionHandling();
+
+        Notification::fake();
 
         $user = User::all()->random();
         $app = App::all()->random();
@@ -414,6 +433,7 @@ class Usertest extends TestCase
         $this->withExceptionHandling();
 
         $user = User::all()->random();
+        $langs = LocalizationHelper::getSupportedRegional();
         $avatars = UserHelper::getAvatars();
         $email = $this->faker->safeEmail;
         $name = $this->faker->name;
@@ -425,6 +445,7 @@ class Usertest extends TestCase
                 'email' => $email,
                 'name' => $name,
                 'avatar' => $avatar,
+                'lang' => $langs[$this->faker->numberBetween(0, COUNT($langs) - 1)],
                 'roles' => $this->roles
             ])
             ->assertStatus(200);
@@ -455,6 +476,7 @@ class Usertest extends TestCase
         $this->withExceptionHandling();
 
         $user = User::all()->random();
+        $langs = LocalizationHelper::getSupportedRegional();
         $password = Hash::make($this->faker->password);
         $avatars = UserHelper::getAvatars();
         $email = $this->faker->safeEmail;
@@ -467,6 +489,7 @@ class Usertest extends TestCase
                 'email' => $email,
                 'name' => $name,
                 'avatar' =>$avatar,
+                'lang' => $langs[$this->faker->numberBetween(0, COUNT($langs) - 1)],
                 'password' => $password,
                 'password_confirmation' => $password,
                 'roles' => $this->roles
@@ -496,12 +519,13 @@ class Usertest extends TestCase
         $this->withExceptionHandling();
 
         $user = User::all()->random();
+        $langs = LocalizationHelper::getSupportedRegional();
         $email = $this->faker->safeEmail;
         $name = $this->faker->name;
-        $avatar = Storage::disk(ImageTemporalController::$disk)->putFile(
-            ImageTemporalController::$temporalPath,
+        $avatar = Storage::disk(ImageHelper::$disk)->putFile(
+            ImageHelper::$temporalPath,
             UploadedFile::fake()->image('random.jpg'),
-            ImageTemporalController::$disk
+            ImageHelper::$disk
         );
 
         $response = $this
@@ -510,6 +534,7 @@ class Usertest extends TestCase
                 'email' => $email,
                 'name' => $name,
                 'avatar' => $avatar,
+                'lang' => $langs[$this->faker->numberBetween(0, COUNT($langs) - 1)],
                 'roles' => $this->roles
             ])
             ->assertStatus(200);
@@ -534,7 +559,7 @@ class Usertest extends TestCase
             }
         }
         // Remove test image
-        Storage::disk(ImageTemporalController::$disk)->delete('images/users/' . $user->id . '/avatar' . str_replace(ImageTemporalController::$temporalPath, '', $avatar));
+        Storage::disk(ImageHelper::$disk)->delete('images/users/' . $user->id . '/avatar' . str_replace(ImageHelper::$temporalPath, '', $avatar));
     }
 
     public function testPostDisable ()

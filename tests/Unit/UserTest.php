@@ -35,7 +35,7 @@ class UserTest extends TestCase
 
         Notification::fake();
 
-        $this->user = factory(User::class)->create()->attachRole('administrator');
+        $this->user = factory(User::class)->create()->attachRole('superadministrator');
     }
 
     public function testIsMe ()
@@ -48,6 +48,8 @@ class UserTest extends TestCase
 
     public function testHasApps ()
     {
+        Notification::fake();
+
         $count = $this->faker->numberBetween(1, 100);
         $this->user->attachRole('user');
 

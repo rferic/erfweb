@@ -27,7 +27,8 @@
             </main>
         </div>
         <script>
-            const locale = "{{ App::getLocale() }}"
+            const locale = "{{ App::getLocale() }}";
+            const localesSupported = @json(\App\Http\Helpers\LocalizationHelper::getSupportedFormatted());
             const routesGlobal = {
                 login: "{{ localization()->localizeURL('login') }}",
                 forgottenPassword: "{{ localization()->localizeURL('password.request')  }}",

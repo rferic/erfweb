@@ -14,6 +14,7 @@ use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\App;
 use App\Models\Core\AppImage;
 use App\Models\Core\AppLocale;
+use App\Models\Core\Page;
 use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,21 +39,23 @@ class AppTest extends TestCase
 
         $this->seedRoles();
 
-        $this->numApps = $this->faker->numberBetween(0, 100);
+        $this->numApps = $this->faker->numberBetween(0, 20);
         $this->user = factory(User::class)->create()->attachRole('superadministrator');
         factory(User::class, $this->faker->numberBetween(1, 10))->create();
 
-        factory(App::class, $this->numApps)->create()->each(function ($app) {
-            $langs = LocalizationHelper::getSupportedFormatted();
+        factory(Page::class, $this->numApps)->create([ 'type' => 'app' ])->each(function ($page) {
+            factory(App::class)->create([ 'page_id' => $page->id ])->each(function ($app) {
+                $langs = LocalizationHelper::getSupportedFormatted();
 
-            foreach ( $langs AS $lang ) {
-                factory(AppLocale::class)->create([
-                    'lang' => $lang['iso'],
-                    'app_id' => $app->id
-                ]);
-            }
+                foreach ( $langs AS $lang ) {
+                    factory(AppLocale::class)->create([
+                        'lang' => $lang['iso'],
+                        'app_id' => $app->id
+                    ]);
+                }
 
-            factory(AppImage::class, $this->faker->numberBetween(1, 10))->create([ 'app_id' => $app->id ]);
+                factory(AppImage::class, $this->faker->numberBetween(1, 10))->create([ 'app_id' => $app->id ]);
+            });
         });
     }
 
@@ -72,7 +75,7 @@ class AppTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->post(route('admin.apps.get', []))
+            ->post(route('admin.apps.get'))
             ->assertStatus(200)
             ->assertJsonFragment(['total' => $this->numApps]);
     }
@@ -109,7 +112,7 @@ class AppTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->post(route('admin.apps.store', []))
+            ->post(route('admin.apps.store'))
             ->assertStatus(400);
     }
 
@@ -121,6 +124,7 @@ class AppTest extends TestCase
         $appLocales = [];
         $appImages = [];
         $testController = new AppControllerTest();
+        $page = Page::create([ 'user_id' => $this->user->id ]);
 
         foreach ( $langs AS $index => $lang ) {
             if ( $this->faker->boolean || $index === 0 ) {
@@ -138,7 +142,7 @@ class AppTest extends TestCase
             $appImages[] = [
                 'id' => '',
                 'title' => $this->faker->word,
-                'langs' => json_encode([$this->faker->word]),
+                'langs' => $langs[$this->faker->numberBetween(0, COUNT($langs) - 1)]['code'],
                 'priority' => $this->faker->numberBetween(0, 10),
                 'src' => ImageHelper::upload(UploadedFile::fake()->image($this->faker->word . '.jpeg'))
             ];
@@ -151,7 +155,8 @@ class AppTest extends TestCase
             'type' => $this->faker->word,
             'status' => $this->faker->word,
             'locales' => $appLocales,
-            'images' => $appImages
+            'images' => $appImages,
+            'page_id' => $page->id
         ];
         // Testing create a new app
         $this
@@ -206,7 +211,7 @@ class AppTest extends TestCase
             $appImages[] = [
                 'id' => '',
                 'title' => $this->faker->word,
-                'langs' => json_encode([$this->faker->word]),
+                'langs' => $langs[$this->faker->numberBetween(0, COUNT($langs) - 1)]['code'],
                 'priority' => $this->faker->numberBetween(0, 10),
                 'src' => ImageHelper::upload(UploadedFile::fake()->image($this->faker->word . '.jpeg'))
             ];

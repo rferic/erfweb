@@ -127,6 +127,9 @@
                         </span>
                         <i v-else>{{ $t('Is parent', { locale }) }}</i>
                     </template>
+                    <template slot="type" slot-scope="data">
+                        {{ data.item.type }}
+                    </template>
                     <template
                         slot="languages"
                         slot-scope="data"
@@ -273,6 +276,10 @@
                     {
                         key: 'page_id',
                         label: this.$t('Parent page', this.locale)
+                    },
+                    {
+                        key: 'type',
+                        label: this.$t('Type', this.locale)
                     },
                     {
                         key: 'layout',
@@ -620,6 +627,7 @@
                         slug: localeDefault !== null ? localeDefault.slug : '',
                         title: localeDefault !== null ? localeDefault.title : '',
                         description: localeDefault !== null ? localeDefault.description : '',
+                        type: page.type,
                         layout: localeDefault !== null ? localeDefault.layout : '',
                         author: page.author,
                         is_home: page.is_home,

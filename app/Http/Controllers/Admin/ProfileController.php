@@ -48,7 +48,12 @@ class ProfileController extends Controller
             'getUserData' => route('admin.users.getData', $user->id),
             'userUpdate' => route('admin.users.update', $user->id),
             'uploadImage' => route('admin.imagesTemporal.upload'),
-            'removeImage' => route('admin.imagesTemporal.remove')
+            'removeImage' => route('admin.imagesTemporal.remove'),
+            'getAppsToAttach' => route('admin.users.getAppsToAttach', $user->id),
+            'attachApp' => route('admin.users.attachApp', $user->id),
+            'detachApp' => route('admin.users.detachApp', $user->id),
+            'enableAttachApp' => route('admin.users.enableAttachApp', $user->id),
+            'disableAttachApp' => route('admin.users.disableAttachApp', $user->id)
         ];
 
         return view('admin/default', compact( 'data', 'title', 'description', 'component', 'routes' ));

@@ -2,24 +2,29 @@
 
 namespace App\Notifications;
 
-use App\Models\Core\Message;
+use App\Http\Helpers\LocalizationHelper;
+use App\Models\Core\AppUser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\App;
 
-class MessageReceivedNotification extends Notification
+class AppUserBanned extends Notification
 {
     use Queueable;
 
-    public $message;
+    public $user, $app;
+
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param AppUser $item
      */
-    public function __construct( Message $message )
+    public function __construct( AppUser $item )
     {
-        $this->message = $message;
+        $this->user = $item->user;
+        $this->app = $item->app;
     }
 
     /**
@@ -41,12 +46,20 @@ class MessageReceivedNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $title = '';
+        $lang = LocalizationHelper::getSupportedItem('code', App::getLocale());
+
+        foreach ( $this->app->locales AS $locale ) {
+            if ( $title === '' || $locale->lang === $lang['iso'] ) {
+                $title = $locale->title;
+            }
+        }
+
         return (new MailMessage)
-            ->subject( __('Your message has been answered'))
-            ->greeting(__('Hello ') . $this->message->receiver->name . '!')
-            ->line(__('Your message has been asnwered.'))
-            ->action(__('Go to your profile and see the answers'), route('account'))
-            ->line(__('Thank you for using our application!'));
+            ->subject( __('Your access has been banned'))
+            ->greeting(__('Hello ') . $this->user->name . '!')
+            ->line(__('Your access to use the application "' . $title . '" has been banned.'))
+            ->line(__('If you are not agree, you can contact us to solve the problem.'));
     }
 
     /**

@@ -8,11 +8,14 @@ use App\Http\Helpers\LocalizationHelper;
 use App\Models\Core\App;
 use App\Models\Core\AppImage;
 use App\Models\Core\AppLocale;
+use App\Models\Core\Page;
+use App\Models\Core\PageLocale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AppController extends Controller
 {
@@ -51,6 +54,7 @@ class AppController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'nullable|integer',
+            'page_id' => 'nullable|integer',
             'version' => 'required|string',
             'vue_component' => 'required|string',
             'type' => 'required|string',
@@ -65,6 +69,7 @@ class AppController extends Controller
             $app_id = $request->input('id');
 
             $app = is_null($app_id) ? $this->create($request) : $this->update($app_id, $request);
+
             $this->refreshLocales($app, $appLocales);
             $this->refreshImages($app, $appImages);
         } else {
@@ -178,25 +183,43 @@ class AppController extends Controller
             'routes' => [
                 'getApps' => route('admin.apps.get'),
                 'storeApp' => route('admin.apps.store'),
-                'uploadImage' => route('admin.imagesTemporal.upload')
+                'uploadImage' => route('admin.imagesTemporal.upload'),
+                'getByType' => route('admin.pages.getByType'),
+                'pageList' => route('admin.pages')
             ]
         ];
     }
 
     private function create ( $request )
     {
+        $page_id = $request->input('page_id');
+
+        if ( is_null($page_id) ) {
+            $page = Page::create([
+                'type' => 'app',
+                'user_id' => Auth::id()
+            ]);
+            $page_id = $page->id;
+        } else {
+            $page = Page::find($page_id);
+            $page->type = 'app';
+            $page->save();
+        }
+
         return App::create([
             'version' => $request->input('version'),
             'vue_component' => $request->input('vue_component'),
             'type' => $request->input('type'),
             'status' => $request->input('status'),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
+            'page_id' => $page_id
         ]);
     }
 
     private function update ( $app_id, $request )
     {
         $app = App::find($app_id);
+        $app->page_id = $request->input('page_id');
         $app->version = $request->input('version');
         $app->vue_component = $request->input('vue_component');
         $app->type = $request->input('type');
@@ -207,6 +230,26 @@ class AppController extends Controller
 
     private function createLocale ( App $app, $data)
     {
+        if ( !is_null($app->page_id) ) {
+            $page_locale = PageLocale::where('page_id', $app->page_id)->where('lang', $data['lang'])->get()->first();
+
+            if (is_null($page_locale)) {
+                PageLocale::create([
+                    'user_id' => Auth::id(),
+                    'page_id' => $app->page_id,
+                    'lang' => $data['lang'],
+                    'slug' => Str::slug($data['title']),
+                    'title' => $data['title'],
+                    'description' => '',
+                    'layout' => '',
+                    'options' => '',
+                    'seo_title' => $data['title'],
+                    'seo_description' => '',
+                    'seo_keywords' => ''
+                ]);
+            }
+        }
+
         return AppLocale::create([
             'app_id' => $app->id,
             'lang' => $data['lang'],
@@ -266,7 +309,7 @@ class AppController extends Controller
     {
         if ( $image->src !== $imageData['src'] ) {
             $imageInfo = pathinfo($imageData['src']);
-            $origin = ImageHelper::$pathTemporal . '/' . $imageInfo['basename'];
+            $origin = ImageHelper::$temporalPath . '/' . $imageInfo['basename'];
             $destination = $image->app->imagePath . '/' . $imageInfo['basename'];
             ImageHelper::move($origin, $destination);
             ImageHelper::destroyImage($image->app->imagePath, $image->src);
@@ -282,7 +325,7 @@ class AppController extends Controller
     private function storeImage ( App $app, $imageData )
     {
         $imageInfo = pathinfo($imageData['src']);
-        $origin = ImageHelper::$pathTemporal . '/' . $imageInfo['basename'];
+        $origin = ImageHelper::$temporalPath . '/' . $imageInfo['basename'];
         $destination = $app->imagePath . '/' . $imageInfo['basename'];
 
         $src = ImageHelper::move($origin, $destination);

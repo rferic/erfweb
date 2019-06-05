@@ -53,7 +53,16 @@
                     @input="$validator.reset()"
                 />
             </v-flex>
-            <v-flex xs12 sm12 md12 lg12 class="pl-2 pr-2">
+            <v-flex xs12 sm6 md6 lg6 class="pl-2 pr-2">
+                <v-select
+                    :items="localesSupported"
+                    item-value="iso"
+                    item-text="name"
+                    v-model="lang"
+                    :label="$vuetify.t('Language')"
+                />
+            </v-flex>
+            <v-flex xs12 sm6 md6 lg6 class="pl-2 pr-2">
                 <v-checkbox
                     name="terms"
                     v-model="terms"
@@ -76,9 +85,7 @@
 </template>
 
 <script>
-    import { Validator } from 'vee-validate'
-    import passwordIsStrongRule from './../../../includes/validators/passwordIsStrongRule'
-    import { mapActions } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
     import authMixin from './../../mixins/auth'
 
     export default {
@@ -90,8 +97,12 @@
                 email: '',
                 password: '',
                 password_confirmation: '',
-                terms: false,
+                lang: 'en_GB',
+                terms: false
             }
+        },
+        computed: {
+            ...mapState([ 'locale', 'localesSupported' ])
         },
         methods: {
             ...mapActions({
@@ -106,6 +117,7 @@
                         email: this.email,
                         password: this.password,
                         password_confirmation: this.password_confirmation,
+                        lang: this.lang,
                         terms: this.terms
                     })
 
@@ -118,28 +130,11 @@
                         this.$emit('onErrorRegistered')
                     }
                 }
-            },
-            async setValidators () {
-                Validator.extend('password', passwordIsStrongRule)
-                this.setEmailIsFreeValidator()
-            },
-            async setEmailIsFreeValidator () {
-                const context = this
-                const emailIsFree = async ( value ) => {
-                    const { result } = await context.getEmailIsFreeRequest({ email: value })
-                    return {
-                        valid: result
-                    }
-                }
-
-                Validator.extend('emailIsFree', {
-                    validate: emailIsFree,
-                    getMessage: field => this.$vuetify.t(`The ${field} already exists`, context.locale)
-                });
             }
         },
         mounted () {
             this.setValidators()
+            this.lang = this.localesSupported.filter(locale => locale.code === this.locale)[0].iso
         }
     }
 </script>

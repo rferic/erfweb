@@ -47,7 +47,7 @@ class ImageController extends Controller
 
         if ( !$validator->fails() ) {
             $imageInfo = pathinfo($request->input('src'));
-            $origin = ImageHelper::$pathTemporal . '/' . $imageInfo['basename'];
+            $origin = ImageHelper::$temporalPath . '/' . $imageInfo['basename'];
             $destination = Image::$folder . '/' . $imageInfo['basename'];
             $src = ImageHelper::move($origin, $destination);
 
@@ -76,7 +76,7 @@ class ImageController extends Controller
             if ( $image->src !== $request->input('src') ) {
                 ImageHelper::destroyImage(Image::$folder, $image->src);
                 $imageInfo = pathinfo($request->input('src'));
-                $origin = ImageHelper::$pathTemporal . '/' . $imageInfo['basename'];
+                $origin = ImageHelper::$temporalPath . '/' . $imageInfo['basename'];
                 $destination = Image::$folder . '/' . $imageInfo['basename'];
                 $image->src = ImageHelper::move($origin, $destination);
             }

@@ -34,6 +34,7 @@
                     class="col-12"
                     :data="data"
                     :app-origin="currentApp"
+                    :pages="pages"
                     @onGoToList="goToList"
                     @onSaveApp="onSaveApp"
                 />
@@ -66,10 +67,12 @@
                 filters: this.clone(filterAppStructure),
                 currentApp: null,
                 isLoaded: false,
+                pages: [],
                 languagesAvailable: JSON.parse(this.data).langsAvailable
             }
         },
         computed: {
+            ...mapState([ 'routes' ]),
             ...mapState({
                 isVisibleBlockui: state => state.blockui.isVisible,
                 messageBlockui: state => state.blockui.message
@@ -120,6 +123,13 @@
                 app.locales = locales
 
                 return app
+            },
+            async loadAppPages () {
+                this.pages = await this.getPagesByTypeRequest('app')
+            },
+            async getPagesByTypeRequest( type ) {
+                const { data } = await this.axios.post(this.routes.getByType, { type })
+                return data
             }
         },
         created () {
@@ -127,6 +137,7 @@
         },
         mounted () {
             this.isLoaded = true
+            this.loadAppPages()
         }
     }
 </script>

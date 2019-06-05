@@ -54,7 +54,7 @@ import store from './store'
 // Layout
 import AdminLayout from './Layout'
 // filters
-import './filters/global'
+import './../includes/filters/global'
 
 const app = new Vue({
     el: '#app',

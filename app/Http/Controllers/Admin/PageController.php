@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PageController extends Controller
 {
@@ -51,11 +52,33 @@ class PageController extends Controller
         return Response::json(Page::whereNull('page_id')->with('locales')->get()->toArray());
     }
 
+    public function getByType ( Request $request )
+    {
+        $validator = Validator::make($request->all(), [
+            'type' => [
+                'required',
+                'string',
+                Rule::in(PageHelper::getTypes())
+            ]
+        ]);
+
+        if ( !$validator->fails() ) {
+            return Response::json(Page::where('type', $request->input('type'))->with(['app', 'locales'])->get());
+        }
+
+        abort(400);
+    }
+
     public function store ( Request $request )
     {
         $validator = Validator::make($request->all(), [
             'id' => 'nullable|integer',
             'page_id' => 'nullable|integer',
+            'type' => [
+                'required',
+                'string',
+                Rule::in(PageHelper::getTypes())
+            ],
             'locales' => 'nullable|array'
         ]);
 
@@ -63,7 +86,7 @@ class PageController extends Controller
             $pageLocales = $request->input('locales');
             $id = $request->input('id');
             $page_id = $request->input('page_id');
-            $is_home = $request->input('is_home');
+            $is_home = is_null($request->input('is_home')) ? false : $request->input('is_home');
 
             if ( $is_home ) {
                 $pageHome = Page::where('is_home', true)->whereNotIn('id', [ $id ])->first();
@@ -76,12 +99,13 @@ class PageController extends Controller
 
             if ( is_null($id) ) {
                 $id = Page::create([
-                    'page_id' => $page_id,
                     'user_id' => Auth::id(),
+                    'page_id' => $page_id,
                     'is_home' => $is_home
                 ])->id;
             } else {
                 $page = Page::find($id);
+                $page->page_id = $page_id;
                 $page->is_home = $is_home;
                 $page->save();
             }
@@ -179,6 +203,10 @@ class PageController extends Controller
             $query = $query->onlyTrashed();
         } else if ( $withTrashed ) {
             $query = $query->withTrashed();
+        }
+        // Filter type
+        if ( isset($filters['type']) ) {
+            $query->where('type', $filters['type']);
         }
         // Filter text
         if ( isset($filters['text']) ) {

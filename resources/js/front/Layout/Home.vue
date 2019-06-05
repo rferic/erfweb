@@ -28,9 +28,13 @@
             </template>
         </parallax>
 
-        <section class="mt-5">
-            <v-content class="pt-3">
-                <app-grid :max-items="8" class-columns-sizes="xs6 sm6 md3 lg3" />
+        <section class="white">
+            <v-content class="pt-3 pb-3">
+                <app-grid title="Discover my apps" :apps="apps" class-columns-sizes="xs6 sm6 md3 lg3" />
+            </v-content>
+        </section>
+        <section>
+            <v-content class="pt-3 pb-3">
                 <v-layout row wrap>
                     <v-flex xs10 sm10 md6 lg6 offset-xs1 offset-sm1 offset-md3 offset-lg3>
                         <h2 class="title font-weight-thin text-xs-center mt-5 mb-4">
@@ -49,12 +53,41 @@
     import Parallax from './../components/Parallax'
     import AppGrid from './../components/App/Grid'
     import ShortContact from './../components/Contact/Short'
+    import appMixin from './../mixins/app'
 
     export default {
         name: 'HomeLayout',
         components: { Parallax, AppGrid, ShortContact },
+        mixins: [ appMixin ],
+        data () {
+            return {
+                apps: [],
+                format: 'collection',
+                randomOrder: true,
+                status: ['success'],
+                types: [],
+                maxItems: 8
+            }
+        },
         computed: {
-            ...mapState(['routesGlobal'])
+            ...mapState(['routesGlobal']),
+            hasApps () {
+                return this.apps.length > 0
+            }
+        },
+        methods: {
+            async getApps () {
+                this.apps = await this.getAppsRequest({
+                    format: 'collection',
+                    randomOrder: true,
+                    maxItems: this.maxItems,
+                    status: this.status,
+                    types: this.types
+                })
+            }
+        },
+        created () {
+            this.getApps()
         }
     }
 </script>

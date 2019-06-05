@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Support\Facades\App;
+use App\Models\Core\App as AppModel;
 
 class Page extends Model
 {
@@ -24,8 +25,15 @@ class Page extends Model
                 $page->menuItems()->forceDelete();
                 $page->locales()->forceDelete();
                 $page->childs()->forceDelete();
+                $page->app()->page_id = null;
+                $page->app()->save();
             }
         });
+    }
+
+    public function app ()
+    {
+        return $this->hasOne(AppModel::class, 'page_id');
     }
 
     public function locales ()

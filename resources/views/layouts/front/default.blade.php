@@ -27,7 +27,7 @@
             {!! $content->header_inject !!}
         @endforeach
     </head>
-    <body>
+    <body class="mb-0">
         <div id="app">
             <v-app v-cloak light>
                 <v-navigation-drawer
@@ -53,7 +53,7 @@
                 </v-toolbar>
                 <v-content>
                     <v-container fluid fill-height class="pa-0">
-                            <v-layout>
+                        <v-layout v-if="$root.printLayout">
                             @yield('content')
                         </v-layout>
                     </v-container>
@@ -65,9 +65,15 @@
         <script>
             const locale = "{{ App::getLocale() }}"
             const csrfToken = "{{ csrf_token() }}"
+            const homeRoute = "{{ $homeRoute }}"
+            const requiredLogged = @json($requireLogged);
+            const isAdmin = @json($isAdmin);
+            const myApps = @json($myApps);
+            const pageData = @json($pageData);
             const routesGlobal = {
                 account: "{{ localization()->localizeURL(route('account')) }}",
                 whoIAm: "{{ localization()->localizeURL(route('who-i-am')) }}",
+                adminDashboard: "{{ route('admin.dashboard') }}",
                 logout: "{{ route('logout') }}",
                 login: "{{ route('login') }}",
                 loginAjax: "{{ route('login-ajax') }}",
@@ -76,9 +82,10 @@
                 emailIsFree: "{{ route('email-is-free') }}",
                 sendMessage: "{{ route('send-message') }}",
                 getApps: "{{ route('get-apps') }}",
+                getMyApps: "{{ route('get-my-apps') }}",
                 translates: @json($pageTranslates)
             }
-            const localesSupported = @json($localesSupported);
+            const localesSupported = @json(\App\Http\Helpers\LocalizationHelper::getSupportedFormatted());
         </script>
         @yield('script')
     </body>

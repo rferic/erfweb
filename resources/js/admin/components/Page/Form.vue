@@ -22,7 +22,7 @@
             </b-row>
             <b-card class="mt-2">
                 <b-row>
-                    <b-col v-if="hasPagesParent" lg="6" md="12">
+                    <b-col v-if="hasPagesParent" lg="4" sm="12">
                         <b-form-group :label="`${$t('Parent page', { locale: locale })}: *`">
                             <b-form-select
                                 name="parent"
@@ -42,12 +42,19 @@
                                     :key="pageParent.id"
                                     :value="pageParent.id"
                                 >
-                                    {{ $t(getDefaultLocale(pageParent).title, { locale }) }}
+                                    {{ getDefaultLocale(pageParent) !== null ? $t(getDefaultLocale(pageParent).title, { locale }) : '' }}
                                 </option>
                             </b-form-select>
                         </b-form-group>
                     </b-col>
-                    <b-col lg="6" sm="12">
+                    <b-col lg="4" sm="6">
+                        <b-form-group :label="`${$t('Type', { locale: locale })}:`">
+                            <b-form-select :disabled="true" :value="type">
+                                <option>{{ type }}</option>
+                            </b-form-select>
+                        </b-form-group>
+                    </b-col>
+                    <b-col lg="4" sm="6">
                         <b-form-checkbox switch v-model="is_home">
                             {{ $t('Is home', { locale }) }}
                         </b-form-checkbox>
@@ -119,7 +126,8 @@
                 languagesAvailable: JSON.parse(this.data).langsAvailable,
                 layouts: JSON.parse(this.data).layouts,
                 page_id: this.pageOrigin.page_id === null ? '' : this.clone(this.pageOrigin.page_id),
-                is_home: this.clone(this.pageOrigin.is_home)
+                is_home: this.clone(this.pageOrigin.is_home),
+                type: this.clone(this.pageOrigin.type)
             }
         },
         computed: {

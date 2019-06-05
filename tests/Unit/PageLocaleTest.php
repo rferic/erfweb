@@ -8,6 +8,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Core\App;
 use App\Models\Core\Content;
 use App\Models\Core\Menu;
 use App\Models\Core\MenuItem;
@@ -37,6 +38,7 @@ class PageLocaleTest extends TestCase
         $this->user = factory(User::class)->create()->attachRole('superadministrator');
         $this->author = factory(User::class)->create()->attachRole('superadministrator');
         $this->page = factory(Page::class)->create([ 'user_id' => $this->author->id ]);
+        factory(App::class)->create(['page_id' => $this->page->id]);
         $this->pageLocale = factory(PageLocale::class)->create([
             'user_id' => $this->author->id,
             'page_id' => $this->page->id,

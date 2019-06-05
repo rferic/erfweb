@@ -8,7 +8,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Http\Controllers\Admin\ImageTemporalController;
+use App\Http\Helpers\ImageHelper;
 use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -62,12 +62,13 @@ class ImageTemporalTest extends TestCase
             ->post(route('admin.imagesTemporal.upload'), [
                 'image' => UploadedFile::fake()->image('random.jpg')
             ])
-            ->assertStatus(200);
+            ->assertSuccessful()
+            ->assertJsonFragment([ 'result' => true ]);
 
         $imageName = str_replace('/storage/', '', $response->original['data']['image']);
 
-        $this->assertTrue($response->original['result']);
-        $this->assertTrue(Storage::disk(ImageTemporalController::$disk)->has($imageName));
+        $this->assertTrue(Storage::disk(ImageHelper::$disk)->has($imageName));
+        Storage::disk(ImageHelper::$disk)->delete($response->original['data']['image']);
     }
 
     public function testDeleteRemoveImageIfNotLogged ()
@@ -105,10 +106,10 @@ class ImageTemporalTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        $imagePath = Storage::disk(ImageTemporalController::$disk)->putFile(
-            ImageTemporalController::$temporalPath,
+        $imagePath = Storage::disk(ImageHelper::$disk)->putFile(
+            ImageHelper::$temporalPath,
             UploadedFile::fake()->image($this->faker->word . '.jpg'),
-            ImageTemporalController::$disk
+            ImageHelper::$disk
         );
 
         $this
@@ -116,6 +117,9 @@ class ImageTemporalTest extends TestCase
             ->delete(route('admin.imagesTemporal.remove'), [
                 'image' => Storage::url($imagePath)
             ])
-            ->assertStatus(200);
+            ->assertSuccessful();
+
+        $imageName = str_replace('/storage/', '', $imagePath);
+        $this->assertFalse(Storage::disk(ImageHelper::$disk)->has($imageName));
     }
 }

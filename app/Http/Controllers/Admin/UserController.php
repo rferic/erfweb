@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Helpers\LocalizationHelper;
 use App\Http\Helpers\PasswordHelper;
 use App\Http\Helpers\RoleHelper;
 use App\Http\Helpers\UserHelper;
@@ -9,9 +10,10 @@ use App\Models\Core\App;
 use App\Models\Core\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -58,7 +60,7 @@ class UserController extends Controller
             'userRoles' => UserHelper::getRolesAssignToUser($user),
             'roles' => RoleHelper::getRoles(),
             'avatars' => UserHelper::getAvatars(),
-            'apps' => $user->apps()->with([ 'locales', 'images' ])->withPivot(['active'])->get()
+            'apps' => $user->apps()->with([ 'locales', 'images' ])->get()
         ];
         $routes = [
             'emailIsFree' => route('admin.users.emailIsFree', $user->id),
@@ -186,58 +188,39 @@ class UserController extends Controller
     public function emailIsFree ( User $user, Request $request )
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required'
+            'email' => [
+                'required',
+                Rule::unique('users', 'email')->ignore($user->id)
+            ]
         ]);
 
-        if ( !$validator->fails() ) {
-            return Response::json([ 'result' => UserHelper::emailIsFree($user, $request->input('email')) ], 200);
-        } else {
-            return Response::json([], 400);
-        }
+        return Response::json([ 'result' => !$validator->fails() ], 200);
     }
 
     public function update ( User $user, Request $request )
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
+            'email' => [
+                'required',
+                Rule::unique('users', 'email')->ignore($user->id)
+            ],
             'name' => 'required',
             'avatar' => 'required',
+            'lang' => [
+                'required',
+                'string',
+                Rule::in(LocalizationHelper::getSupportedRegional())
+            ],
             'password_confirmation' => 'nullable|same:password'
         ]);
 
-        $image = $request->input('avatar');
-
-        if ( !$validator->fails() && UserHelper::emailIsFree($user, $request->input('email')) ) {
-            // Save user
-            $avatars = UserHelper::getAvatars();
-
-            // If avatar is a temporal image move to static folder
-            if ( !in_array($image, $avatars) && $image !== $user->avatar ) {
-                $imageTmp = str_replace('storage/', '', $image);
-                $imageNew = str_replace(ImageTemporalController::$temporalPath, 'images/users/' . $user->id . '/avatar', $imageTmp);
-
-                if ( Storage::disk(ImageTemporalController::$disk)->exists($imageTmp) ) {
-                    // Remove image if exists
-                    if ( Storage::disk(ImageTemporalController::$disk)->exists($imageNew) ) {
-                        Storage::disk(ImageTemporalController::$disk)->delete($imageNew);
-                    }
-                    // Move temporal image to static folder
-                    Storage::disk(ImageTemporalController::$disk)->move($imageTmp, $imageNew);
-                    $image = $imageNew;
-                }
-            }
-            // Remove old image if is required
-            if ( !in_array($user->avatar, $avatars) && $image !== $user->avatar ) {
-                $imageOld = str_replace('storage/', '', $user->avatar);
-
-                if ( Storage::disk(ImageTemporalController::$disk)->exists($imageOld) ) {
-                    Storage::disk(ImageTemporalController::$disk)->delete($imageOld);
-                }
-            }
+        if ( !$validator->fails() ) {
+            $image = UserHelper::storeAvatar($user, $request);
 
             $user->email = $request->input('email');
             $user->name = $request->input('name');
             $user->avatar = $image;
+            $user->lang = $request->input('lang');
 
             if ( !empty($request->input('password')) ) {
                 $request->validate([ 'password' => PasswordHelper::validate() ]);
@@ -299,7 +282,7 @@ class UserController extends Controller
 
         if ( isset($filters['role']) && in_array($filters['role'], RoleHelper::getRoles()) ) {
             $usersWithRole = isset($filters['banned']) && $filters['banned']
-                ? User::withTrashed()->role($filters['role'])->get()
+                ? User::withTrashed()->whereRoleIs($filters['role'])->get()
                 : User::whereRoleIs($filters['role'])->get();
             $query->where(function ($query) use ($usersWithRole) {
                 foreach ( $usersWithRole AS $userWithRole ){

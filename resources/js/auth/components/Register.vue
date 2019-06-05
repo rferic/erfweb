@@ -14,6 +14,7 @@
                         novalidate
                     >
                         <input type="hidden" name="_token" :value="csrfToken">
+                        <input type="hidden" name="lang" v-model="lang" />
 
                         <div class="form-group input-group-alternative mb-3 input-group" :class="{ 'has-danger': errors.has('name') }">
                             <div class="input-group-prepend">
@@ -120,6 +121,21 @@
                             {{ errors.first('password_confirmation') }}
                         </base-alert>
 
+                        <base-dropdown>
+                            <base-button slot="title" type="secondary" class="dropdown-toggle input-group-alternative form-control">
+                                {{ currentLocaleSupported.name }}
+                            </base-button>
+                            <a
+                                v-for="locale in localesSupportedNotSelected"
+                                :key="locale.iso"
+                                class="dropdown-item"
+                                href="#"
+                                @click.prevent="lang = locale.iso"
+                            >
+                                {{ locale.name }}
+                            </a>
+                        </base-dropdown>
+
                         <div class="row my-4">
                             <div class="col-12">
                                 <div class="custom-control custom-checkbox custom-control-alternative">
@@ -204,10 +220,12 @@
         },
         data () {
             return {
+                localesSupported: localesSupported,
                 name: '',
                 email: '',
                 password: '',
                 password_confirmation: '',
+                lang: 'en_GB',
                 terms: false,
                 sessionErrors: JSON.parse(this.data).sessionErrors
             }
@@ -216,6 +234,12 @@
             ...mapState([ 'csrfToken', 'locale', 'routesGlobal' ]),
             hasSessionErrors () {
                 return this.sessionErrors.length > 0
+            },
+            currentLocaleSupported () {
+                return this.localesSupported.filter(localeSupported => localeSupported.iso === this.lang)[0]
+            },
+            localesSupportedNotSelected () {
+                return this.localesSupported.filter(localeSupported => localeSupported.iso !== this.lang)
             }
         },
         methods: {
@@ -228,6 +252,7 @@
             }
         },
         mounted () {
+            this.lang = this.localesSupported.filter(localeSupported => localeSupported.code === this.locale)[0].iso
             Validator.extend('password', passwordIsStrongRule)
         }
     }

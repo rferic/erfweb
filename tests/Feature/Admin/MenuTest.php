@@ -90,6 +90,7 @@ class MenuTest extends TestCase
                 'type' => $isExternal ? 'internal' : 'external',
                 'page_locale_id' => $isExternal ? '' : PageLocale::get()->random()->id,
                 'url_external' => $isExternal ? $this->faker->url : '',
+                'icon' => $this->faker->word,
                 'priority' => $this->faker->numberBetween(0, 10)
             ];
         }
@@ -127,6 +128,7 @@ class MenuTest extends TestCase
                     'type' => $isExternal ? 'internal' : 'external',
                     'page_locale_id' => $isExternal ? '' : PageLocale::get()->random()->id,
                     'url_external' => $isExternal ? $this->faker->url : '',
+                    'icon' => $this->faker->word,
                     'priority' => $this->faker->numberBetween(0, 10)
                 ];
             }
@@ -142,6 +144,7 @@ class MenuTest extends TestCase
                 'type' => $isExternal ? 'internal' : 'external',
                 'page_locale_id' => $isExternal ? '' : PageLocale::get()->random()->id,
                 'url_external' => $isExternal ? $this->faker->url : '',
+                'icon' => $this->faker->word,
                 'priority' => $this->faker->numberBetween(0, 10)
             ];
         }

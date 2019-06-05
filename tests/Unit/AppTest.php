@@ -11,11 +11,14 @@ namespace Tests\Unit;
 use App\Models\Core\App;
 use App\Models\Core\AppImage;
 use App\Models\Core\AppLocale;
+use App\Models\Core\Page;
+use App\Models\Core\PageLocale;
 use App\Models\Core\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class AppTest extends TestCase
@@ -30,7 +33,20 @@ class AppTest extends TestCase
     {
         parent::setUp();
 
-        $this->appTest = factory(App::class)->create();
+        $this->seedRoles();
+
+        factory(User::class)->create()->attachRole('superadministrator');
+        $page = factory(Page::class)->create();
+        factory(PageLocale::class)->create([
+            'page_id' => $page->id,
+            'lang' => $this->faker->languageCode
+        ]);
+        $this->appTest = factory(App::class)->create([ 'page_id' => $page ]);
+    }
+
+    public function testHasPage ()
+    {
+        $this->assertInstanceOf(Page::class, $this->appTest->page);
     }
 
     public function testHasLocales ()
@@ -62,6 +78,8 @@ class AppTest extends TestCase
 
     public function testHasUsers ()
     {
+        Notification::fake();
+
         $count = $this->faker->numberBetween(2, 100);
 
         $users = factory(User::class, $count)->create();

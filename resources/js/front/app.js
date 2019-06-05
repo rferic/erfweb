@@ -16,9 +16,11 @@ import VeeValidate from 'vee-validate'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import vueDebounce from 'vue-debounce'
+import Transitions from 'vue2-transitions'
 // CSS
 import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 // Requires
 const moment = require('moment')
 if ( locale !== 'en' ) {
@@ -36,27 +38,35 @@ Vue.use(VeeValidate, { fieldsBagName: 'veeFields' })
 Vue.use(VueAxios, axios)
 Vue.use(VueMoment, { moment })
 Vue.use(vueDebounce)
+Vue.use(Transitions)
 // Store
 import store from './store'
 // Layouts
 import HomeLayout from './Layout/Home'
 import WhoIAmLayout from './Layout/WhoIAm'
+import AccountLayout from './Layout/Account'
 // Menu
 import ToolbarMenu from './components/Menu/Toolbar'
 import MobileMenu from './components/Menu/Mobile'
 import IndexFooter from './components/Footer'
 // Auth
 import AuthIndex from './components/Auth/'
+// filters
+import './../includes/filters/global'
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import { mapGetters } from 'vuex'
 
 const app = new Vue({
     el: '#app',
     data: () => ({
-        drawer: false
+        drawer: false,
+        requiredLogged: requiredLogged,
+        isAdmin: isAdmin,
+        pageData: pageData
     }),
     props: {
         source: String
@@ -68,6 +78,22 @@ const app = new Vue({
         IndexFooter,
         AuthIndex,
         HomeLayout,
-        WhoIAmLayout
+        WhoIAmLayout,
+        AccountLayout
+    },
+    computed: {
+        ...mapGetters({
+            isLogged: 'auth/isLogged'
+        }),
+        printLayout () {
+            return !this.requiredLogged || this.isLogged
+        }
+    },
+    watch: {
+        isLogged () {
+            if ( !this.printLayout ) {
+                window.location.href = homeRoute
+            }
+        }
     }
 });

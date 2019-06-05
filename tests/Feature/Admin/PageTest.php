@@ -10,6 +10,7 @@ namespace Tests\Feature\Admin;
 
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Helpers\LocalizationHelper;
+use App\Http\Helpers\PageHelper;
 use App\Models\Core\Menu;
 use App\Models\Core\Page;
 use App\Models\Core\PageLocale;
@@ -120,6 +121,30 @@ class PageTest extends TestCase
             ->assertExactJson(Page::whereNull('page_id')->with('locales')->get()->toArray());
     }
 
+    public function testPostGetByTypeBadRequest ()
+    {
+        $this->withExceptionHandling();
+
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.pages.getByType'))
+            ->assertStatus(400);
+    }
+
+    public function testPostGetByTypeSuccessful ()
+    {
+        $this->withExceptionHandling();
+
+        $types = PageHelper::getTypes();
+        $type = $types[$this->faker->numberBetween(0, COUNT($types) - 1)];
+
+        $this
+            ->actingAs($this->user)
+            ->post(route('admin.pages.getByType'), [ 'type' => $type])
+            ->assertSuccessful()
+            ->assertJsonCount(Page::where('type', $type)->get()->count());
+    }
+
     public function testPostRestorePage ()
     {
         $this->withExceptionHandling();
@@ -198,8 +223,8 @@ class PageTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->post(route('admin.pages.store', []))
-            ->assertStatus(500);
+            ->post(route('admin.pages.store'))
+            ->assertStatus(400);
     }
 
     public function testPostStorePageSuccessful ()
@@ -207,6 +232,7 @@ class PageTest extends TestCase
         $this->withExceptionHandling();
 
         $langs = LocalizationHelper::getSupportedFormatted();
+        $types = PageHelper::getTypes();
         $pageLocales = [];
         $allContents = [];
 
@@ -251,6 +277,8 @@ class PageTest extends TestCase
         $params = [
             'id' => null,
             'page_id' => $this->faker->boolean ? '' : Page::all()->random()->id,
+            'type' => $types[$this->faker->numberBetween(0, COUNT($types) - 1)],
+            'is_home' => $this->faker->boolean,
             'locales' => $pageLocales
         ];
 
@@ -268,10 +296,13 @@ class PageTest extends TestCase
             'allContents' => $allContents,
             'params' => $params
         ]);
+
         // Update page
         $params = [
             'id' => $page->id,
             'page_id' => $params['page_id'],
+            'type' => $types[$this->faker->numberBetween(0, COUNT($types) - 1)],
+            'is_home' => $this->faker->boolean,
             'locales' => []
         ];
 

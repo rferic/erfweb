@@ -5,6 +5,7 @@ namespace App\Models\Core;
 use Arcanedev\Localization\Facades\Localization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Core\App as AppModel;
 
 use Illuminate\Support\Facades\App;
 
@@ -76,6 +77,11 @@ class PageLocale extends Model
 
     public function getUrlAttribute ()
     {
-        return Localization::localizeURL($this->slug);
+        if ( isset($this->page) ) {
+            $prefix = $this->page->type === 'html' ? '' : $this->page->type . '/';
+            return Localization::localizeURL($prefix . $this->slug);
+        }
+
+        return null;
     }
 }

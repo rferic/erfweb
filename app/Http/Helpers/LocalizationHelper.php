@@ -23,4 +23,30 @@ class LocalizationHelper
 
         return $localesSupportedFormatted;
     }
+
+    static function getSupportedRegional ()
+    {
+        $supported = [];
+        $supportedLocales = config('localization.supported-locales');
+        $locales = config('localization.locales');
+
+        foreach ( $supportedLocales AS $supportedLocale ) {
+            $supported[] = $locales[$supportedLocale]['regional'];
+        }
+
+        return $supported;
+    }
+
+    static function getSupportedItem ( $key, $value )
+    {
+        $supportedLocales = self::getSupportedFormatted();
+
+        foreach ( $supportedLocales AS $supportedLocale ) {
+            if ( $supportedLocale[$key] === $value ) {
+                return $supportedLocale;
+            }
+        }
+
+        return null;
+    }
 }

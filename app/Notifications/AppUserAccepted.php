@@ -2,24 +2,29 @@
 
 namespace App\Notifications;
 
-use App\Models\Core\Message;
+use App\Http\Helpers\LocalizationHelper;
+use App\Models\Core\AppUser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\App;
 
-class MessageDeletedNotification extends Notification
+class AppUserAccepted extends Notification
 {
     use Queueable;
 
-    public $message;
+    public $user, $app;
+
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param AppUser $item
      */
-    public function __construct( Message $message )
+    public function __construct( AppUser $item )
     {
-        $this->message = $message;
+        $this->user = $item->user;
+        $this->app = $item->app;
     }
 
     /**
@@ -41,11 +46,19 @@ class MessageDeletedNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $title = '';
+        $lang = LocalizationHelper::getSupportedItem('code', App::getLocale());
+
+        foreach ( $this->app->locales AS $locale ) {
+            if ( $title === '' || $locale->lang === $lang['iso'] ) {
+                $title = $locale->title;
+            }
+        }
+
         return (new MailMessage)
-            ->subject( __('Your message has been removed'))
-            ->greeting(__('Hello ') . $this->message->author->name . '!')
-            ->line(__('Your message has been deleted for violating some community policy.'))
-            ->action(__('Check the rules'), route('policy'))
+            ->subject( __('Your request has been accepted'))
+            ->greeting(__('Hello ') . $this->user->name . '!')
+            ->line(__('Your request to use the application "' . $title . '" has been accepted.'))
             ->line(__('If you are not agree, you can contact us to solve the problem.'));
     }
 

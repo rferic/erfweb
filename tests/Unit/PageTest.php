@@ -8,6 +8,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Core\App;
 use App\Models\Core\Content;
 use App\Models\Core\Menu;
 use App\Models\Core\MenuItem;
@@ -26,7 +27,7 @@ class PageTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    protected $page, $childs, $user, $author, $count, $countPagesChild;
+    protected $page, $pageWithApp, $childs, $user, $author, $count, $countPagesChild;
 
     protected function setUp (): void
     {
@@ -40,6 +41,8 @@ class PageTest extends TestCase
         $this->user = factory(User::class)->create()->attachRole('superadministrator');
         $this->author = factory(User::class)->create()->attachRole('superadministrator');
         $this->page = factory(Page::class)->create([ 'user_id' => $this->author->id]);
+        $this->pageWithApp = factory(Page::class)->create([ 'user_id' => $this->author->id]);
+        factory(App::class)->create([ 'page_id' => $this->pageWithApp->id ]);
         $this->childs = factory(Page::class, $this->countPagesChild)->create([
             'page_id' => $this->page->id,
             'user_id' => $this->author->id
@@ -55,6 +58,12 @@ class PageTest extends TestCase
                 'lang' => $pageLocale->lang
             ]);
         });
+    }
+
+    public function testHasApp ()
+    {
+        $this->assertNull($this->page->app);
+        $this->assertInstanceOf(App::class, $this->pageWithApp->app);
     }
 
     public function testIsAuthor ()

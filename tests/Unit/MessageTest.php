@@ -34,7 +34,7 @@ class MessageTest extends TestCase
         $this->seedRoles();
 
         $this->user = factory(User::class)->create()->attachRole('user');
-        $this->author = factory(User::class)->create()->attachRole('administrator');
+        $this->author = factory(User::class)->create()->attachRole('superadministrator');
         $this->message = factory(Message::class)->create([
             'author_id' => $this->author->id,
             'receiver_id' => $this->user->id,

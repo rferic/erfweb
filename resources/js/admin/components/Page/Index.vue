@@ -135,6 +135,7 @@
                 return {
                     id: null,
                     page_id: '',
+                    type: 'html',
                     locales: [],
                     languages
                 }

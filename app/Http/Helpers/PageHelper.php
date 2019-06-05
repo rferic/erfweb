@@ -13,6 +13,14 @@ use Arcanedev\Localization\Facades\Localization;
 
 class PageHelper
 {
+    static function getTypes ()
+    {
+        return Array(
+            'html',
+            'apps'
+        );
+    }
+
     static function getLayouts ()
     {
         return [
@@ -55,11 +63,15 @@ class PageHelper
         ];
     }
 
-    static function getSlugTranslate ( $url, $lang ) {
+    static function getSlugTranslate ( $url, $lang = null ) {
+        if ( is_null($lang) ) {
+            $lang = Localization::getCurrentLocale();
+        }
+
         $slug = str_replace(
-            Localization::localizeURL(route('home'), $lang['code']),
+            Localization::localizeURL(route('home'), $lang),
             '',
-            Localization::localizeURL(route($url), $lang['code'])
+            Localization::localizeURL(route($url), $lang)
         );
         return str_replace('/', '', $slug);
     }

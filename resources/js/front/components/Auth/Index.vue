@@ -13,7 +13,7 @@
             </v-card>
         </v-dialog>
         <v-snackbar v-model="snackbar.show" :color="snackbar.color" :multi-line="true" top>
-            {{ $vuetify.t(snackbar.message) }}
+            <span class="snackbar-text">{{ $vuetify.t(snackbar.message) }}</span>
         </v-snackbar>
     </div>
 </template>
@@ -90,3 +90,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .snackbar-text {
+        font-family: Roboto, sans-serif !important;
+    }
+</style>

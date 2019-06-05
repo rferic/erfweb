@@ -78,6 +78,7 @@
                                 <span class="status">{{ $t('banned', { locale }) }}</span>
                             </badge>
                         </template>
+                        <template slot="language" slot-scope="data">{{ $t(data.item.language.name, { locale }) }}</template>
                         <template slot="actions" slot-scope="data">
                             <a :href="getUrlToEditUser(data.item)" target="_blank" class="mr-2">
                                 <i class="fa fa-pencil text-primary" />
@@ -168,6 +169,10 @@
                     {
                         key: 'email',
                         label: this.$t('Email', this.locale)
+                    },
+                    {
+                        key: 'language',
+                        label: this.$t('Language', this.locale)
                     },
                     {
                         key: 'status',
